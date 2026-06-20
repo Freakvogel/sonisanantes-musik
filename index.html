@@ -78,16 +78,16 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(5,6,8,.92);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(5,6,8,.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(212,168,32,.15);
-      padding: calc(env(safe-area-inset-top, 14px) + 14px) 20px 10px;
+      padding: calc(env(safe-area-inset-top, 14px) + 18px) 20px 14px;
       text-align: center;
     }
     .logo-name {
       font-family: var(--display);
-      font-size: clamp(1.1rem, 4vw, 1.6rem);
+      font-size: clamp(1.5rem, 5vw, 2.2rem);
       font-weight: 500;
       letter-spacing: .22em;
       text-transform: uppercase;
@@ -98,16 +98,16 @@
     }
     .logo-sub {
       font-family: var(--sans);
-      font-size: .62rem;
+      font-size: .65rem;
       letter-spacing: .45em;
       text-transform: uppercase;
       color: var(--turquoise);
-      margin-top: 3px;
+      margin-top: 5px;
       font-weight: 400;
     }
     .divider {
-      width: 120px; height: 1px; margin: 8px auto 0;
-      background: linear-gradient(90deg, transparent, rgba(212,168,32,.45), transparent);
+      width: 160px; height: 1px; margin: 10px auto 0;
+      background: linear-gradient(90deg, transparent, rgba(212,168,32,.5), transparent);
     }
 
     /* ── Tabs ── */
@@ -115,32 +115,35 @@
       display: flex;
       border-bottom: 1px solid rgba(212,168,32,.12);
       position: relative; z-index: 1;
+      background: rgba(5,6,8,.6);
     }
     .tab-btn {
       flex: 1;
-      padding: 11px 8px;
+      padding: 13px 8px;
       background: none;
       border: none;
       color: var(--text-dim);
-      font-family: var(--sans);
-      font-size: 12px;
+      font-family: var(--display);
+      font-size: 11px;
       font-weight: 400;
-      letter-spacing: .12em;
+      letter-spacing: .18em;
       text-transform: uppercase;
       cursor: pointer;
       border-bottom: 2px solid transparent;
-      transition: color .2s, border-color .2s;
+      transition: color .25s, border-color .25s;
     }
     .tab-btn.active {
       color: var(--gold);
-      border-bottom-color: var(--gold);
+      border-image: linear-gradient(90deg, var(--violet), var(--magenta), var(--gold)) 1;
+      border-bottom: 2px solid;
+      border-image-slice: 1;
     }
     .tab-btn .badge {
       display: inline-block;
-      background: var(--gold);
-      color: #050608;
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      color: #fff;
       font-size: 9px;
-      font-weight: 700;
+      font-weight: 600;
       border-radius: 10px;
       padding: 1px 6px;
       margin-left: 5px;
@@ -159,12 +162,13 @@
 
     /* ── Section label ── */
     .section-label {
-      padding: 18px 20px 10px;
-      font-family: var(--sans);
+      padding: 18px 20px 12px;
+      font-family: var(--display);
       font-size: 10px;
-      letter-spacing: .3em;
+      letter-spacing: .35em;
       text-transform: uppercase;
-      color: var(--text-dim);
+      color: var(--turquoise);
+      opacity: .7;
     }
 
     /* ── Track list ── */
@@ -174,21 +178,22 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 10px 10px;
-      border-radius: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
       cursor: pointer;
-      transition: background .15s;
-      border: 1px solid transparent;
-      margin-bottom: 2px;
+      transition: background .2s, border-color .2s;
+      border: 1px solid rgba(123,45,158,.18);
+      background: rgba(255,255,255,.03);
+      margin-bottom: 6px;
     }
-    .track-card:active { background: rgba(212,168,32,.06); }
+    .track-card:active { background: rgba(212,168,32,.07); border-color: rgba(212,168,32,.25); }
     .track-card.playing {
       background: rgba(212,168,32,.07);
-      border-color: rgba(212,168,32,.18);
+      border-color: rgba(212,168,32,.3);
     }
     .track-card.selected {
-      background: rgba(123,45,158,.1);
-      border-color: rgba(123,45,158,.2);
+      background: rgba(123,45,158,.12);
+      border-color: rgba(123,45,158,.4);
     }
 
     .thumb-wrap {
@@ -232,21 +237,21 @@
 
     .track-actions { flex-shrink: 0; }
     .add-btn {
-      width: 30px; height: 30px;
+      width: 32px; height: 32px;
       border-radius: 50%;
-      border: 1.5px solid rgba(212,168,32,.3);
-      background: none;
-      color: rgba(212,168,32,.6);
+      border: 1.5px solid rgba(123,45,158,.5);
+      background: rgba(123,45,158,.08);
+      color: rgba(196,37,122,.8);
       display: flex; align-items: center; justify-content: center;
       cursor: pointer;
       transition: all .2s;
-      font-size: 17px;
+      font-size: 18px;
       line-height: 1;
     }
     .track-card.selected .add-btn {
-      background: var(--gold);
-      border-color: var(--gold);
-      color: #050608;
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      border-color: transparent;
+      color: #fff;
       font-size: 13px;
     }
 
@@ -284,15 +289,16 @@
       cursor: pointer;
     }
     .btn-play-all {
-      background: linear-gradient(135deg, var(--gold), #b8900e);
-      color: #050608;
+      background: linear-gradient(135deg, var(--violet), var(--magenta), var(--gold));
+      color: #fff;
       font-weight: 600;
       flex: 1;
+      letter-spacing: .15em;
     }
     .btn-clear {
-      background: rgba(255,255,255,.06);
+      background: rgba(255,255,255,.04);
       color: var(--text-dim);
-      border: 1px solid rgba(255,255,255,.1);
+      border: 1px solid rgba(123,45,158,.25);
     }
 
     .playlist-track {
@@ -300,16 +306,16 @@
       align-items: center;
       gap: 10px;
       padding: 8px 12px;
-      margin: 0 10px 3px;
-      border-radius: 8px;
+      margin: 0 10px 5px;
+      border-radius: 10px;
       background: rgba(255,255,255,.03);
-      border: 1px solid transparent;
+      border: 1px solid rgba(123,45,158,.18);
       cursor: pointer;
-      transition: background .15s;
+      transition: background .15s, border-color .15s;
     }
     .playlist-track.playing-now {
-      background: rgba(212,168,32,.07);
-      border-color: rgba(212,168,32,.2);
+      background: rgba(123,45,158,.1);
+      border-color: rgba(196,37,122,.35);
     }
     .playlist-num { font-size: 11px; color: var(--text-dim); width: 18px; text-align: center; flex-shrink: 0; }
     .playlist-thumb { width: 42px; height: 42px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
@@ -328,18 +334,18 @@
       bottom: 0; left: 0; right: 0;
       height: calc(var(--player-h) + var(--safe-bottom));
       padding-bottom: var(--safe-bottom);
-      background: rgba(8,5,15,.95);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(212,168,32,.2);
-      box-shadow: 0 -12px 40px rgba(0,0,0,.6);
+      background: rgba(5,3,12,.97);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(123,45,158,.35);
+      box-shadow: 0 -1px 0 rgba(212,168,32,.1), 0 -20px 60px rgba(0,0,0,.7);
       z-index: 200;
       display: flex;
       flex-direction: column;
     }
     .player-progress {
-      height: 2px;
-      background: rgba(212,168,32,.12);
+      height: 3px;
+      background: rgba(123,45,158,.2);
       cursor: pointer;
       flex-shrink: 0;
     }
@@ -359,11 +365,11 @@
     }
     #now-thumb {
       width: 48px; height: 48px;
-      border-radius: 6px;
+      border-radius: 8px;
       object-fit: cover;
       flex-shrink: 0;
-      background: rgba(255,255,255,.05);
-      box-shadow: 0 4px 12px rgba(0,0,0,.4);
+      background: rgba(123,45,158,.15);
+      box-shadow: 0 4px 16px rgba(0,0,0,.5), 0 0 0 1px rgba(123,45,158,.3);
     }
     .now-info { flex: 1; min-width: 0; }
     #now-title {
@@ -376,7 +382,7 @@
       margin-bottom: 2px;
       color: var(--cream);
     }
-    #now-status { font-size: 10px; color: var(--text-dim); letter-spacing: .06em; }
+    #now-status { font-size: 10px; color: var(--turquoise); letter-spacing: .08em; opacity: .7; }
 
     .controls {
       display: flex;
@@ -386,7 +392,7 @@
     }
     .ctrl-btn {
       background: none; border: none;
-      color: var(--text-dim);
+      color: rgba(255,255,255,.4);
       cursor: pointer;
       padding: 8px;
       border-radius: 50%;
@@ -396,13 +402,14 @@
     .ctrl-btn:active { color: var(--gold); }
     .ctrl-btn svg { width: 20px; height: 20px; fill: currentColor; }
     .ctrl-btn.main {
-      color: var(--gold);
-      background: rgba(212,168,32,.1);
-      border: 1px solid rgba(212,168,32,.25);
-      margin: 0 4px;
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      border: none;
+      color: #fff;
+      margin: 0 6px;
+      box-shadow: 0 4px 20px rgba(196,37,122,.4);
     }
-    .ctrl-btn.main svg { width: 32px; height: 32px; }
-    .ctrl-btn.main:active { background: rgba(212,168,32,.2); }
+    .ctrl-btn.main svg { width: 28px; height: 28px; }
+    .ctrl-btn.main:active { opacity: .8; }
 
     /* ── Hidden YouTube player ── */
     #yt-player { position: fixed; width: 1px; height: 1px; top: -1px; left: -1px; opacity: 0; pointer-events: none; }
