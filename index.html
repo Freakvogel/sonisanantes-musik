@@ -543,7 +543,15 @@ async function loadChannelTracks() {
 function thumb(id) { return `https://img.youtube.com/vi/${id}/mqdefault.jpg`; }
 
 let ytPlayer = null, ytReady = false;
-let currentTrackIdx = null, playlist = [], isPlaying = false, queueIdx = null;
+let currentTrackIdx = null, isPlaying = false, queueIdx = null;
+
+function loadPlaylist() {
+  try { return JSON.parse(localStorage.getItem('soni-playlist') || '[]'); } catch { return []; }
+}
+function savePlaylist() {
+  localStorage.setItem('soni-playlist', JSON.stringify(playlist));
+}
+let playlist = loadPlaylist();
 
 const tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
@@ -616,10 +624,10 @@ function renderPlaylist() {
 function togglePlaylist(i) {
   const id = TRACKS[i].id;
   playlist.includes(id) ? playlist = playlist.filter(x => x !== id) : playlist.push(id);
-  renderTracks(); renderPlaylist();
+  savePlaylist(); renderTracks(); renderPlaylist();
 }
-function removeFromPlaylist(id) { playlist = playlist.filter(x => x !== id); renderTracks(); renderPlaylist(); }
-function clearPlaylist() { playlist = []; queueIdx = null; renderTracks(); renderPlaylist(); }
+function removeFromPlaylist(id) { playlist = playlist.filter(x => x !== id); savePlaylist(); renderTracks(); renderPlaylist(); }
+function clearPlaylist() { playlist = []; queueIdx = null; savePlaylist(); renderTracks(); renderPlaylist(); }
 
 function playTrackDirect(i) { currentTrackIdx = i; queueIdx = null; loadAndPlay(TRACKS[i]); renderTracks(); renderPlaylist(); }
 function playFromQueue(qi) {
