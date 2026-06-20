@@ -82,7 +82,7 @@
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(212,168,32,.15);
-      padding: 14px 20px 10px;
+      padding: calc(env(safe-area-inset-top, 14px) + 14px) 20px 10px;
       text-align: center;
     }
     .logo-name {
@@ -194,7 +194,7 @@
     .thumb-wrap {
       position: relative;
       flex-shrink: 0;
-      width: 58px; height: 58px;
+      width: 96px; height: 60px;
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 4px 16px rgba(0,0,0,.4);
@@ -214,12 +214,14 @@
       font-family: var(--serif);
       font-size: 15px;
       font-weight: 500;
-      white-space: nowrap;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
       overflow: hidden;
-      text-overflow: ellipsis;
       margin-bottom: 3px;
       color: var(--cream);
       letter-spacing: .01em;
+      line-height: 1.35;
     }
     .track-card.playing .track-title { color: var(--gold-light); }
     .track-meta {
