@@ -5,78 +5,131 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Sonisanantes – Musik</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#120820">
+  <meta name="theme-color" content="#050608">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Soni Musik">
   <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    button, a { touch-action: manipulation; -webkit-tap-highlight-color: rgba(212,168,32,.18); }
+    @media (hover: none) {
+      .track-card:hover, .ctrl-btn:hover, .tab-btn:hover, .add-btn:hover { transform: none !important; }
+    }
 
     :root {
-      --bg: #120820;
-      --surface: #1e1030;
-      --surface2: #2a1845;
-      --gold: #c9a84c;
-      --gold-light: #e8c97a;
-      --text: #f0e8ff;
-      --text-dim: #9c87b8;
-      --accent: #7c3aed;
-      --accent-soft: #4c1d95;
-      --player-h: 120px;
+      --bg: #050608;
+      --surface: rgba(255,255,255,.04);
+      --surface2: rgba(255,255,255,.08);
+      --gold: #D4A820;
+      --gold-light: #F5ECD0;
+      --cream: #F5ECD0;
+      --violet: #7B2D9E;
+      --magenta: #C4257A;
+      --turquoise: #44D6D6;
+      --text: rgba(255,255,255,.92);
+      --text-dim: rgba(255,255,255,.42);
+      --player-h: 116px;
       --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --display: 'Cinzel', Georgia, serif;
+      --sans: 'Inter', -apple-system, sans-serif;
     }
 
     html, body {
       height: 100%;
       background: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: var(--sans);
+      font-weight: 300;
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ── Header ── */
+    /* ── Ambient background ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse at 15% 20%, rgba(123,45,158,.18) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 25%, rgba(68,214,214,.07) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 95%, rgba(196,37,122,.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 75% 65%, rgba(63,184,155,.05) 0%, transparent 45%);
+    }
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        radial-gradient(1px 1px at 15% 28%, rgba(255,255,255,.45), transparent),
+        radial-gradient(1px 1px at 55% 68%, rgba(255,255,255,.3), transparent),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.38), transparent),
+        radial-gradient(1px 1px at 32% 82%, rgba(255,255,255,.28), transparent),
+        radial-gradient(1px 1px at 88% 55%, rgba(255,255,255,.32), transparent),
+        radial-gradient(1px 1px at 42% 42%, rgba(255,255,255,.2), transparent),
+        radial-gradient(1px 1px at 68% 88%, rgba(255,255,255,.25), transparent);
+      opacity: .55;
+    }
+
+    /* ── Header / Logo ── */
     header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: var(--bg);
-      border-bottom: 1px solid #2a1845;
-      padding: 16px 20px 12px;
+      background: rgba(5,6,8,.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(212,168,32,.15);
+      padding: 14px 20px 10px;
+      text-align: center;
     }
-    .logo {
-      font-size: 11px;
-      letter-spacing: 3px;
+    .logo-name {
+      font-family: var(--display);
+      font-size: clamp(1.1rem, 4vw, 1.6rem);
+      font-weight: 500;
+      letter-spacing: .22em;
       text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 4px;
+      background: linear-gradient(135deg, #D4A820, #F5ECD0, #D4A820);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-    header h1 {
-      font-size: 20px;
-      font-weight: 300;
-      color: var(--text);
-      letter-spacing: 1px;
+    .logo-sub {
+      font-family: var(--sans);
+      font-size: .62rem;
+      letter-spacing: .45em;
+      text-transform: uppercase;
+      color: var(--turquoise);
+      margin-top: 3px;
+      font-weight: 400;
     }
-    header h1 span { color: var(--gold); font-weight: 600; }
+    .divider {
+      width: 120px; height: 1px; margin: 8px auto 0;
+      background: linear-gradient(90deg, transparent, rgba(212,168,32,.45), transparent);
+    }
 
     /* ── Tabs ── */
     .tabs {
       display: flex;
-      gap: 0;
-      margin: 0 20px 0;
-      border-bottom: 1px solid var(--surface2);
+      border-bottom: 1px solid rgba(212,168,32,.12);
+      position: relative; z-index: 1;
     }
     .tab-btn {
       flex: 1;
-      padding: 12px 8px;
+      padding: 11px 8px;
       background: none;
       border: none;
       color: var(--text-dim);
-      font-size: 13px;
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: .12em;
+      text-transform: uppercase;
       cursor: pointer;
       border-bottom: 2px solid transparent;
-      transition: all 0.2s;
-      letter-spacing: 0.5px;
+      transition: color .2s, border-color .2s;
     }
     .tab-btn.active {
       color: var(--gold);
@@ -85,110 +138,114 @@
     .tab-btn .badge {
       display: inline-block;
       background: var(--gold);
-      color: #120820;
-      font-size: 10px;
+      color: #050608;
+      font-size: 9px;
       font-weight: 700;
       border-radius: 10px;
       padding: 1px 6px;
       margin-left: 5px;
+      font-family: var(--sans);
+      letter-spacing: 0;
+      text-transform: none;
     }
 
-    /* ── Main scroll area ── */
+    /* ── Main ── */
     main {
       padding-bottom: calc(var(--player-h) + var(--safe-bottom) + 20px);
+      position: relative; z-index: 1;
     }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
 
-    /* ── Track list ── */
+    /* ── Section label ── */
     .section-label {
-      padding: 16px 20px 8px;
-      font-size: 11px;
-      letter-spacing: 2px;
+      padding: 18px 20px 10px;
+      font-family: var(--sans);
+      font-size: 10px;
+      letter-spacing: .3em;
       text-transform: uppercase;
       color: var(--text-dim);
     }
 
-    .track-list { padding: 0 12px; }
+    /* ── Track list ── */
+    .track-list { padding: 0 10px 8px; }
 
     .track-card {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 10px 8px;
-      border-radius: 12px;
+      padding: 10px 10px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: background 0.15s;
-      position: relative;
+      transition: background .15s;
+      border: 1px solid transparent;
+      margin-bottom: 2px;
     }
-    .track-card:active { background: var(--surface2); }
-    .track-card.playing { background: var(--surface); }
-    .track-card.selected { background: linear-gradient(90deg, #2a1845 0%, #1e1030 100%); }
+    .track-card:active { background: rgba(212,168,32,.06); }
+    .track-card.playing {
+      background: rgba(212,168,32,.07);
+      border-color: rgba(212,168,32,.18);
+    }
+    .track-card.selected {
+      background: rgba(123,45,158,.1);
+      border-color: rgba(123,45,158,.2);
+    }
 
     .thumb-wrap {
       position: relative;
       flex-shrink: 0;
-      width: 60px;
-      height: 60px;
+      width: 58px; height: 58px;
       border-radius: 8px;
       overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,.4);
     }
-    .thumb-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .thumb-wrap img { width: 100%; height: 100%; object-fit: cover; }
     .thumb-wrap .play-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 0.2s;
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,.55);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .2s;
     }
     .track-card.playing .play-overlay { opacity: 1; }
-    .play-overlay svg { width: 24px; height: 24px; fill: #fff; }
+    .play-overlay svg { width: 22px; height: 22px; fill: var(--gold); }
 
     .track-info { flex: 1; min-width: 0; }
     .track-title {
-      font-size: 14px;
+      font-family: var(--serif);
+      font-size: 15px;
       font-weight: 500;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       margin-bottom: 3px;
+      color: var(--cream);
+      letter-spacing: .01em;
     }
+    .track-card.playing .track-title { color: var(--gold-light); }
     .track-meta {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-dim);
+      letter-spacing: .04em;
     }
 
-    .track-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
+    .track-actions { flex-shrink: 0; }
     .add-btn {
-      width: 32px;
-      height: 32px;
+      width: 30px; height: 30px;
       border-radius: 50%;
-      border: 1.5px solid var(--text-dim);
+      border: 1.5px solid rgba(212,168,32,.3);
       background: none;
-      color: var(--text-dim);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      color: rgba(212,168,32,.6);
+      display: flex; align-items: center; justify-content: center;
       cursor: pointer;
-      transition: all 0.2s;
-      font-size: 18px;
+      transition: all .2s;
+      font-size: 17px;
       line-height: 1;
     }
     .track-card.selected .add-btn {
       background: var(--gold);
       border-color: var(--gold);
-      color: #120820;
-      font-size: 14px;
+      color: #050608;
+      font-size: 13px;
     }
 
     /* ── Playlist tab ── */
@@ -197,31 +254,43 @@
       padding: 60px 30px;
       color: var(--text-dim);
     }
-    .playlist-empty .icon { font-size: 48px; margin-bottom: 16px; }
-    .playlist-empty p { font-size: 14px; line-height: 1.6; }
+    .playlist-empty .icon {
+      font-size: 42px;
+      margin-bottom: 16px;
+      filter: grayscale(30%);
+    }
+    .playlist-empty p {
+      font-family: var(--serif);
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text-dim);
+    }
 
     .playlist-controls {
       display: flex;
       gap: 10px;
-      padding: 12px 20px;
+      padding: 14px 16px 6px;
     }
     .btn-sm {
-      padding: 8px 16px;
+      padding: 9px 18px;
       border-radius: 20px;
       border: none;
-      font-size: 12px;
+      font-family: var(--sans);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
       cursor: pointer;
-      letter-spacing: 0.5px;
     }
     .btn-play-all {
-      background: var(--gold);
-      color: #120820;
+      background: linear-gradient(135deg, var(--gold), #b8900e);
+      color: #050608;
       font-weight: 600;
       flex: 1;
     }
     .btn-clear {
-      background: var(--surface2);
+      background: rgba(255,255,255,.06);
       color: var(--text-dim);
+      border: 1px solid rgba(255,255,255,.1);
     }
 
     .playlist-track {
@@ -229,54 +298,54 @@
       align-items: center;
       gap: 10px;
       padding: 8px 12px;
-      margin: 0 12px 4px;
-      border-radius: 10px;
-      background: var(--surface);
+      margin: 0 10px 3px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid transparent;
       cursor: pointer;
-      transition: background 0.15s;
+      transition: background .15s;
     }
-    .playlist-track.playing-now { background: var(--surface2); border: 1px solid var(--gold-light)33; }
+    .playlist-track.playing-now {
+      background: rgba(212,168,32,.07);
+      border-color: rgba(212,168,32,.2);
+    }
     .playlist-num { font-size: 11px; color: var(--text-dim); width: 18px; text-align: center; flex-shrink: 0; }
-    .playlist-thumb { width: 44px; height: 44px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
+    .playlist-thumb { width: 42px; height: 42px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
     .playlist-info { flex: 1; min-width: 0; }
-    .playlist-title { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .playlist-title { font-family: var(--serif); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--cream); }
     .playlist-duration { font-size: 11px; color: var(--text-dim); }
     .remove-btn {
-      background: none;
-      border: none;
-      color: var(--text-dim);
-      cursor: pointer;
-      font-size: 18px;
-      padding: 4px;
-      flex-shrink: 0;
+      background: none; border: none;
+      color: var(--text-dim); cursor: pointer;
+      font-size: 18px; padding: 4px; flex-shrink: 0;
     }
 
     /* ── Player bar ── */
     #player-bar {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      bottom: 0; left: 0; right: 0;
       height: calc(var(--player-h) + var(--safe-bottom));
       padding-bottom: var(--safe-bottom);
-      background: var(--surface);
-      border-top: 1px solid var(--surface2);
-      box-shadow: 0 -8px 30px rgba(0,0,0,0.4);
+      background: rgba(8,5,15,.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(212,168,32,.2);
+      box-shadow: 0 -12px 40px rgba(0,0,0,.6);
       z-index: 200;
       display: flex;
       flex-direction: column;
     }
     .player-progress {
-      height: 3px;
-      background: var(--surface2);
+      height: 2px;
+      background: rgba(212,168,32,.12);
       cursor: pointer;
       flex-shrink: 0;
     }
     .player-progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      background: linear-gradient(90deg, var(--violet), var(--magenta), var(--gold));
       width: 0%;
-      transition: width 0.5s linear;
+      transition: width .5s linear;
       pointer-events: none;
     }
     .player-inner {
@@ -287,60 +356,84 @@
       flex: 1;
     }
     #now-thumb {
-      width: 50px;
-      height: 50px;
-      border-radius: 8px;
+      width: 48px; height: 48px;
+      border-radius: 6px;
       object-fit: cover;
       flex-shrink: 0;
-      background: var(--surface2);
+      background: rgba(255,255,255,.05);
+      box-shadow: 0 4px 12px rgba(0,0,0,.4);
     }
     .now-info { flex: 1; min-width: 0; }
     #now-title {
+      font-family: var(--serif);
       font-size: 13px;
       font-weight: 500;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       margin-bottom: 2px;
+      color: var(--cream);
     }
-    #now-status { font-size: 11px; color: var(--text-dim); }
+    #now-status { font-size: 10px; color: var(--text-dim); letter-spacing: .06em; }
 
     .controls {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 2px;
       flex-shrink: 0;
     }
     .ctrl-btn {
-      background: none;
-      border: none;
-      color: var(--text);
+      background: none; border: none;
+      color: var(--text-dim);
       cursor: pointer;
       padding: 8px;
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.15s;
+      display: flex; align-items: center; justify-content: center;
+      transition: color .15s;
     }
-    .ctrl-btn:active { background: var(--surface2); }
-    .ctrl-btn svg { width: 22px; height: 22px; fill: currentColor; }
-    .ctrl-btn.main { color: var(--gold); }
-    .ctrl-btn.main svg { width: 36px; height: 36px; }
+    .ctrl-btn:active { color: var(--gold); }
+    .ctrl-btn svg { width: 20px; height: 20px; fill: currentColor; }
+    .ctrl-btn.main {
+      color: var(--gold);
+      background: rgba(212,168,32,.1);
+      border: 1px solid rgba(212,168,32,.25);
+      margin: 0 4px;
+    }
+    .ctrl-btn.main svg { width: 32px; height: 32px; }
+    .ctrl-btn.main:active { background: rgba(212,168,32,.2); }
 
     /* ── Hidden YouTube player ── */
     #yt-player { position: fixed; width: 1px; height: 1px; top: -1px; left: -1px; opacity: 0; pointer-events: none; }
 
-    /* ── Tab panels ── */
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
+    /* ── Loading shimmer ── */
+    .loading-tracks {
+      padding: 30px 20px;
+      text-align: center;
+      font-family: var(--sans);
+      font-size: 11px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .loading-tracks::after {
+      content: '';
+      display: block;
+      width: 60px; height: 1px;
+      margin: 14px auto 0;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      animation: shimmer 1.6s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0%, 100% { opacity: .3; } 50% { opacity: 1; }
+    }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">Sonisanantes</div>
-  <h1>Meine <span>Musik</span></h1>
+  <div class="logo-name">Sonisanantes</div>
+  <div class="logo-sub">Musik</div>
+  <div class="divider"></div>
 </header>
 
 <div class="tabs">
@@ -353,13 +446,15 @@
 <main>
   <div class="tab-panel active" id="tab-alle">
     <div class="section-label">Alle Veröffentlichungen</div>
-    <div class="track-list" id="track-list"></div>
+    <div class="track-list" id="track-list">
+      <div class="loading-tracks">Tracks werden geladen</div>
+    </div>
   </div>
 
   <div class="tab-panel" id="tab-playlist">
     <div id="playlist-empty" class="playlist-empty">
-      <div class="icon">🎵</div>
-      <p>Klicke auf <strong>+</strong> bei einem Track,<br>um ihn deiner Playlist hinzuzufügen.</p>
+      <div class="icon">♫</div>
+      <p>Tippe auf <strong style="color:var(--gold)">+</strong> bei einem Track,<br>um ihn deiner Playlist hinzuzufügen.</p>
     </div>
     <div id="playlist-content" style="display:none">
       <div class="playlist-controls">
@@ -371,7 +466,6 @@
   </div>
 </main>
 
-<!-- Player bar -->
 <div id="player-bar">
   <div class="player-progress" id="progress-bar" onclick="seekTo(event)">
     <div class="player-progress-fill" id="progress-fill"></div>
@@ -380,7 +474,7 @@
     <img id="now-thumb" src="" alt="">
     <div class="now-info">
       <div id="now-title">Kein Track ausgewählt</div>
-      <div id="now-status">Tippe auf einen Track zum Starten</div>
+      <div id="now-status">Tippe auf einen Track</div>
     </div>
     <div class="controls">
       <button class="ctrl-btn" onclick="prevTrack()" title="Zurück">
@@ -396,12 +490,10 @@
   </div>
 </div>
 
-<!-- Hidden YouTube Player container -->
 <div id="yt-player"></div>
 
 <script>
 const YT_API_KEY = 'AIzaSyA2R2drwdoSrSQ-WJzwZ5WcBZQggD8Z0cM';
-const YT_CHANNEL_HANDLE = '@sonisanantes';
 let TRACKS = [];
 
 function parseDuration(iso) {
@@ -413,25 +505,19 @@ function parseDuration(iso) {
 }
 
 async function loadChannelTracks() {
-  const listEl = document.getElementById('track-list');
-  listEl.innerHTML = '<div style="padding:20px;color:var(--text-dim)">Tracks werden geladen…</div>';
   try {
-    // 1. Channel-ID über Handle ermitteln
     const chRes = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=contentDetails&forHandle=sonisanantes&key=${YT_API_KEY}`);
     const chData = await chRes.json();
     const uploadsId = chData.items[0].contentDetails.relatedPlaylists.uploads;
 
-    // 2. Alle Videos aus der Uploads-Playlist holen (bis zu 50)
     let videos = [], pageToken = '';
     do {
-      const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsId}&maxResults=50&pageToken=${pageToken}&key=${YT_API_KEY}`;
-      const res = await fetch(url);
+      const res = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsId}&maxResults=50&pageToken=${pageToken}&key=${YT_API_KEY}`);
       const data = await res.json();
       videos = videos.concat(data.items || []);
       pageToken = data.nextPageToken || '';
     } while (pageToken);
 
-    // 3. Dauer für alle Videos holen (je 50er Batch)
     const ids = videos.map(v => v.snippet.resourceId.videoId);
     const durations = {};
     for (let i = 0; i < ids.length; i += 50) {
@@ -449,55 +535,34 @@ async function loadChannelTracks() {
 
     renderTracks();
   } catch (err) {
-    listEl.innerHTML = `<div style="padding:20px;color:#f87171">Fehler beim Laden: ${err.message}</div>`;
+    document.getElementById('track-list').innerHTML =
+      `<div style="padding:24px 20px;color:rgba(212,168,32,.5);font-size:13px;text-align:center">Fehler beim Laden – bitte neu laden.<br><small style="opacity:.6">${err.message}</small></div>`;
   }
 }
 
-// Thumbnail-URL aus Video-ID erzeugen
-function thumb(id) {
-  return `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
-}
+function thumb(id) { return `https://img.youtube.com/vi/${id}/mqdefault.jpg`; }
 
-// ── State ──
-let ytPlayer = null;
-let ytReady = false;
-let currentTrackIdx = null;   // Index in TRACKS
-let playlist = [];             // Array von Track-IDs in der Playlist
-let isPlaying = false;
-let queueIdx = null;           // Index in playlist während Wiedergabe
+let ytPlayer = null, ytReady = false;
+let currentTrackIdx = null, playlist = [], isPlaying = false, queueIdx = null;
 
-// ── YouTube IFrame API laden ──
 const tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
 document.head.appendChild(tag);
 
 window.onYouTubeIframeAPIReady = function() {
   ytPlayer = new YT.Player('yt-player', {
-    height: '1',
-    width: '1',
+    height: '1', width: '1',
     playerVars: { autoplay: 0, controls: 0, modestbranding: 1 },
-    events: {
-      onReady: () => { ytReady = true; },
-      onStateChange: onPlayerStateChange,
-    }
+    events: { onReady: () => { ytReady = true; }, onStateChange: onPlayerStateChange }
   });
 };
 
 function onPlayerStateChange(e) {
-  if (e.data === YT.PlayerState.PLAYING) {
-    isPlaying = true;
-    setPlayIcon(true);
-    startProgressUpdate();
-  } else if (e.data === YT.PlayerState.PAUSED) {
-    isPlaying = false;
-    setPlayIcon(false);
-    stopProgressUpdate();
-  } else if (e.data === YT.PlayerState.ENDED) {
-    nextTrack();
-  }
+  if (e.data === YT.PlayerState.PLAYING) { isPlaying = true; setPlayIcon(true); startProgressUpdate(); }
+  else if (e.data === YT.PlayerState.PAUSED) { isPlaying = false; setPlayIcon(false); stopProgressUpdate(); }
+  else if (e.data === YT.PlayerState.ENDED) { nextTrack(); }
 }
 
-// ── Render track list ──
 function renderTracks() {
   const list = document.getElementById('track-list');
   list.innerHTML = TRACKS.map((t, i) => {
@@ -507,40 +572,29 @@ function renderTracks() {
       <div class="track-card ${sel ? 'selected' : ''} ${playing ? 'playing' : ''}" id="card-${i}" onclick="playTrackDirect(${i})">
         <div class="thumb-wrap">
           <img src="${thumb(t.id)}" alt="${t.title}" loading="lazy">
-          <div class="play-overlay">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </div>
+          <div class="play-overlay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         </div>
         <div class="track-info">
           <div class="track-title">${t.title}</div>
           <div class="track-meta">${t.duration}</div>
         </div>
         <div class="track-actions" onclick="event.stopPropagation()">
-          <button class="add-btn" onclick="togglePlaylist(${i})" title="${sel ? 'Entfernen' : 'Zur Playlist'}">
-            ${sel ? '✓' : '+'}
-          </button>
+          <button class="add-btn" onclick="togglePlaylist(${i})" title="${sel ? 'Entfernen' : 'Zur Playlist'}">${sel ? '✓' : '+'}</button>
         </div>
       </div>`;
   }).join('');
 }
 
-// ── Render playlist ──
 function renderPlaylist() {
   const empty = document.getElementById('playlist-empty');
   const content = document.getElementById('playlist-content');
   const list = document.getElementById('playlist-list');
   const badge = document.getElementById('playlist-badge');
-
   if (playlist.length === 0) {
-    empty.style.display = 'block';
-    content.style.display = 'none';
-    badge.style.display = 'none';
+    empty.style.display = 'block'; content.style.display = 'none'; badge.style.display = 'none';
   } else {
-    empty.style.display = 'none';
-    content.style.display = 'block';
-    badge.style.display = 'inline';
-    badge.textContent = playlist.length;
-
+    empty.style.display = 'none'; content.style.display = 'block';
+    badge.style.display = 'inline'; badge.textContent = playlist.length;
     list.innerHTML = playlist.map((id, qi) => {
       const t = TRACKS.find(x => x.id === id);
       if (!t) return '';
@@ -559,127 +613,72 @@ function renderPlaylist() {
   }
 }
 
-// ── Playlist logic ──
 function togglePlaylist(i) {
   const id = TRACKS[i].id;
-  if (playlist.includes(id)) {
-    playlist = playlist.filter(x => x !== id);
-  } else {
-    playlist.push(id);
-  }
-  renderTracks();
-  renderPlaylist();
+  playlist.includes(id) ? playlist = playlist.filter(x => x !== id) : playlist.push(id);
+  renderTracks(); renderPlaylist();
 }
+function removeFromPlaylist(id) { playlist = playlist.filter(x => x !== id); renderTracks(); renderPlaylist(); }
+function clearPlaylist() { playlist = []; queueIdx = null; renderTracks(); renderPlaylist(); }
 
-function removeFromPlaylist(id) {
-  playlist = playlist.filter(x => x !== id);
-  renderTracks();
-  renderPlaylist();
-}
-
-function clearPlaylist() {
-  playlist = [];
-  queueIdx = null;
-  renderTracks();
-  renderPlaylist();
-}
-
-// ── Playback ──
-function playTrackDirect(i) {
-  currentTrackIdx = i;
-  queueIdx = null;
-  loadAndPlay(TRACKS[i]);
-  renderTracks();
-  renderPlaylist();
-}
-
+function playTrackDirect(i) { currentTrackIdx = i; queueIdx = null; loadAndPlay(TRACKS[i]); renderTracks(); renderPlaylist(); }
 function playFromQueue(qi) {
   queueIdx = qi;
-  const id = playlist[qi];
-  const t = TRACKS.find(x => x.id === id);
+  const t = TRACKS.find(x => x.id === playlist[qi]);
   if (!t) return;
   currentTrackIdx = TRACKS.indexOf(t);
-  loadAndPlay(t);
-  renderTracks();
-  renderPlaylist();
+  loadAndPlay(t); renderTracks(); renderPlaylist();
 }
-
-function playAll() {
-  if (playlist.length === 0) return;
-  playFromQueue(0);
-  showTab('playlist');
-}
-
+function playAll() { if (playlist.length === 0) return; playFromQueue(0); showTab('playlist'); }
 function loadAndPlay(track) {
-  if (!ytReady) { alert('Player lädt noch, bitte kurz warten…'); return; }
+  if (!ytReady) { return; }
   ytPlayer.loadVideoById(track.id);
   updatePlayerBar(track);
 }
-
 function togglePlay() {
   if (!ytReady || currentTrackIdx === null) return;
-  if (isPlaying) { ytPlayer.pauseVideo(); }
-  else { ytPlayer.playVideo(); }
+  isPlaying ? ytPlayer.pauseVideo() : ytPlayer.playVideo();
 }
-
 function nextTrack() {
-  if (queueIdx !== null && playlist.length > 0) {
-    const next = queueIdx + 1;
-    if (next < playlist.length) { playFromQueue(next); return; }
-  }
-  if (currentTrackIdx !== null && currentTrackIdx + 1 < TRACKS.length) {
-    playTrackDirect(currentTrackIdx + 1);
-  }
+  if (queueIdx !== null && playlist.length > 0 && queueIdx + 1 < playlist.length) { playFromQueue(queueIdx + 1); return; }
+  if (currentTrackIdx !== null && currentTrackIdx + 1 < TRACKS.length) playTrackDirect(currentTrackIdx + 1);
 }
-
 function prevTrack() {
   if (queueIdx !== null && queueIdx > 0) { playFromQueue(queueIdx - 1); return; }
-  if (currentTrackIdx !== null && currentTrackIdx > 0) {
-    playTrackDirect(currentTrackIdx - 1);
-  }
+  if (currentTrackIdx !== null && currentTrackIdx > 0) playTrackDirect(currentTrackIdx - 1);
 }
 
-// ── Player bar ──
 function updatePlayerBar(track) {
   document.getElementById('now-thumb').src = thumb(track.id);
   document.getElementById('now-title').textContent = track.title;
   document.getElementById('now-status').textContent = '⏳ Lädt…';
 }
-
 function setPlayIcon(playing) {
   const btn = document.getElementById('play-pause-btn');
   btn.innerHTML = playing
-    ? `<svg id="play-icon" viewBox="0 0 24 24" style="width:36px;height:36px;fill:currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`
-    : `<svg id="play-icon" viewBox="0 0 24 24" style="width:36px;height:36px;fill:currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+    ? `<svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`
+    : `<svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:currentColor"><path d="M8 5v14l11-7z"/></svg>`;
   document.getElementById('now-status').textContent = playing ? '♫ Spielt gerade' : '⏸ Pausiert';
 }
 
-// ── Progress bar ──
 let progressTimer = null;
 function startProgressUpdate() {
   stopProgressUpdate();
   progressTimer = setInterval(() => {
     if (!ytReady || !ytPlayer.getDuration) return;
-    const dur = ytPlayer.getDuration();
-    const cur = ytPlayer.getCurrentTime();
-    if (dur > 0) {
-      document.getElementById('progress-fill').style.width = (cur / dur * 100) + '%';
-    }
+    const dur = ytPlayer.getDuration(), cur = ytPlayer.getCurrentTime();
+    if (dur > 0) document.getElementById('progress-fill').style.width = (cur / dur * 100) + '%';
   }, 500);
 }
-function stopProgressUpdate() {
-  if (progressTimer) { clearInterval(progressTimer); progressTimer = null; }
-}
+function stopProgressUpdate() { if (progressTimer) { clearInterval(progressTimer); progressTimer = null; } }
 
 function seekTo(e) {
   if (!ytReady || currentTrackIdx === null) return;
-  const bar = e.currentTarget;
-  const ratio = e.offsetX / bar.offsetWidth;
+  const ratio = e.offsetX / e.currentTarget.offsetWidth;
   const dur = ytPlayer.getDuration();
   if (dur > 0) ytPlayer.seekTo(ratio * dur, true);
 }
 
-// ── Tabs ──
 function showTab(name) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -687,11 +686,9 @@ function showTab(name) {
   document.querySelector(`[onclick="showTab('${name}')"]`).classList.add('active');
 }
 
-// ── Init ──
 loadChannelTracks();
 renderPlaylist();
 
-// Service Worker registrieren
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
