@@ -400,29 +400,58 @@
 <div id="yt-player"></div>
 
 <script>
-// ╔══════════════════════════════════════════════════════╗
-// ║  DEINE TRACKS – hier eintragen!                     ║
-// ║  videoId: den Teil nach ?v= in der YouTube-URL      ║
-// ║  Bsp: https://youtu.be/ABC123XYZ → "ABC123XYZ"     ║
-// ╚══════════════════════════════════════════════════════╝
-const TRACKS = [
-  {
-    id: "DEINE_VIDEO_ID_1",
-    title: "Track 1 – Titel eintragen",
-    duration: "5:30"
-  },
-  {
-    id: "DEINE_VIDEO_ID_2",
-    title: "Track 2 – Titel eintragen",
-    duration: "6:12"
-  },
-  {
-    id: "DEINE_VIDEO_ID_3",
-    title: "Track 3 – Titel eintragen",
-    duration: "4:55"
-  },
-  // Weitere Tracks einfach hier einfügen ...
-];
+const YT_API_KEY = 'AIzaSyA2R2drwdoSrSQ-WJzwZ5WcBZQggD8Z0cM';
+const YT_CHANNEL_HANDLE = '@sonisanantes';
+let TRACKS = [];
+
+function parseDuration(iso) {
+  const m = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+  if (!m) return '';
+  const h = parseInt(m[1] || 0), min = parseInt(m[2] || 0), s = parseInt(m[3] || 0);
+  if (h > 0) return `${h}:${String(min).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  return `${min}:${String(s).padStart(2,'0')}`;
+}
+
+async function loadChannelTracks() {
+  const listEl = document.getElementById('track-list');
+  listEl.innerHTML = '<div style="padding:20px;color:var(--text-dim)">Tracks werden geladen…</div>';
+  try {
+    // 1. Channel-ID über Handle ermitteln
+    const chRes = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=contentDetails&forHandle=sonisanantes&key=${YT_API_KEY}`);
+    const chData = await chRes.json();
+    const uploadsId = chData.items[0].contentDetails.relatedPlaylists.uploads;
+
+    // 2. Alle Videos aus der Uploads-Playlist holen (bis zu 50)
+    let videos = [], pageToken = '';
+    do {
+      const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsId}&maxResults=50&pageToken=${pageToken}&key=${YT_API_KEY}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      videos = videos.concat(data.items || []);
+      pageToken = data.nextPageToken || '';
+    } while (pageToken);
+
+    // 3. Dauer für alle Videos holen (je 50er Batch)
+    const ids = videos.map(v => v.snippet.resourceId.videoId);
+    const durations = {};
+    for (let i = 0; i < ids.length; i += 50) {
+      const batch = ids.slice(i, i + 50).join(',');
+      const dRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${batch}&key=${YT_API_KEY}`);
+      const dData = await dRes.json();
+      (dData.items || []).forEach(v => { durations[v.id] = parseDuration(v.contentDetails.duration); });
+    }
+
+    TRACKS = videos.map(v => ({
+      id: v.snippet.resourceId.videoId,
+      title: v.snippet.title,
+      duration: durations[v.snippet.resourceId.videoId] || '',
+    }));
+
+    renderTracks();
+  } catch (err) {
+    listEl.innerHTML = `<div style="padding:20px;color:#f87171">Fehler beim Laden: ${err.message}</div>`;
+  }
+}
 
 // Thumbnail-URL aus Video-ID erzeugen
 function thumb(id) {
@@ -659,7 +688,7 @@ function showTab(name) {
 }
 
 // ── Init ──
-renderTracks();
+loadChannelTracks();
 renderPlaylist();
 
 // Service Worker registrieren
