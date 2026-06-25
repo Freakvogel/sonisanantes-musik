@@ -4,5 +4,5 @@
 //  Zu finden unter: supabase.com → Project Settings → API
 // ═══════════════════════════════════════════════════════
 
-const SUPABASE_URL  = 'DEINE_SUPABASE_URL_HIER';   // z.B. https://xyz.supabase.co
-const SUPABASE_ANON = 'DEIN_ANON_KEY_HIER';         // beginnt mit eyJh...
+const SUPABASE_URL  = 'https://sbhzyhkyhwaufchnkwio.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_TSUlUvX2bgIBt6k9jAQQZA_8rhUAshx';
