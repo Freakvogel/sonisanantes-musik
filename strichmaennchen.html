@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Strichmännchen-Technik – Sonisanantes</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#050608">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400;1,500&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    button, a { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      --bg: #050608;
+      --gold: #D4A820;
+      --gold-light: #F5ECD0;
+      --cream: #F5ECD0;
+      --violet: #7B2D9E;
+      --magenta: #C4257A;
+      --turquoise: #44D6D6;
+      --text: rgba(255,255,255,.92);
+      --text-dim: rgba(255,255,255,.42);
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --display: 'Cinzel', Georgia, serif;
+      --sans: 'Inter', -apple-system, sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 300;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse at 15% 20%, rgba(123,45,158,.18) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 25%, rgba(68,214,214,.07) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 95%, rgba(196,37,122,.12) 0%, transparent 50%);
+    }
+
+    /* ── Header ── */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(5,6,8,.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(212,168,32,.15);
+      padding: calc(env(safe-area-inset-top, 10px) + 12px) 20px 10px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .back-btn {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      background: none; border: none;
+      color: var(--gold); font-family: var(--sans); font-size: 12px;
+      letter-spacing: .08em; cursor: pointer; padding: 8px 6px;
+      margin-top: calc(env(safe-area-inset-top, 10px) / 2);
+    }
+    .header-center { text-align: center; }
+    .logo-name {
+      font-family: var(--display);
+      font-size: clamp(1rem, 3.5vw, 1.4rem);
+      font-weight: 500; letter-spacing: .2em; text-transform: uppercase;
+      background: linear-gradient(135deg, #D4A820, #F5ECD0, #D4A820);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .logo-sub {
+      font-family: var(--sans); font-size: .58rem; letter-spacing: .38em;
+      text-transform: uppercase; color: var(--turquoise); margin-top: 2px;
+    }
+
+    /* ── App wrapper ── */
+    #app {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 14px 14px calc(env(safe-area-inset-bottom, 0px) + 32px);
+      max-width: 520px; margin: 0 auto;
+    }
+
+    /* ── Step indicator ── */
+    .step-header {
+      width: 100%; margin-bottom: 12px; text-align: center;
+    }
+    .step-label {
+      font-family: var(--display); font-size: 10px; letter-spacing: .3em;
+      text-transform: uppercase; color: var(--turquoise); margin-bottom: 8px;
+    }
+    .step-dots {
+      display: flex; gap: 6px; justify-content: center; align-items: center;
+    }
+    .step-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,.1); transition: all .35s ease;
+    }
+    .step-dot.done { background: rgba(212,168,32,.45); }
+    .step-dot.active {
+      background: var(--gold); width: 22px; border-radius: 4px;
+      box-shadow: 0 0 10px rgba(212,168,32,.55);
+    }
+
+    /* ── Canvas ── */
+    #canvas-wrap {
+      width: 100%; border-radius: 18px; overflow: hidden;
+      border: 1px solid rgba(123,45,158,.28);
+      background: rgba(4,2,10,.7);
+      position: relative;
+    }
+    #canvas { display: block; width: 100%; touch-action: none; }
+    .tap-hint {
+      position: absolute; bottom: 10px; left: 0; right: 0;
+      text-align: center; font-size: 11px; color: rgba(212,168,32,.55);
+      letter-spacing: .12em; pointer-events: none;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+    /* ── Step content ── */
+    #step-content { width: 100%; margin-top: 18px; }
+
+    /* Inputs */
+    .input-group { margin-bottom: 14px; }
+    .input-label {
+      display: block; font-family: var(--display); font-size: 9.5px;
+      letter-spacing: .32em; text-transform: uppercase; color: var(--turquoise);
+      margin-bottom: 7px;
+    }
+    .name-input {
+      width: 100%; background: rgba(255,255,255,.04);
+      border: 1px solid rgba(212,168,32,.22); border-radius: 12px;
+      padding: 13px 16px; color: var(--cream);
+      font-family: var(--serif); font-size: 19px; font-weight: 400;
+      outline: none; transition: border-color .2s, background .2s;
+      -webkit-appearance: none;
+    }
+    .name-input:focus {
+      border-color: rgba(212,168,32,.55); background: rgba(255,255,255,.06);
+    }
+    .name-input::placeholder { color: rgba(255,255,255,.18); font-style: italic; }
+
+    /* Affirmation */
+    .affirmation-box {
+      background: linear-gradient(135deg, rgba(123,45,158,.1), rgba(196,37,122,.07));
+      border: 1px solid rgba(212,168,32,.2); border-radius: 16px;
+      padding: 18px 20px; margin-bottom: 16px;
+    }
+    .affirmation-label {
+      font-family: var(--display); font-size: 9px; letter-spacing: .35em;
+      text-transform: uppercase; color: var(--turquoise); margin-bottom: 10px;
+    }
+    .affirmation-text {
+      font-family: var(--serif); font-size: 17px; line-height: 1.72;
+      color: var(--cream); font-style: italic;
+    }
+    .affirmation-text strong { font-style: normal; color: var(--gold-light); font-weight: 500; }
+
+    /* Step description */
+    .step-desc {
+      font-size: 13.5px; line-height: 1.65; color: rgba(255,255,255,.6);
+      margin-bottom: 16px; text-align: center;
+    }
+
+    /* Chakra legend */
+    .chakra-legend {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px;
+      margin-bottom: 18px;
+    }
+    .chakra-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: var(--text-dim);
+    }
+    .chakra-dot-sm {
+      width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0;
+    }
+
+    /* Cut instruction */
+    .cut-box {
+      background: rgba(196,37,122,.07);
+      border: 1px solid rgba(196,37,122,.25); border-radius: 14px;
+      padding: 16px 18px; margin-bottom: 14px; text-align: center;
+    }
+    .cut-box p { font-family: var(--serif); font-size: 15px; line-height: 1.7; color: var(--cream); }
+    .cut-box strong { color: var(--gold-light); font-weight: 500; }
+    .cut-progress {
+      font-family: var(--display); font-size: 11px; letter-spacing: .22em;
+      color: var(--turquoise); text-align: center; margin-bottom: 14px;
+    }
+
+    /* Completion */
+    .completion { text-align: center; padding: 8px 0 4px; }
+    .completion-star { font-size: 44px; margin-bottom: 14px; }
+    .completion-title {
+      font-family: var(--display); font-size: 1.3rem; letter-spacing: .16em;
+      background: linear-gradient(135deg, #D4A820, #F5ECD0, #D4A820);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 10px;
+    }
+    .divider {
+      width: 100px; height: 1px; margin: 12px auto 16px;
+      background: linear-gradient(90deg, transparent, rgba(212,168,32,.45), transparent);
+    }
+    .completion-text {
+      font-family: var(--serif); font-size: 16px; line-height: 1.75;
+      color: rgba(245,236,208,.75); margin-bottom: 28px;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      width: 100%; padding: 15px; border-radius: 50px; border: none;
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      color: #fff; font-family: var(--display); font-size: 12px;
+      font-weight: 500; letter-spacing: .22em; text-transform: uppercase;
+      cursor: pointer; box-shadow: 0 4px 20px rgba(196,37,122,.3);
+      transition: opacity .2s, transform .1s; margin-top: 6px;
+    }
+    .btn-primary:active { opacity: .82; transform: scale(.98); }
+    .btn-primary:disabled { opacity: .35; cursor: default; }
+
+    .btn-secondary {
+      width: 100%; padding: 13px; border-radius: 50px;
+      border: 1px solid rgba(212,168,32,.28); background: transparent;
+      color: var(--gold); font-family: var(--display); font-size: 11px;
+      letter-spacing: .2em; text-transform: uppercase; cursor: pointer;
+      margin-top: 10px; transition: background .2s;
+    }
+    .btn-secondary:active { background: rgba(212,168,32,.07); }
+  </style>
+</head>
+<body>
+
+<header>
+  <button class="back-btn" onclick="goBack()">← Zurück</button>
+  <div class="header-center">
+    <div class="logo-name">Sonisanantes</div>
+    <div class="logo-sub">Energetic Toolbox</div>
+  </div>
+</header>
+
+<div id="app">
+  <div class="step-header">
+    <div class="step-label" id="step-label">Schritt 1 von 7</div>
+    <div class="step-dots" id="step-dots"></div>
+  </div>
+
+  <div id="canvas-wrap">
+    <canvas id="canvas"></canvas>
+    <div class="tap-hint" id="tap-hint" style="display:none">
+      Tippe auf eine Verbindungslinie, um sie zu durchtrennen
+    </div>
+  </div>
+
+  <div id="step-content"></div>
+</div>
+
+<script>
+// ── Constants ──────────────────────────────────────────────────────────────
+
+const CHAKRA_COLORS = [
+  '#9B59B6', // 1 Scheitel
+  '#5B8DEF', // 2 Stirn
+  '#1ABC9C', // 3 Kehle
+  '#2ECC71', // 4 Herz
+  '#F1C40F', // 5 Solarplexus
+  '#E67E22', // 6 Sakral
+  '#E74C3C', // 7 Wurzel
+];
+const CHAKRA_NAMES = ['Scheitel', 'Stirn', 'Kehle', 'Herz', 'Solarplexus', 'Sakral', 'Wurzel'];
+
+// ── State ──────────────────────────────────────────────────────────────────
+
+let step = 1;
+let myName = '', otherName = '';
+let drawnCircles = new Set();          // 'left' | 'right' | 'outer'
+let circleAnim = { type: null, progress: 0 };
+let linesDrawn = 0;                    // how many lines are fully drawn
+let lineAnim = { active: false, progress: 0, idx: 0 };
+let cutLines = Array(7).fill(false);
+let cutAnims = [];                     // [{ idx, progress }]
+
+// ── Canvas ──────────────────────────────────────────────────────────────────
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let dpr = window.devicePixelRatio || 1;
+
+function cw() { return canvas.width / dpr; }
+function ch() { return canvas.height / dpr; }
+
+function resizeCanvas() {
+  dpr = window.devicePixelRatio || 1;
+  const wrap = document.getElementById('canvas-wrap');
+  const w = wrap.clientWidth;
+  const h = Math.round(w * 0.76);
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.height = h + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  drawAll();
+}
+window.addEventListener('resize', resizeCanvas);
+
+// ── Figure Geometry ────────────────────────────────────────────────────────
+
+function getFig(side) {
+  const w = cw(), h = ch();
+  const cx = side === 'left' ? w * 0.25 : w * 0.75;
+  const R  = Math.round(w * 0.072);   // head radius
+  const topY       = h * 0.05;
+  const headCY     = topY + R;
+  const neckY      = headCY + R + R * 0.18;
+  const shoulderY  = neckY + R * 0.35;
+  const hipY       = shoulderY + R * 3.4;
+  const armLX      = cx - R * 1.85;
+  const armRX      = cx + R * 1.85;
+  const armMidY    = shoulderY + R * 1.35;
+  const footLX     = cx - R * 1.25;
+  const footRX     = cx + R * 1.25;
+  const footY      = hipY + R * 3.1;
+  const nameY      = footY + R * 1.05;
+
+  const chakras = [
+    { x: cx, y: topY + R * 0.05 },   // 0 Scheitel
+    { x: cx, y: headCY },            // 1 Stirn
+    { x: cx, y: neckY + R * 0.08 },  // 2 Kehle
+    { x: cx, y: shoulderY + R * 1.05 }, // 3 Herz
+    { x: cx, y: shoulderY + R * 1.9 },  // 4 Solarplexus
+    { x: cx, y: shoulderY + R * 2.75 }, // 5 Sakral
+    { x: cx, y: hipY },              // 6 Wurzel
+  ];
+
+  return { cx, R, topY, headCY, neckY, shoulderY, hipY,
+           armLX, armRX, armMidY, footLX, footRX, footY, nameY, chakras };
+}
+
+// ── Draw: Stick Figure ─────────────────────────────────────────────────────
+
+function drawFig(fig, color = 'rgba(245,236,208,.87)') {
+  const { cx, R, headCY, neckY, shoulderY, hipY,
+          armLX, armRX, armMidY, footLX, footRX, footY } = fig;
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth   = Math.max(2, R * 0.13);
+  ctx.lineCap     = 'round'; ctx.lineJoin = 'round';
+  ctx.shadowColor = color; ctx.shadowBlur = 8;
+
+  // Head
+  ctx.beginPath(); ctx.arc(cx, headCY, R, 0, Math.PI * 2); ctx.stroke();
+  // Body
+  line(cx, neckY, cx, hipY);
+  // Arms
+  line(cx, shoulderY + R * 0.3, armLX, armMidY);
+  line(cx, shoulderY + R * 0.3, armRX, armMidY);
+  // Legs
+  line(cx, hipY, footLX, footY);
+  line(cx, hipY, footRX, footY);
+  ctx.restore();
+}
+
+function drawFigName(fig, name) {
+  if (!name) return;
+  const { cx, nameY, R } = fig;
+  ctx.save();
+  ctx.fillStyle = 'rgba(245,236,208,.6)';
+  ctx.font = `400 ${Math.max(11, Math.round(R * 0.62))}px 'Cormorant Garamond', serif`;
+  ctx.textAlign = 'center';
+  ctx.fillText(name, cx, nameY);
+  ctx.restore();
+}
+
+function line(x1, y1, x2, y2) {
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+}
+
+// ── Draw: Chakra Dots ──────────────────────────────────────────────────────
+
+function drawChakras(fig) {
+  const r = Math.max(4, fig.R * 0.21);
+  fig.chakras.forEach((c, i) => {
+    ctx.save();
+    ctx.beginPath(); ctx.arc(c.x, c.y, r, 0, Math.PI * 2);
+    ctx.fillStyle   = CHAKRA_COLORS[i];
+    ctx.shadowColor = CHAKRA_COLORS[i]; ctx.shadowBlur = 10;
+    ctx.fill(); ctx.restore();
+  });
+}
+
+// ── Draw: Light Circle ─────────────────────────────────────────────────────
+
+function drawLightCircle(cx, cy, radius, alpha, rays = 16) {
+  ctx.save(); ctx.globalAlpha = alpha;
+
+  // Soft glow fill
+  const grd = ctx.createRadialGradient(cx, cy, radius * .6, cx, cy, radius * 1.3);
+  grd.addColorStop(0,   'rgba(212,168,32,0)');
+  grd.addColorStop(.55, 'rgba(212,168,32,.1)');
+  grd.addColorStop(1,   'rgba(212,168,32,0)');
+  ctx.beginPath(); ctx.arc(cx, cy, radius * 1.3, 0, Math.PI * 2);
+  ctx.fillStyle = grd; ctx.fill();
+
+  // Circle stroke
+  ctx.beginPath(); ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+  ctx.strokeStyle = '#D4A820'; ctx.lineWidth = 1.8;
+  ctx.shadowColor = '#D4A820'; ctx.shadowBlur = 12;
+  ctx.stroke();
+
+  // Rays
+  for (let i = 0; i < rays; i++) {
+    const ang = (i / rays) * Math.PI * 2;
+    const r1  = radius + 3;
+    const r2  = radius + 14 + (i % 2 === 0 ? 10 : 0);
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(ang) * r1, cy + Math.sin(ang) * r1);
+    ctx.lineTo(cx + Math.cos(ang) * r2, cy + Math.sin(ang) * r2);
+    ctx.strokeStyle = 'rgba(212,168,32,.65)';
+    ctx.lineWidth   = 1.4; ctx.shadowBlur = 6;
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawCircleForType(type, L, R, alpha) {
+  const circleForFig = (fig) => {
+    const centerY = (fig.headCY + fig.footY) / 2;
+    const radius  = (fig.footY - fig.headCY) / 2 + fig.R * 1.3;
+    drawLightCircle(fig.cx, centerY, radius, alpha);
+  };
+  if (type === 'left')  circleForFig(L);
+  if (type === 'right') circleForFig(R);
+  if (type === 'outer') {
+    drawLightCircle(cw() / 2, ch() * 0.46, cw() * 0.43, alpha, 24);
+  }
+}
+
+// ── Draw: Connection Line ──────────────────────────────────────────────────
+
+function drawConnLine(c1, c2, idx, alpha, isCut, cutProg) {
+  const { x: x1, y: y1 } = c1;
+  const { x: x2, y: y2 } = c2;
+  ctx.save(); ctx.globalAlpha = alpha;
+
+  const grad = ctx.createLinearGradient(x1, y1, x2, y2);
+  grad.addColorStop(0,   CHAKRA_COLORS[idx]);
+  grad.addColorStop(.5,  'rgba(212,168,32,.8)');
+  grad.addColorStop(1,   CHAKRA_COLORS[idx]);
+  ctx.strokeStyle = grad;
+  ctx.lineWidth   = 2;
+  ctx.lineCap     = 'round';
+  ctx.shadowColor = CHAKRA_COLORS[idx];
+  ctx.shadowBlur  = 7;
+
+  if (!isCut) {
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  } else {
+    // Severed line: two halves with growing gap, fading out
+    const dx = x2 - x1, dy = y2 - y1;
+    const len = Math.hypot(dx, dy);
+    const nx = dx / len, ny = dy / len;
+    const midX = (x1 + x2) / 2, midY = (y1 + y2) / 2;
+    const gap  = Math.min(cutProg * 28, 22);
+    ctx.globalAlpha = alpha * Math.max(0, 1 - cutProg * .85);
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(midX - nx * gap, midY - ny * gap);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(midX + nx * gap, midY + ny * gap);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+
+    // Flash spark at cut point
+    if (cutProg < .45) {
+      const flash = (1 - cutProg / .45) * .95;
+      ctx.save();
+      ctx.globalAlpha = flash;
+      ctx.beginPath(); ctx.arc(midX, midY, gap * .5, 0, Math.PI * 2);
+      ctx.fillStyle = '#fff'; ctx.shadowColor = '#fff'; ctx.shadowBlur = 20;
+      ctx.fill(); ctx.restore();
+    }
+  }
+  ctx.restore();
+}
+
+// ── Main draw ──────────────────────────────────────────────────────────────
+
+function drawAll() {
+  ctx.clearRect(0, 0, cw(), ch());
+  const L = getFig('left'), R = getFig('right');
+
+  if (step >= 1) { drawFig(L);  drawFigName(L, myName); }
+  if (step >= 2) { drawFig(R);  drawFigName(R, otherName); }
+
+  // Light circles (persistent + animating)
+  drawnCircles.forEach(t => drawCircleForType(t, L, R, 1));
+  if (circleAnim.type) drawCircleForType(circleAnim.type, L, R, circleAnim.progress);
+
+  // Chakra dots and connection lines
+  if (step >= 6) {
+    drawChakras(L); drawChakras(R);
+
+    for (let i = 0; i < 7; i++) {
+      const isAnimatingNow = lineAnim.active && lineAnim.idx === i;
+      if (i >= linesDrawn && !isAnimatingNow) continue;
+
+      const alpha    = isAnimatingNow ? lineAnim.progress : 1;
+      const cutAnim  = cutAnims.find(a => a.idx === i);
+      const isCut    = cutLines[i];
+      const cutProg  = cutAnim ? cutAnim.progress : (isCut ? 1 : 0);
+
+      drawConnLine(L.chakras[i], R.chakras[i], i, alpha, isCut || !!cutAnim, cutProg);
+    }
+  }
+}
+
+// ── Animations ────────────────────────────────────────────────────────────
+
+function animateCircle(type, onDone) {
+  // First add individual circles for 'outer' (persist from prev steps)
+  circleAnim = { type, progress: 0 };
+  const start = performance.now(), dur = 850;
+  (function frame(now) {
+    circleAnim.progress = Math.min((now - start) / dur, 1);
+    drawAll();
+    if (circleAnim.progress < 1) requestAnimationFrame(frame);
+    else {
+      drawnCircles.add(type);
+      circleAnim = { type: null, progress: 0 };
+      drawAll();
+      if (onDone) onDone();
+    }
+  })(performance.now());
+}
+
+function animateLines(onDone) {
+  linesDrawn = 0;
+  function nextLine() {
+    if (linesDrawn >= 7) { lineAnim.active = false; drawAll(); if (onDone) onDone(); return; }
+    lineAnim = { active: true, progress: 0, idx: linesDrawn };
+    const start = performance.now(), dur = 480;
+    (function frame(now) {
+      lineAnim.progress = Math.min((now - start) / dur, 1);
+      drawAll();
+      if (lineAnim.progress < 1) requestAnimationFrame(frame);
+      else { linesDrawn++; lineAnim.active = false; drawAll(); setTimeout(nextLine, 180); }
+    })(performance.now());
+  }
+  nextLine();
+}
+
+function animateCut(idx) {
+  if (cutLines[idx] || cutAnims.find(a => a.idx === idx)) return;
+  const obj = { idx, progress: 0 };
+  cutAnims.push(obj);
+  const start = performance.now(), dur = 620;
+  (function frame(now) {
+    obj.progress = Math.min((now - start) / dur, 1);
+    drawAll();
+    if (obj.progress < 1) requestAnimationFrame(frame);
+    else {
+      cutLines[idx] = true;
+      cutAnims = cutAnims.filter(a => a.idx !== idx);
+      drawAll();
+      updateCutProgress();
+      if (cutLines.every(Boolean)) setTimeout(showCompletion, 700);
+    }
+  })(performance.now());
+}
+
+// ── Step UI ────────────────────────────────────────────────────────────────
+
+const STEP_LABELS = [
+  '', 'Schritt 1 – Ich selbst', 'Schritt 2 – Die andere Person / Situation',
+  'Schritt 3 – Mein Lichtkreis', 'Schritt 4 – Ihr Lichtkreis',
+  'Schritt 5 – Gemeinsamer Kreis', 'Schritt 6 – Verbindungslinien',
+  'Schritt 7 – Durchtrennen',
+];
+
+function updateDots() {
+  document.getElementById('step-label').textContent = STEP_LABELS[step];
+  const wrap = document.getElementById('step-dots');
+  wrap.innerHTML = '';
+  for (let i = 1; i <= 7; i++) {
+    const d = document.createElement('div');
+    d.className = 'step-dot' + (i < step ? ' done' : i === step ? ' active' : '');
+    wrap.appendChild(d);
+  }
+}
+
+function renderContent() {
+  const el = document.getElementById('step-content');
+  document.getElementById('tap-hint').style.display = 'none';
+
+  if (step === 1) {
+    el.innerHTML = `
+      <div class="input-group">
+        <label class="input-label">Mein Vor- und Nachname</label>
+        <input class="name-input" id="inp-my" type="text" placeholder="z. B. Maria Muster"
+               value="${myName}" inputmode="text" autocomplete="off" autocorrect="off">
+      </div>
+      <button class="btn-primary" onclick="goNext()">Weiter →</button>`;
+    const inp = document.getElementById('inp-my');
+    inp.addEventListener('input', e => { myName = e.target.value; drawAll(); });
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.target.blur(); goNext(); } });
+    setTimeout(() => inp.focus(), 350);
+  }
+
+  else if (step === 2) {
+    el.innerHTML = `
+      <div class="input-group">
+        <label class="input-label">Name der anderen Person oder Situation</label>
+        <input class="name-input" id="inp-other" type="text" placeholder="z. B. Anna Müller"
+               value="${otherName}" inputmode="text" autocomplete="off" autocorrect="off">
+      </div>
+      <button class="btn-primary" onclick="goNext()">Weiter →</button>`;
+    const inp = document.getElementById('inp-other');
+    inp.addEventListener('input', e => { otherName = e.target.value; drawAll(); });
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.target.blur(); goNext(); } });
+    setTimeout(() => inp.focus(), 350);
+  }
+
+  else if (step === 3) {
+    el.innerHTML = `
+      <div class="affirmation-box">
+        <div class="affirmation-label">Sprich laut oder innerlich:</div>
+        <div class="affirmation-text">
+          „Ich wünsche mir das, was für mich das Beste ist,<br>
+          auch wenn ich nicht genau weiß, was es ist."
+        </div>
+      </div>
+      <button class="btn-primary" onclick="goNext()">Weiter →</button>`;
+    setTimeout(() => animateCircle('left'), 250);
+  }
+
+  else if (step === 4) {
+    const name = otherName || 'die andere Person';
+    el.innerHTML = `
+      <div class="affirmation-box">
+        <div class="affirmation-label">Sprich laut oder innerlich:</div>
+        <div class="affirmation-text">
+          „Ich wünsche mir das, was für <strong>${escHtml(name)}</strong> am Besten ist,<br>
+          auch wenn ich nicht weiß, was es ist."
+        </div>
+      </div>
+      <button class="btn-primary" onclick="goNext()">Weiter →</button>`;
+    setTimeout(() => animateCircle('right'), 250);
+  }
+
+  else if (step === 5) {
+    el.innerHTML = `
+      <div class="affirmation-box">
+        <div class="affirmation-label">Sprich laut oder innerlich:</div>
+        <div class="affirmation-text">
+          „Ich wünsche mir das, was für uns beide am Besten ist,<br>
+          auch wenn ich nicht genau weiß, was das ist."
+        </div>
+      </div>
+      <button class="btn-primary" onclick="goNext()">Weiter →</button>`;
+    setTimeout(() => animateCircle('outer'), 250);
+  }
+
+  else if (step === 6) {
+    el.innerHTML = `
+      <p class="step-desc">Die 7 Energiezentren beider Personen werden nun<br>durch Verbindungslinien verbunden.</p>
+      <div class="chakra-legend">
+        ${CHAKRA_NAMES.map((n, i) => `
+          <div class="chakra-item">
+            <div class="chakra-dot-sm" style="background:${CHAKRA_COLORS[i]}"></div>
+            <span>${n}</span>
+          </div>`).join('')}
+      </div>
+      <button class="btn-primary" id="btn-next" onclick="goNext()" disabled>Linien werden gezeichnet …</button>`;
+    setTimeout(() => {
+      animateLines(() => {
+        const btn = document.getElementById('btn-next');
+        if (btn) { btn.disabled = false; btn.textContent = 'Weiter →'; }
+      });
+    }, 300);
+  }
+
+  else if (step === 7) {
+    document.getElementById('tap-hint').style.display = 'block';
+    el.innerHTML = `
+      <div class="cut-box">
+        <p>Tippe auf jede Verbindungslinie,<br>um sie zu durchtrennen.</p>
+        <p style="margin-top:12px">Sage dabei:<br>
+          <strong>„Danke, danke, danke"</strong><br>
+          oder<br>
+          <strong>„Ich akzeptiere, ich akzeptiere, ich akzeptiere."</strong>
+        </p>
+      </div>
+      <div class="cut-progress" id="cut-progress">0 von 7 durchtrennt</div>`;
+    enableTap();
+  }
+}
+
+function updateCutProgress() {
+  const n = cutLines.filter(Boolean).length;
+  const el = document.getElementById('cut-progress');
+  if (el) el.textContent = `${n} von 7 durchtrennt`;
+}
+
+// ── Line Tap ───────────────────────────────────────────────────────────────
+
+function enableTap() {
+  canvas.addEventListener('pointerdown', handleTap);
+}
+function disableTap() {
+  canvas.removeEventListener('pointerdown', handleTap);
+}
+
+function handleTap(e) {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  const L = getFig('left'), R = getFig('right');
+  const threshold = Math.max(18, cw() * 0.05);
+
+  for (let i = 0; i < 7; i++) {
+    if (cutLines[i] || cutAnims.find(a => a.idx === i)) continue;
+    if (i >= linesDrawn) continue;
+    if (ptLineDist(x, y, L.chakras[i], R.chakras[i]) < threshold) {
+      animateCut(i);
+      break;
+    }
+  }
+}
+
+function ptLineDist(px, py, c1, c2) {
+  const dx = c2.x - c1.x, dy = c2.y - c1.y;
+  const lenSq = dx * dx + dy * dy;
+  if (lenSq === 0) return Math.hypot(px - c1.x, py - c1.y);
+  const t = Math.max(0, Math.min(1, ((px - c1.x) * dx + (py - c1.y) * dy) / lenSq));
+  return Math.hypot(px - c1.x - t * dx, py - c1.y - t * dy);
+}
+
+// ── Completion ────────────────────────────────────────────────────────────
+
+function showCompletion() {
+  disableTap();
+  document.getElementById('tap-hint').style.display = 'none';
+  document.getElementById('step-label').textContent = 'Abgeschlossen ✦';
+
+  const dots = document.getElementById('step-dots');
+  dots.querySelectorAll('.step-dot').forEach(d => {
+    d.classList.remove('active'); d.classList.add('done');
+  });
+
+  document.getElementById('step-content').innerHTML = `
+    <div class="completion">
+      <div class="completion-star">✨</div>
+      <div class="completion-title">Danke, es ist erledigt.</div>
+      <div class="divider"></div>
+      <div class="completion-text">
+        Alle Verbindungslinien sind durchtrennt.<br>
+        Die Technik ist vollständig abgeschlossen.<br><br>
+        <em>„Danke, danke, danke."</em>
+      </div>
+      <button class="btn-primary" onclick="resetAll()">Neue Sitzung beginnen</button>
+      <button class="btn-secondary" onclick="goBack()">Zur Energetic Toolbox</button>
+    </div>`;
+}
+
+// ── Navigation ────────────────────────────────────────────────────────────
+
+function goNext() {
+  if (step === 1) { const i = document.getElementById('inp-my');    if (i) myName    = i.value.trim(); }
+  if (step === 2) { const i = document.getElementById('inp-other'); if (i) otherName = i.value.trim(); }
+  if (step >= 7) return;
+  step++;
+  updateDots(); drawAll(); renderContent();
+}
+
+function resetAll() {
+  disableTap();
+  step = 1; myName = ''; otherName = '';
+  drawnCircles.clear(); circleAnim = { type: null, progress: 0 };
+  linesDrawn = 0; lineAnim = { active: false, progress: 0, idx: 0 };
+  cutLines = Array(7).fill(false); cutAnims = [];
+  updateDots(); drawAll(); renderContent();
+}
+
+function goBack() {
+  window.location.href = 'index.html';
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+
+resizeCanvas();
+updateDots();
+renderContent();
+</script>
+</body>
+</html>
