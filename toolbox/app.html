@@ -1,0 +1,2272 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Energetic Toolbox – App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #050608;
+      --card: rgba(123,45,158,0.08);
+      --card2: rgba(123,45,158,0.14);
+      --violet: #7B2D9E;
+      --violet-light: #A040C8;
+      --magenta: #C4257A;
+      --gold: #D4A820;
+      --gold-light: #E8C840;
+      --turquoise: #44D6D6;
+      --emerald: #3FB89B;
+      --cream: #F5ECD0;
+      --cream-muted: rgba(245,236,208,0.5);
+      --display: 'Cinzel', Georgia, serif;
+      --sans: 'Inter', -apple-system, sans-serif;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --nav-h: 70px;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--cream);
+      font-family: var(--sans);
+      overflow: hidden;
+    }
+
+    /* ─── SCREENS ─── */
+    .screen {
+      position: fixed;
+      inset: 0;
+      bottom: var(--nav-h);
+      overflow-y: auto;
+      display: none;
+      flex-direction: column;
+      -webkit-overflow-scrolling: touch;
+    }
+    .screen.active { display: flex; }
+
+    /* ─── BOTTOM NAV ─── */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(5,6,8,.96);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(212,168,32,.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 200;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 12px;
+      transition: background .2s;
+      border: none;
+      background: transparent;
+    }
+    .nav-icon { font-size: 1.3rem; opacity: .4; transition: opacity .2s; }
+    .nav-item.active .nav-icon { opacity: 1; }
+    .nav-label { font-family: var(--display); font-size: .6rem; letter-spacing: 1px; color: var(--cream-muted); text-transform: uppercase; }
+    .nav-item.active .nav-label { color: var(--turquoise); }
+
+    /* ─── SHARED ─── */
+    .page-header {
+      padding: 24px 20px 0;
+      flex-shrink: 0;
+    }
+    .page-header .greeting { font-family: var(--display); font-size: .65rem; color: var(--turquoise); letter-spacing: 2px; text-transform: uppercase; }
+    .page-header h1 { font-family: var(--display); font-size: 1.4rem; margin-top: 6px; line-height: 1.2; color: var(--cream); font-weight: 500; letter-spacing: .5px; }
+    .scrollable { flex: 1; overflow-y: auto; padding: 20px; -webkit-overflow-scrolling: touch; }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(212,168,32,.1);
+      border-radius: 18px;
+      padding: 20px;
+    }
+    .card + .card { margin-top: 14px; }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(68,214,214,.08);
+      border: 1px solid rgba(68,214,214,.2);
+      color: var(--turquoise);
+      font-family: var(--display);
+      font-size: .62rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 50px;
+    }
+
+    /* ─── HOME ─── */
+    #home { background: linear-gradient(180deg, rgba(5,6,8,1) 0%, var(--bg) 40%); }
+    .home-top {
+      padding: 32px 20px 0;
+      position: relative;
+    }
+    .home-top::before {
+      content: '';
+      position: absolute;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(123,45,158,.2) 0%, transparent 65%);
+      top: -80px; right: -80px;
+      pointer-events: none;
+    }
+    .home-greeting { font-family: var(--display); font-size: .65rem; color: var(--turquoise); letter-spacing: 2px; text-transform: uppercase; }
+    .home-title { font-family: var(--display); font-size: 1.5rem; margin: 8px 0 24px; line-height: 1.25; color: var(--cream); font-weight: 500; }
+    .home-title span {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 300;
+      background: linear-gradient(135deg, var(--gold-light), var(--magenta));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Daily impulse */
+    .impulse-card {
+      background: linear-gradient(135deg, rgba(123,45,158,.18), rgba(196,37,122,.1));
+      border: 1px solid rgba(212,168,32,.18);
+      border-radius: 18px;
+      padding: 22px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .impulse-card::before {
+      content: '✦';
+      position: absolute;
+      right: 16px; top: 14px;
+      font-size: 1.2rem;
+      color: rgba(212,168,32,.25);
+    }
+    .impulse-label { font-family: var(--display); font-size: .65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+    .impulse-text {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      color: var(--cream-muted);
+      line-height: 1.8;
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    /* Feeling check */
+    .feeling-card { margin-bottom: 20px; }
+    .feeling-card h3 { font-family: var(--display); font-size: .8rem; font-weight: 500; letter-spacing: .5px; margin-bottom: 14px; }
+    .feeling-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .feeling-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      background: rgba(5,6,8,.5);
+      border: 1px solid rgba(212,168,32,.08);
+      border-radius: 12px;
+      padding: 12px 6px;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      font-family: var(--sans);
+    }
+    .feeling-btn:hover, .feeling-btn.selected {
+      border-color: rgba(212,168,32,.3);
+      background: rgba(123,45,158,.12);
+    }
+    .feeling-btn .emoji { font-size: 1.3rem; }
+    .feeling-btn span { font-size: .62rem; color: var(--cream-muted); font-family: var(--display); letter-spacing: .5px; text-transform: uppercase; }
+
+    /* Quick access */
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .quick-card {
+      background: var(--card);
+      border: 1px solid rgba(212,168,32,.1);
+      border-radius: 16px;
+      padding: 18px 16px;
+      cursor: pointer;
+      transition: transform .2s, border-color .2s;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .quick-card:hover { transform: translateY(-2px); border-color: rgba(212,168,32,.25); }
+    .quick-card .q-icon { font-size: 1.5rem; }
+    .quick-card .q-title { font-family: var(--display); font-size: .78rem; font-weight: 500; letter-spacing: .3px; color: var(--cream); }
+    .quick-card .q-sub { font-size: .7rem; color: var(--cream-muted); font-weight: 300; }
+    .quick-card.violet { border-top: 2px solid var(--violet); }
+    .quick-card.magenta { border-top: 2px solid var(--magenta); }
+    .quick-card.gold    { border-top: 2px solid var(--gold); }
+    .quick-card.teal    { border-top: 2px solid var(--turquoise); }
+
+    /* ─── TOOLS SCREEN ─── */
+    .tools-list { padding: 16px 0 0; }
+    .tools-category { margin-bottom: 24px; }
+    .tools-category h3 {
+      font-family: var(--display);
+      font-size: .62rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--turquoise);
+      margin-bottom: 12px;
+      padding: 0 20px;
+    }
+    .tool-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      cursor: pointer;
+      transition: background .2s;
+      border-bottom: 1px solid rgba(212,168,32,.05);
+    }
+    .tool-item:hover { background: rgba(123,45,158,.07); }
+    .tool-item-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .tool-item-body { flex: 1; }
+    .tool-item-name { font-family: var(--display); font-size: .82rem; font-weight: 500; letter-spacing: .3px; margin-bottom: 3px; color: var(--cream); }
+    .tool-item-desc { font-size: .75rem; color: var(--cream-muted); font-weight: 300; }
+    .tool-item-arrow { color: var(--cream-muted); font-size: .9rem; }
+    .tool-item-badge {
+      font-family: var(--display);
+      font-size: .58rem;
+      letter-spacing: 1px;
+      padding: 2px 8px;
+      border-radius: 50px;
+      text-transform: uppercase;
+    }
+
+    /* ─── JOURNAL ─── */
+    .journal-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .stat-box {
+      background: var(--card);
+      border: 1px solid rgba(212,168,32,.1);
+      border-radius: 12px;
+      padding: 14px 10px;
+      text-align: center;
+    }
+    .stat-num { font-family: var(--display); font-size: 1.5rem; font-weight: 500; color: var(--turquoise); }
+    .stat-label { font-family: var(--display); font-size: .6rem; letter-spacing: 1px; color: var(--cream-muted); text-transform: uppercase; margin-top: 4px; }
+    .journal-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--cream-muted);
+    }
+    .journal-empty .icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .journal-empty p { font-size: .88rem; font-weight: 300; line-height: 1.7; }
+    .journal-entry {
+      background: var(--card);
+      border: 1px solid rgba(212,168,32,.1);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 12px;
+    }
+    .je-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .je-tool { font-family: var(--display); font-size: .62rem; letter-spacing: 1px; color: var(--turquoise); text-transform: uppercase; }
+    .je-date { font-size: .7rem; color: var(--cream-muted); font-weight: 300; }
+    .je-text { font-size: .85rem; color: var(--cream-muted); line-height: 1.65; font-weight: 300; }
+    .je-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 10px;
+      font-size: .7rem;
+      font-weight: 300;
+      color: var(--emerald);
+    }
+
+    /* ─── PROFIL ─── */
+    .profile-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      margin: 28px auto 0;
+      box-shadow: 0 0 40px rgba(123,45,158,.3);
+    }
+    .profile-name { text-align: center; font-family: var(--display); font-size: 1rem; font-weight: 500; letter-spacing: .5px; margin-top: 14px; color: var(--cream); }
+    .profile-plan { text-align: center; margin-top: 8px; }
+    .profile-plan span {
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      color: var(--cream);
+      font-family: var(--display);
+      font-size: .65rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 16px;
+      border-radius: 50px;
+    }
+    .profile-menu { margin-top: 28px; }
+    .profile-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(212,168,32,.05);
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .profile-menu-item:hover { background: rgba(123,45,158,.06); }
+    .pmi-icon {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      background: rgba(123,45,158,.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .pmi-label { flex: 1; font-family: var(--display); font-size: .78rem; font-weight: 400; letter-spacing: .3px; color: var(--cream); }
+    .pmi-arrow { color: var(--cream-muted); font-size: .85rem; }
+
+    /* ─── TOOL MODAL ─── */
+    .tool-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      display: none;
+      flex-direction: column;
+      background: var(--bg);
+    }
+    .tool-modal.open { display: flex; }
+
+    .tool-modal-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(212,168,32,.08);
+      flex-shrink: 0;
+    }
+    .modal-back {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: rgba(123,45,158,.12);
+      border: none;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      color: var(--cream-muted);
+      flex-shrink: 0;
+      transition: color .2s;
+    }
+    .modal-back:hover { color: var(--cream); }
+    .modal-title { font-family: var(--display); font-size: .85rem; font-weight: 500; letter-spacing: .5px; color: var(--cream); }
+    .modal-step-indicator {
+      margin-left: auto;
+      font-family: var(--display);
+      font-size: .62rem;
+      letter-spacing: 1px;
+      color: var(--cream-muted);
+      text-transform: uppercase;
+    }
+
+    /* Progress bar */
+    .progress-bar-wrap {
+      height: 2px;
+      background: rgba(212,168,32,.08);
+      flex-shrink: 0;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--violet), var(--magenta));
+      transition: width .5s ease;
+    }
+
+    .tool-modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 20px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Step content */
+    .step-content { animation: fadeUp .4s ease; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .step-icon-large { font-size: 2.8rem; margin-bottom: 20px; text-align: center; }
+    .step-title {
+      font-family: var(--display);
+      font-size: 1.3rem;
+      font-weight: 500;
+      letter-spacing: .5px;
+      margin-bottom: 12px;
+      line-height: 1.3;
+      color: var(--cream);
+    }
+    .step-desc { color: var(--cream-muted); font-size: .92rem; line-height: 1.75; margin-bottom: 24px; font-weight: 300; }
+    .step-sub { font-size: .8rem; color: rgba(245,236,208,.35); margin-top: 8px; line-height: 1.6; font-weight: 300; }
+
+    /* Input styles */
+    .step-input {
+      width: 100%;
+      background: rgba(5,6,8,.5);
+      border: 1px solid rgba(212,168,32,.15);
+      border-radius: 14px;
+      color: var(--cream);
+      font-family: var(--sans);
+      font-size: .9rem;
+      font-weight: 300;
+      padding: 16px;
+      resize: none;
+      outline: none;
+      transition: border-color .2s;
+      line-height: 1.65;
+    }
+    .step-input:focus { border-color: rgba(212,168,32,.35); }
+    .step-input::placeholder { color: rgba(245,236,208,.2); }
+
+    /* Emotion grid */
+    .emotion-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .emotion-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      background: rgba(5,6,8,.5);
+      border: 1px solid rgba(212,168,32,.08);
+      border-radius: 12px;
+      padding: 14px 8px;
+      cursor: pointer;
+      font-family: var(--sans);
+      transition: border-color .2s, background .2s;
+    }
+    .emotion-btn:hover, .emotion-btn.sel {
+      border-color: rgba(212,168,32,.3);
+      background: rgba(123,45,158,.12);
+    }
+    .emotion-btn .e-icon { font-size: 1.4rem; }
+    .emotion-btn .e-label { font-family: var(--display); font-size: .6rem; letter-spacing: .5px; color: var(--cream-muted); text-transform: uppercase; text-align: center; }
+
+    /* Body map */
+    .body-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .body-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(5,6,8,.5);
+      border: 1px solid rgba(212,168,32,.08);
+      border-radius: 12px;
+      padding: 14px;
+      cursor: pointer;
+      font-family: var(--sans);
+      transition: border-color .2s, background .2s;
+    }
+    .body-btn:hover, .body-btn.sel {
+      border-color: rgba(212,168,32,.3);
+      background: rgba(123,45,158,.12);
+    }
+    .body-btn .b-icon { font-size: 1.1rem; }
+    .body-btn .b-label { font-family: var(--display); font-size: .68rem; letter-spacing: .3px; color: var(--cream-muted); }
+
+    /* Intensity slider */
+    .intensity-wrap { margin: 10px 0 6px; }
+    .intensity-slider {
+      width: 100%;
+      -webkit-appearance: none;
+      height: 4px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--emerald) 0%, var(--gold) 50%, var(--magenta) 100%);
+      outline: none;
+      cursor: pointer;
+    }
+    .intensity-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: var(--cream);
+      box-shadow: 0 2px 12px rgba(0,0,0,.5);
+      cursor: pointer;
+    }
+    .intensity-value {
+      text-align: center;
+      font-family: var(--display);
+      font-size: 2rem;
+      font-weight: 500;
+      color: var(--turquoise);
+      margin: 16px 0 4px;
+    }
+    .intensity-label { text-align: center; font-size: .78rem; color: var(--cream-muted); font-weight: 300; }
+
+    /* Connection choice */
+    .connection-cards { display: flex; flex-direction: column; gap: 14px; }
+    .connection-card {
+      background: rgba(5,6,8,.4);
+      border: 1px solid rgba(212,168,32,.1);
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+    .connection-card:hover, .connection-card.sel {
+      border-color: rgba(212,168,32,.3);
+      background: rgba(123,45,158,.1);
+    }
+    .cc-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .cc-icon { font-size: 1.5rem; }
+    .cc-title { font-family: var(--display); font-size: .85rem; font-weight: 500; letter-spacing: .3px; color: var(--cream); }
+    .cc-desc { font-size: .82rem; color: var(--cream-muted); line-height: 1.65; font-weight: 300; }
+
+    /* Breathing animation */
+    .breath-circle {
+      width: 150px; height: 150px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(123,45,158,.35) 0%, rgba(123,45,158,.04) 70%);
+      border: 1px solid rgba(212,168,32,.2);
+      display: flex; align-items: center; justify-content: center;
+      margin: 24px auto;
+      font-family: var(--display);
+      font-size: .75rem;
+      letter-spacing: 1px;
+      color: var(--turquoise);
+      text-align: center;
+      animation: breathe 8s ease-in-out infinite;
+    }
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(123,45,158,.15); }
+      50% { transform: scale(1.15); box-shadow: 0 0 40px 10px rgba(123,45,158,.1); }
+    }
+    .breath-instruction { text-align: center; font-size: .9rem; color: var(--cream-muted); line-height: 1.75; font-weight: 300; }
+
+    /* Release type */
+    .release-cards { display: flex; flex-direction: column; gap: 14px; }
+    .release-card {
+      background: rgba(5,6,8,.4);
+      border: 1px solid rgba(212,168,32,.1);
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+    .release-card.violet-theme:hover, .release-card.violet-theme.sel { border-color: var(--violet); background: rgba(123,45,158,.1); }
+    .release-card.gold-theme:hover,   .release-card.gold-theme.sel   { border-color: var(--gold); background: rgba(212,168,32,.06); }
+    .release-card.magenta-theme:hover, .release-card.magenta-theme.sel { border-color: var(--magenta); background: rgba(196,37,122,.07); }
+    .rc-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .rc-icon { font-size: 1.4rem; }
+    .rc-title { font-family: var(--display); font-size: .82rem; font-weight: 500; letter-spacing: .3px; color: var(--cream); }
+    .rc-desc { font-size: .8rem; color: var(--cream-muted); line-height: 1.65; font-weight: 300; }
+
+    /* Guided process box */
+    .guided-box {
+      background: linear-gradient(135deg, rgba(123,45,158,.12), rgba(196,37,122,.06));
+      border: 1px solid rgba(212,168,32,.12);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .guided-step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+      animation: fadeUp .4s ease;
+    }
+    .guided-step:last-child { margin-bottom: 0; }
+    .gs-num {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--display);
+      font-size: .68rem;
+      color: var(--cream);
+      flex-shrink: 0;
+    }
+    .gs-text { font-size: .85rem; color: var(--cream-muted); line-height: 1.7; font-weight: 300; }
+
+    /* Questions */
+    .question-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+    .question-item {
+      background: rgba(5,6,8,.4);
+      border-left: 2px solid var(--gold);
+      border-radius: 0 10px 10px 0;
+      padding: 14px 16px;
+      font-family: var(--serif);
+      font-size: .95rem;
+      color: var(--cream-muted);
+      font-style: italic;
+      font-weight: 300;
+      line-height: 1.65;
+    }
+
+    /* Completion */
+    .completion-glow {
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(63,184,155,.25) 0%, transparent 70%);
+      border: 1px solid rgba(63,184,155,.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.8rem;
+      margin: 0 auto 24px;
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(63,184,155,.15); }
+      50% { box-shadow: 0 0 0 20px rgba(63,184,155,0); }
+    }
+
+    /* ─── MODAL FOOTER ─── */
+    .modal-footer {
+      padding: 16px 20px;
+      border-top: 1px solid rgba(212,168,32,.08);
+      flex-shrink: 0;
+    }
+    .btn-next {
+      width: 100%;
+      padding: 15px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      color: var(--cream);
+      font-family: var(--display);
+      font-size: .75rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(123,45,158,.3);
+      transition: transform .2s, opacity .2s;
+    }
+    .btn-next:hover { transform: scale(1.02); }
+    .btn-next:disabled { opacity: .35; cursor: default; transform: none; }
+    .btn-skip {
+      display: block;
+      text-align: center;
+      margin-top: 10px;
+      font-size: .78rem;
+      color: var(--cream-muted);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: var(--sans);
+      font-weight: 300;
+      width: 100%;
+      padding: 6px;
+      transition: color .2s;
+    }
+    .btn-skip:hover { color: var(--cream); }
+
+    .char-hint { font-size: .7rem; color: var(--cream-muted); text-align: right; margin-top: 6px; font-weight: 300; }
+
+    /* ─── BUCH-CARD ─── */
+    .book-card {
+      margin-top: 28px;
+      background: linear-gradient(135deg, rgba(212,168,32,.08) 0%, rgba(123,45,158,.1) 100%);
+      border: 1px solid rgba(212,168,32,.2);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+    .book-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top right, rgba(212,168,32,.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .book-card-inner {
+      padding: 20px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .book-cover {
+      width: 80px;
+      height: 110px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #f97316, #3b82f6, #06b6d4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,.4);
+      position: relative;
+      overflow: hidden;
+    }
+    .book-cover-text {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: .55rem;
+      color: rgba(255,255,255,.9);
+      text-align: center;
+      padding: 6px;
+      line-height: 1.4;
+      position: relative;
+      z-index: 1;
+    }
+    .book-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,.15) 0%, transparent 50%);
+    }
+    .book-info { flex: 1; min-width: 0; }
+    .book-tag {
+      font-family: var(--display);
+      font-size: .6rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .book-title {
+      font-family: var(--display);
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--cream);
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+    .book-author {
+      font-size: .75rem;
+      color: var(--cream-muted);
+      font-weight: 300;
+      margin-bottom: 8px;
+    }
+    .book-stars { color: var(--gold); font-size: .78rem; letter-spacing: 1px; margin-bottom: 8px; }
+    .book-desc {
+      font-size: .78rem;
+      color: var(--cream-muted);
+      font-weight: 300;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .book-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .book-feature {
+      font-family: var(--display);
+      font-size: .58rem;
+      letter-spacing: .8px;
+      color: var(--turquoise);
+      background: rgba(68,214,214,.08);
+      border: 1px solid rgba(68,214,214,.15);
+      padding: 3px 8px;
+      border-radius: 50px;
+    }
+    .book-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-top: 1px solid rgba(212,168,32,.1);
+      background: rgba(5,6,8,.3);
+    }
+    .book-price {
+      font-family: var(--display);
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--gold);
+    }
+    .book-price-sub {
+      font-size: .68rem;
+      color: var(--cream-muted);
+      font-weight: 300;
+      margin-top: 1px;
+    }
+    .btn-amazon {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--gold), #B8920E);
+      color: #050608;
+      font-family: var(--display);
+      font-size: .7rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 10px 18px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(212,168,32,.3);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-amazon:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(212,168,32,.4); }
+
+    /* ─── KLÄNGE SCREEN ─── */
+    .klaenge-category-label {
+      font-family: var(--display);
+      font-size: .62rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--turquoise);
+      margin: 24px 0 12px;
+    }
+    .klaenge-category-label:first-child { margin-top: 4px; }
+
+    .media-card {
+      background: var(--card);
+      border: 1px solid rgba(212,168,32,.12);
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      cursor: pointer;
+      transition: transform .2s, border-color .2s;
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .media-card:hover { transform: translateY(-2px); border-color: rgba(212,168,32,.28); }
+    .media-card-thumb {
+      width: 88px;
+      height: 88px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      position: relative;
+    }
+    .media-card-thumb.meditation { background: linear-gradient(135deg, rgba(123,45,158,.4), rgba(196,37,122,.25)); }
+    .media-card-thumb.frequenz   { background: linear-gradient(135deg, rgba(212,168,32,.2), rgba(63,184,155,.15)); }
+    .media-card-thumb .play-btn {
+      position: absolute;
+      bottom: 6px; right: 6px;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: rgba(212,168,32,.85);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem;
+      color: #050608;
+    }
+    .media-card-body { flex: 1; padding: 14px 16px 14px 14px; }
+    .media-card-tag {
+      font-family: var(--display);
+      font-size: .58rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--turquoise);
+      margin-bottom: 6px;
+    }
+    .media-card-title {
+      font-family: var(--display);
+      font-size: .82rem;
+      font-weight: 500;
+      color: var(--cream);
+      line-height: 1.3;
+      margin-bottom: 5px;
+    }
+    .media-card-desc {
+      font-size: .73rem;
+      color: var(--cream-muted);
+      font-weight: 300;
+      line-height: 1.5;
+    }
+    .media-card-hz {
+      display: inline-block;
+      margin-top: 6px;
+      font-family: var(--display);
+      font-size: .58rem;
+      letter-spacing: 1px;
+      color: var(--gold);
+      background: rgba(212,168,32,.1);
+      border: 1px solid rgba(212,168,32,.2);
+      padding: 2px 8px;
+      border-radius: 50px;
+    }
+
+    /* ─── MEDIA PLAYER MODAL ─── */
+    .player-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      display: none;
+      flex-direction: column;
+      background: var(--bg);
+    }
+    .player-modal.open { display: flex; }
+
+    .player-modal-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(212,168,32,.08);
+      flex-shrink: 0;
+    }
+    .player-body {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 20px 32px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* video player */
+    .video-wrap {
+      width: 100%;
+      max-width: 560px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #000;
+      margin-bottom: 28px;
+      box-shadow: 0 0 40px rgba(123,45,158,.25);
+    }
+    .video-wrap video {
+      width: 100%;
+      display: block;
+    }
+
+    /* audio player */
+    .audio-visual {
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,168,32,.2) 0%, rgba(123,45,158,.15) 50%, transparent 75%);
+      border: 1px solid rgba(212,168,32,.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem;
+      margin-bottom: 28px;
+      animation: breathe 6s ease-in-out infinite;
+      box-shadow: 0 0 60px rgba(123,45,158,.15);
+    }
+    .audio-wrap {
+      width: 100%;
+      max-width: 440px;
+      margin-bottom: 20px;
+    }
+    audio {
+      width: 100%;
+      border-radius: 50px;
+      outline: none;
+    }
+    audio::-webkit-media-controls-panel {
+      background: rgba(123,45,158,.15);
+      border-radius: 50px;
+    }
+
+    .player-title {
+      font-family: var(--display);
+      font-size: 1.1rem;
+      font-weight: 500;
+      letter-spacing: .5px;
+      color: var(--cream);
+      text-align: center;
+      margin-bottom: 8px;
+      max-width: 400px;
+    }
+    .player-subtitle {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: .95rem;
+      color: var(--cream-muted);
+      text-align: center;
+      margin-bottom: 24px;
+      font-weight: 300;
+      max-width: 360px;
+      line-height: 1.65;
+    }
+    .player-hz-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .hz-badge {
+      font-family: var(--display);
+      font-size: .62rem;
+      letter-spacing: 1px;
+      color: var(--gold);
+      background: rgba(212,168,32,.1);
+      border: 1px solid rgba(212,168,32,.2);
+      padding: 4px 12px;
+      border-radius: 50px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ HOME ══════════ -->
+<div id="home" class="screen active">
+  <div class="home-top">
+    <div class="home-greeting">Guten Morgen ✦</div>
+    <h1 class="home-title">Wie geht es<br /><span>dir heute?</span></h1>
+
+    <div class="impulse-card">
+      <div class="impulse-label">✦ Tagesimpuls</div>
+      <p class="impulse-text" id="daily-impulse">„Was in dir wartet, wartet nicht auf die perfekte Zeit. Es wartet auf deine Bereitschaft."</p>
+    </div>
+  </div>
+
+  <div class="scrollable">
+    <div class="card feeling-card">
+      <h3>Wie fühlst du dich gerade?</h3>
+      <div class="feeling-grid">
+        <button class="feeling-btn" onclick="selectFeeling(this)"><span class="emoji">😌</span><span>Ruhig</span></button>
+        <button class="feeling-btn" onclick="selectFeeling(this)"><span class="emoji">😔</span><span>Schwer</span></button>
+        <button class="feeling-btn" onclick="selectFeeling(this)"><span class="emoji">😤</span><span>Angespannt</span></button>
+        <button class="feeling-btn" onclick="selectFeeling(this)"><span class="emoji">😢</span><span>Traurig</span></button>
+        <button class="feeling-btn" onclick="selectFeeling(this)"><span class="emoji">😟</span><span>Ängstlich</span></button>
+        <button class="feeling-btn" onclick="selectFeeling(this)"><span class="emoji">😊</span><span>Offen</span></button>
+        <button class="feeling-btn" onclick="selectFeeling(this)"><span class="emoji">🌀</span><span>Unruhig</span></button>
+        <button class="feeling-btn" onclick="selectFeeling(this)"><span class="emoji">✨</span><span>Klar</span></button>
+      </div>
+    </div>
+
+    <div style="margin-bottom:10px;">
+      <div style="font-family:var(--display);font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--turquoise);margin-bottom:12px;">Schnellzugriff</div>
+      <div class="quick-grid">
+        <div class="quick-card violet" onclick="openTool('blockaden')">
+          <span class="q-icon">🔓</span>
+          <span class="q-title">Blockaden lösen</span>
+          <span class="q-sub">Geführter Prozess</span>
+        </div>
+        <div class="quick-card magenta" onclick="openTool('koerper')">
+          <span class="q-icon">🫀</span>
+          <span class="q-title">Körper fragen</span>
+          <span class="q-sub">Intuitive Antworten</span>
+        </div>
+        <div class="quick-card gold" onclick="openTool('wunsch')">
+          <span class="q-icon">📖</span>
+          <span class="q-title">Wunschbuch</span>
+          <span class="q-sub">Manifestation</span>
+        </div>
+        <div class="quick-card teal" onclick="openTool('schutz')">
+          <span class="q-icon">🛡️</span>
+          <span class="q-title">Back to Sender</span>
+          <span class="q-sub">Energieschutz</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="display:flex;align-items:center;gap:16px;">
+      <div style="font-size:1.8rem;">🔥</div>
+      <div>
+        <div style="font-family:var(--display);font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--turquoise);">Deine Streak</div>
+        <div style="font-family:var(--display);font-size:.92rem;font-weight:500;margin-top:4px;color:var(--cream);">3 Tage in Folge <span style="color:var(--gold)">✦</span></div>
+        <div style="font-size:.75rem;color:var(--cream-muted);margin-top:3px;font-weight:300;">Weiter so – du bist auf dem richtigen Weg</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TOOLS ══════════ -->
+<div id="tools-screen" class="screen">
+  <div class="page-header" style="padding-bottom:16px;">
+    <div class="greeting">Deine Werkzeuge</div>
+    <h1>Toolbox</h1>
+  </div>
+  <div class="tools-list">
+    <div class="tools-category">
+      <h3>Transformation</h3>
+      <div class="tool-item" onclick="openTool('blockaden')">
+        <div class="tool-item-icon" style="background:rgba(123,45,158,.15);">🔓</div>
+        <div class="tool-item-body">
+          <div class="tool-item-name">Blockaden lösen</div>
+          <div class="tool-item-desc">Multidimensionaler geführter Prozess</div>
+        </div>
+        <span class="tool-item-badge" style="background:rgba(68,214,214,.1);color:var(--turquoise);">Pro</span>
+        <span class="tool-item-arrow">›</span>
+      </div>
+      <div class="tool-item" onclick="openTool('wunder')">
+        <div class="tool-item-icon" style="background:rgba(123,45,158,.1);">🪄</div>
+        <div class="tool-item-body">
+          <div class="tool-item-name">Die 4 Schritte für Wunder</div>
+          <div class="tool-item-desc">Wahrnehmen · Annehmen · Transformieren · Neu ausrichten</div>
+        </div>
+        <span class="tool-item-arrow">›</span>
+      </div>
+    </div>
+    <div class="tools-category">
+      <h3>Intuition & Körper</h3>
+      <div class="tool-item" onclick="openTool('koerper')">
+        <div class="tool-item-icon" style="background:rgba(196,37,122,.1);">🫀</div>
+        <div class="tool-item-body">
+          <div class="tool-item-name">Körperkommunikation</div>
+          <div class="tool-item-desc">Fragen an den Körper – intuitive Antworten</div>
+        </div>
+        <span class="tool-item-arrow">›</span>
+      </div>
+      <div class="tool-item" onclick="openTool('fragen')">
+        <div class="tool-item-icon" style="background:rgba(212,168,32,.08);">🖊️</div>
+        <div class="tool-item-body">
+          <div class="tool-item-name">Lösungsorientierte Fragen</div>
+          <div class="tool-item-desc">Perspektivwechsel durch kraftvolle Impulse</div>
+        </div>
+        <span class="tool-item-arrow">›</span>
+      </div>
+    </div>
+    <div class="tools-category">
+      <h3>Energie & Schutz</h3>
+      <div class="tool-item" onclick="openTool('schutz')">
+        <div class="tool-item-icon" style="background:rgba(68,214,214,.08);">🛡️</div>
+        <div class="tool-item-body">
+          <div class="tool-item-name">Back to Sender</div>
+          <div class="tool-item-desc">Fremde Energien erkennen & zurückgeben</div>
+        </div>
+        <span class="tool-item-arrow">›</span>
+      </div>
+      <div class="tool-item" onclick="openTool('felder')">
+        <div class="tool-item-icon" style="background:rgba(68,214,214,.08);">🌀</div>
+        <div class="tool-item-body">
+          <div class="tool-item-name">Energiefelder anlegen</div>
+          <div class="tool-item-desc">Schutz-, Heil- und Manifestationsfelder</div>
+        </div>
+        <span class="tool-item-badge" style="background:rgba(68,214,214,.1);color:var(--turquoise);">Pro</span>
+        <span class="tool-item-arrow">›</span>
+      </div>
+    </div>
+    <div class="tools-category">
+      <h3>Manifestation</h3>
+      <div class="tool-item" onclick="openTool('wunsch')">
+        <div class="tool-item-icon" style="background:rgba(212,168,32,.08);">📖</div>
+        <div class="tool-item-body">
+          <div class="tool-item-name">Wunschbucharbeit</div>
+          <div class="tool-item-desc">Wünsche formulieren & Frequenz aktivieren</div>
+        </div>
+        <span class="tool-item-arrow">›</span>
+      </div>
+      <div class="tool-item" onclick="openTool('strich')">
+        <div class="tool-item-icon" style="background:rgba(196,37,122,.08);">👤</div>
+        <div class="tool-item-body">
+          <div class="tool-item-name">Strichmännchentechnik</div>
+          <div class="tool-item-desc">Energetische Verbindungen zu Personen</div>
+        </div>
+        <span class="tool-item-badge" style="background:rgba(68,214,214,.1);color:var(--turquoise);">Pro</span>
+        <span class="tool-item-arrow">›</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ JOURNAL ══════════ -->
+<div id="journal" class="screen">
+  <div class="page-header">
+    <div class="greeting">Deine Erkenntnisse</div>
+    <h1>Journal</h1>
+  </div>
+  <div class="scrollable">
+    <div class="journal-stats">
+      <div class="stat-box"><div class="stat-num" id="stat-sessions">0</div><div class="stat-label">Sessions</div></div>
+      <div class="stat-box"><div class="stat-num" id="stat-days">3</div><div class="stat-label">Tage aktiv</div></div>
+      <div class="stat-box"><div class="stat-num" id="stat-tools">0</div><div class="stat-label">Tools</div></div>
+    </div>
+    <!-- Buchempfehlung -->
+    <div class="book-card">
+      <div class="book-card-inner">
+        <div class="book-cover">
+          <div class="book-cover-text">Your<br/>positive<br/>Victory</div>
+        </div>
+        <div class="book-info">
+          <div class="book-tag">✦ Von Yvonne Stark</div>
+          <div class="book-title">Your positive Victory –<br/>Dein Erfolgstagebuch</div>
+          <div class="book-author">von Yvonne Stark · Taschenbuch</div>
+          <div class="book-stars">★★★★★</div>
+          <div class="book-desc">Dein täglicher Erfolgsbooster – inspiriert, energetisch zu wachsen, Dankbarkeit zu spüren und Deine Erfolge bewusst zu feiern.</div>
+          <div class="book-features">
+            <span class="book-feature">Wunschenergie</span>
+            <span class="book-feature">Wertschätzung</span>
+            <span class="book-feature">Dankbarkeit</span>
+            <span class="book-feature">Erfolge</span>
+          </div>
+        </div>
+      </div>
+      <div class="book-footer">
+        <div>
+          <div class="book-price">16,68 €</div>
+          <div class="book-price-sub">auf Amazon.de</div>
+        </div>
+        <a href="https://amzn.eu/d/090lTFzq" target="_blank" class="btn-amazon">
+          📖 Jetzt kaufen
+        </a>
+      </div>
+    </div>
+
+    <div style="font-family:var(--display);font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--turquoise);margin:24px 0 12px;">Deine Einträge</div>
+    <div id="journal-entries">
+      <div class="journal-empty">
+        <div class="icon">📖</div>
+        <p>Dein Journal ist noch leer.<br />Starte dein erstes Tool und<br />halte deine Erkenntnisse fest.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PROFIL ══════════ -->
+<div id="profil" class="screen">
+  <div class="profile-avatar">🌸</div>
+  <div class="profile-name" id="profile-name">Herzlich willkommen</div>
+  <div style="text-align:center;margin-top:6px;font-size:.75rem;color:var(--cream-muted);font-weight:300;" id="profile-email"></div>
+  <div class="profile-plan"><span>✦ Energetic Pro</span></div>
+  <div class="scrollable" style="margin-top:20px;">
+    <div class="profile-menu">
+      <div class="profile-menu-item"><div class="pmi-icon">✨</div><span class="pmi-label">Mein Abo</span><span class="pmi-arrow">›</span></div>
+      <div class="profile-menu-item"><div class="pmi-icon">🔔</div><span class="pmi-label">Erinnerungen</span><span class="pmi-arrow">›</span></div>
+      <div class="profile-menu-item"><div class="pmi-icon">🎨</div><span class="pmi-label">Erscheinungsbild</span><span class="pmi-arrow">›</span></div>
+      <div class="profile-menu-item"><div class="pmi-icon">🔒</div><span class="pmi-label">Datenschutz</span><span class="pmi-arrow">›</span></div>
+      <div class="profile-menu-item"><div class="pmi-icon">❓</div><span class="pmi-label">Hilfe & Support</span><span class="pmi-arrow">›</span></div>
+      <div class="profile-menu-item" onclick="handleLogout()" style="border-top:1px solid rgba(196,37,122,.12);margin-top:8px;">
+        <div class="pmi-icon" style="background:rgba(196,37,122,.1);">🚪</div>
+        <span class="pmi-label" style="color:#F0A0C0;">Abmelden</span>
+        <span class="pmi-arrow">›</span>
+      </div>
+    </div>
+    <div style="text-align:center;padding:24px 0;color:var(--cream-muted);font-size:.75rem;font-weight:300;">Version 1.0.0 · Energetic Toolbox · Sonisanantes</div>
+  </div>
+</div>
+
+<!-- ══════════ KLÄNGE ══════════ -->
+<div id="klaenge" class="screen">
+  <div class="page-header">
+    <div class="greeting">Von Yvonne Stark</div>
+    <h1>Klang & Meditation</h1>
+  </div>
+  <div class="scrollable">
+
+    <div class="klaenge-category-label">🌊 Geführte Meditationen</div>
+
+    <div class="media-card" onclick="openPlayer('traenen')">
+      <div class="media-card-thumb meditation">
+        🌊
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="media-card-body">
+        <div class="media-card-tag">Geführte Meditation · Video</div>
+        <div class="media-card-title">Wenn Tränen Heilen</div>
+        <div class="media-card-desc">Eine einfühlsame Reise durch den Schmerz – hin zu tiefer Heilung und innerem Frieden.</div>
+      </div>
+    </div>
+
+    <div class="media-card" onclick="openPlayer('vollmond')">
+      <div class="media-card-thumb meditation">
+        🌕
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="media-card-body">
+        <div class="media-card-tag">Geführte Meditation · Video</div>
+        <div class="media-card-title">Vollmond – Loslassen, Aufladen & Fülle empfangen</div>
+        <div class="media-card-desc">Die Kraft des Vollmonds nutzen: loslassen, was nicht mehr dient, und Fülle einladen.</div>
+      </div>
+    </div>
+
+    <div class="klaenge-category-label">✧ Frequenzreisen</div>
+
+    <div class="media-card" onclick="openPlayer('urklang')">
+      <div class="media-card-thumb frequenz">
+        💛
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="media-card-body">
+        <div class="media-card-tag">Frequenzreise · Musik</div>
+        <div class="media-card-title">Urklang des Herzens</div>
+        <div class="media-card-desc">Heilende Herzfrequenzen für tiefe Verbindung und innere Harmonie.</div>
+        <span class="media-card-hz">432 Hz · 639 Hz</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════ MEDIA PLAYER MODAL ══════════ -->
+<div class="player-modal" id="player-modal">
+  <div class="player-modal-header">
+    <button class="modal-back" onclick="closePlayer()">←</button>
+    <div class="modal-title" id="player-modal-title">Meditation</div>
+  </div>
+  <div class="player-body" id="player-body">
+    <!-- wird per JS befüllt -->
+  </div>
+</div>
+
+<!-- ══════════ BOTTOM NAV ══════════ -->
+<nav class="bottom-nav">
+  <button class="nav-item active" onclick="showScreen('home',this)">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">Home</span>
+  </button>
+  <button class="nav-item" onclick="showScreen('tools-screen',this)">
+    <span class="nav-icon">🧰</span>
+    <span class="nav-label">Tools</span>
+  </button>
+  <button class="nav-item" onclick="showScreen('journal',this)">
+    <span class="nav-icon">📖</span>
+    <span class="nav-label">Journal</span>
+  </button>
+  <button class="nav-item" onclick="showScreen('klaenge',this)">
+    <span class="nav-icon">🎵</span>
+    <span class="nav-label">Klänge</span>
+  </button>
+  <button class="nav-item" onclick="showScreen('profil',this)">
+    <span class="nav-icon">🌸</span>
+    <span class="nav-label">Profil</span>
+  </button>
+</nav>
+
+<!-- ══════════ TOOL MODAL: BLOCKADEN LÖSEN ══════════ -->
+<!-- ══════════ KÖRPERKOMMUNIKATION MODAL ══════════ -->
+<div class="tool-modal" id="modal-koerper">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="closeModal('modal-koerper')">←</button>
+    <div><div class="modal-title">Körperkommunikation</div></div>
+    <div></div>
+  </div>
+  <div class="tool-modal-body" style="overflow-y:auto;padding:20px 16px 100px;">
+
+    <!-- INTRO -->
+    <div style="text-align:center;margin-bottom:28px;">
+      <div style="font-size:2.5rem;margin-bottom:12px;">🫀</div>
+      <h2 style="font-family:var(--display);font-size:1.3rem;color:var(--cream);margin-bottom:10px;">Was ist Körperkommunikation?</h2>
+      <p style="font-family:var(--sans);font-weight:300;font-size:.9rem;color:rgba(245,236,208,.7);line-height:1.7;">
+        Dein Körper weiß mehr als dein Verstand. Er trägt das Wissen deiner Seele, deiner Ahnen und deiner energetischen Realität – und antwortet, wenn du lernst, ihm die richtigen Fragen zu stellen.
+      </p>
+      <p style="font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--gold);margin-top:12px;line-height:1.6;">
+        „Dein Körper lügt nie."
+      </p>
+    </div>
+
+    <!-- WAS IST ES -->
+    <div style="background:rgba(123,45,158,.08);border:1px solid rgba(123,45,158,.2);border-radius:18px;padding:20px;margin-bottom:16px;">
+      <div style="font-family:var(--display);font-size:.65rem;letter-spacing:2px;color:var(--turquoise);margin-bottom:14px;">WAS IST ES</div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--magenta));display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;">✦</div>
+          <div>
+            <div style="font-family:var(--display);font-size:.82rem;color:var(--cream);margin-bottom:4px;">Direkte Verbindung zur Körperintelligenz</div>
+            <div style="font-size:.82rem;color:rgba(245,236,208,.65);font-weight:300;line-height:1.6;">Körperkommunikation ist die Fähigkeit, deinen Körper als Informationsquelle zu nutzen – jenseits von Logik und Analyse.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--magenta));display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;">✦</div>
+          <div>
+            <div style="font-family:var(--display);font-size:.82rem;color:var(--cream);margin-bottom:4px;">Ja / Nein – so einfach ist es</div>
+            <div style="font-size:.82rem;color:rgba(245,236,208,.65);font-weight:300;line-height:1.6;">Der Körper antwortet mit zwei klaren Signalen: Stärke (JA) oder Schwäche (NEIN). Alles, was resoniert, stärkt – alles, was nicht stimmt, schwächt.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--magenta));display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;">✦</div>
+          <div>
+            <div style="font-family:var(--display);font-size:.82rem;color:var(--cream);margin-bottom:4px;">Basis vieler energetischer Methoden</div>
+            <div style="font-size:.82rem;color:rgba(245,236,208,.65);font-weight:300;line-height:1.6;">Kinesiologen, Energetikerinnen und spirituelle Heilerinnen nutzen sie weltweit – für Blockadenlösung, Ernährung, Beziehungen, Entscheidungen.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WIE GEHT ES -->
+    <div style="background:rgba(212,168,32,.06);border:1px solid rgba(212,168,32,.15);border-radius:18px;padding:20px;margin-bottom:16px;">
+      <div style="font-family:var(--display);font-size:.65rem;letter-spacing:2px;color:var(--gold);margin-bottom:14px;">SO GEHT ES</div>
+      <p style="font-size:.85rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.7;margin-bottom:16px;">
+        Bevor du testest: Kalibriere deinen Körper. Sage laut oder innerlich eine wahre Aussage (<em style="font-family:var(--serif);">„Mein Name ist [dein Name]"</em>) – spüre die Stärke. Dann eine falsche (<em style="font-family:var(--serif);">„Mein Name ist [falscher Name]"</em>) – spüre den Unterschied.
+      </p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(212,168,32,.2);border:1px solid rgba(212,168,32,.3);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:.75rem;color:var(--gold);flex-shrink:0;">1</div>
+          <div style="font-size:.84rem;color:rgba(245,236,208,.75);font-weight:300;line-height:1.6;padding-top:4px;">Stelle eine klare Ja/Nein-Frage – im Präsens, positiv formuliert.</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(212,168,32,.2);border:1px solid rgba(212,168,32,.3);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:.75rem;color:var(--gold);flex-shrink:0;">2</div>
+          <div style="font-size:.84rem;color:rgba(245,236,208,.75);font-weight:300;line-height:1.6;padding-top:4px;">Führe die Testmethode aus (z.B. O-Ring, Standfestigkeit, Finger-Test).</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(212,168,32,.2);border:1px solid rgba(212,168,32,.3);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:.75rem;color:var(--gold);flex-shrink:0;">3</div>
+          <div style="font-size:.84rem;color:rgba(245,236,208,.75);font-weight:300;line-height:1.6;padding-top:4px;">Stärke = JA · Schwäche oder Unsicherheit = NEIN.</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(212,168,32,.2);border:1px solid rgba(212,168,32,.3);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:.75rem;color:var(--gold);flex-shrink:0;">4</div>
+          <div style="font-size:.84rem;color:rgba(245,236,208,.75);font-weight:300;line-height:1.6;padding-top:4px;">Teste immer nüchtern, geerdet und ohne Erwartungsdruck.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MÖGLICHKEITEN / METHODEN -->
+    <div style="background:rgba(68,214,214,.05);border:1px solid rgba(68,214,214,.15);border-radius:18px;padding:20px;margin-bottom:16px;">
+      <div style="font-family:var(--display);font-size:.65rem;letter-spacing:2px;color:var(--turquoise);margin-bottom:14px;">TESTMETHODEN</div>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+
+        <div style="border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:14px;">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
+            <span style="font-size:1.1rem;">☕</span>
+            <div style="font-family:var(--display);font-size:.85rem;color:var(--cream);">Tasse Leeren <span style="font-size:.65rem;color:var(--gold);letter-spacing:1px;margin-left:6px;">VORBEREITUNG</span></div>
+          </div>
+          <div style="font-size:.82rem;color:rgba(245,236,208,.65);font-weight:300;line-height:1.7;">
+            <p style="margin-bottom:8px;">Alles, was der Kopf, die Angst oder sonstiges gerade erzählt – Gedanken, Zweifel, Sorgen – packen wir in eine imaginäre Tasse.</p>
+            <p style="margin-bottom:8px;">Dann machen wir die Handbewegung dazu: <em style="font-family:var(--serif);">als würden wir eine Tasse oder ein Glas ausleeren</em> – und lassen damit all das los, was uns beim klaren Testen im Weg stehen könnte.</p>
+            <p><em style="font-family:var(--serif);">Leere Tasse = freier Kopf = klares Testergebnis.</em></p>
+          </div>
+        </div>
+
+        <div style="border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:14px;">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
+            <span style="font-size:1.1rem;">🧍</span>
+            <div style="font-family:var(--display);font-size:.85rem;color:var(--cream);">Standfestigkeitstest</div>
+          </div>
+          <div style="font-size:.82rem;color:rgba(245,236,208,.65);font-weight:300;line-height:1.6;">Stehe aufrecht, Augen geschlossen. Stelle die Frage. <em style="font-family:var(--serif);">Neigung nach vorne = JA · Neigung nach hinten = NEIN.</em> Sehr intuitiv, gut für tiefe Entscheidungen.</div>
+        </div>
+
+        <div style="border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:14px;">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
+            <span style="font-size:1.1rem;">👌</span>
+            <div style="font-family:var(--display);font-size:.85rem;color:var(--cream);">O-Ring-Test</div>
+          </div>
+          <div style="font-size:.82rem;color:rgba(245,236,208,.65);font-weight:300;line-height:1.6;">Bilde einen Kreis aus Daumen und Zeigefinger. Versuche ihn mit dem anderen Zeigefinger zu öffnen. <em style="font-family:var(--serif);">Hält er = JA · Öffnet er sich = NEIN.</em> Ideal für den Alltag und das Alleine-Testen.</div>
+        </div>
+
+        <div style="border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:14px;">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
+            <span style="font-size:1.1rem;">👆</span>
+            <div style="font-family:var(--display);font-size:.85rem;color:var(--cream);">Fingertest – Die Kussübung <span style="font-size:.65rem;color:var(--turquoise);letter-spacing:1px;margin-left:6px;">nach Uwe Albrecht</span></div>
+          </div>
+          <div style="font-size:.82rem;color:rgba(245,236,208,.65);font-weight:300;line-height:1.7;">
+            <p style="margin-bottom:10px;">Daumen und Zeigefinger begegnen sich. Stelle deine Frage – und beobachte, was passiert.</p>
+            <p style="margin-bottom:10px;"><em style="font-family:var(--serif);">JA:</em> Beide Finger finden sich an der Spitze. Sie kommen sich entgegen – der Daumen streckt sich, der Zeigefinger bewegt sich leicht nach unten – und treffen sich präzise auf Augenhöhe.</p>
+            <p style="margin-bottom:10px;"><em style="font-family:var(--serif);">NEIN:</em> Der Zeigefinger blockiert. Er hält inne, bewegt sich nicht vollständig mit – der Daumen trifft ihn deshalb nicht an der Spitze, sondern weiter unten am Finger.</p>
+            <p>Funktioniert es mit dem Zeigefinger nicht gut, probiere es mit Mittelfinger, Ringfinger oder kleinem Finger. Jeder Körper findet seinen eigenen klaren Kanal.</p>
+          </div>
+        </div>
+
+        <div style="border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:14px;">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
+            <span style="font-size:1.1rem;">💫</span>
+            <div style="font-family:var(--display);font-size:.85rem;color:var(--cream);">Pendel</div>
+          </div>
+          <div style="font-size:.82rem;color:rgba(245,236,208,.65);font-weight:300;line-height:1.6;">Halte ein Pendel ruhig. Kalibriere zuerst: Frage nach JA und NEIN um die Pendelbewegung zu erkennen. Danach stelle deine Fragen. Das Pendel verstärkt feine Körpersignale.</div>
+        </div>
+
+        <div>
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
+            <span style="font-size:1.1rem;">🫁</span>
+            <div style="font-family:var(--display);font-size:.85rem;color:var(--cream);">Inneres Spüren / Bauchgefühl</div>
+          </div>
+          <div style="font-size:.82rem;color:rgba(245,236,208,.65);font-weight:300;line-height:1.6;">Die subtilste Form. Stelle die Frage, atme tief ein, leg deine Hand auf dein Herz und spüre: <em style="font-family:var(--serif);">Weitet sich etwas oder fühlt sich weich, leicht an = JA · Zieht sich etwas zusammen oder fühlt es sich schwer, eng an = NEIN.</em> Wird mit der Zeit zur verlässlichsten Methode.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TIPPS -->
+    <div style="background:rgba(63,184,155,.05);border:1px solid rgba(63,184,155,.15);border-radius:18px;padding:20px;">
+      <div style="font-family:var(--display);font-size:.65rem;letter-spacing:2px;color:var(--emerald);margin-bottom:14px;">WICHTIGE HINWEISE</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span>
+          <span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Übe täglich – auch mit kleinen Fragen (Lebensmittel, Entscheidungen).</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span>
+          <span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Teste nie unter Stress, Druck oder mit starkem Erwartungswunsch.</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span>
+          <span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Starte mit Fragen, deren Antwort du kennst – um deinen Körper-Code zu kalibrieren.</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span>
+          <span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Energetische Blockaden können das Testergebnis beeinflussen – löse sie zuerst.</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span>
+          <span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Vertraue dem ersten Impuls. Der Verstand redet danach oft dazwischen.</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="tool-modal" id="modal-blockaden">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="closeTool('blockaden')">←</button>
+    <div>
+      <div class="modal-title">Blockaden lösen</div>
+    </div>
+    <div class="modal-step-indicator" id="bl-step-ind">Schritt 1 von 9</div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar" id="bl-progress" style="width:11%"></div>
+  </div>
+  <div class="tool-modal-body" id="bl-body"></div>
+  <div class="modal-footer">
+    <button class="btn-next" id="bl-next" onclick="blNext()">Weiter</button>
+    <button class="btn-skip" id="bl-skip" onclick="blSkip()">Überspringen</button>
+  </div>
+</div>
+
+<!-- ══════════ TOOL MODAL: STRICHMÄNNCHENTECHNIK ══════════ -->
+<div class="tool-modal" id="modal-strich">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="closeStrich()">←</button>
+    <div>
+      <div class="modal-title">Strichmännchentechnik</div>
+    </div>
+    <div class="modal-step-indicator" id="sm-step-ind">1 / 7</div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar" id="sm-progress" style="width:14%"></div>
+  </div>
+  <div class="tool-modal-body" style="padding:14px 14px 28px;">
+    <div id="sm-canvas-wrap" style="width:100%;border-radius:14px;overflow:hidden;border:1px solid rgba(123,45,158,.25);background:rgba(4,2,10,.7);position:relative;margin-bottom:14px;">
+      <canvas id="sm-canvas" style="display:block;width:100%;touch-action:none;"></canvas>
+      <div id="sm-tap-hint" style="display:none;position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:11px;color:rgba(212,168,32,.55);letter-spacing:.12em;pointer-events:none;animation:pulse 2s ease-in-out infinite;">
+        Tippe auf eine Verbindungslinie
+      </div>
+    </div>
+    <div id="sm-step-content"></div>
+  </div>
+</div>
+
+<!-- ══════════ TOOL MODAL: COMING SOON ══════════ -->
+<div class="tool-modal" id="modal-soon">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="closeModal('modal-soon')">←</button>
+    <div class="modal-title" id="soon-title">Tool</div>
+  </div>
+  <div class="tool-modal-body" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:60vh;">
+    <div style="font-size:3.5rem;margin-bottom:20px;" id="soon-icon">✨</div>
+    <h2 style="font-family:var(--display);font-size:1.3rem;font-weight:500;letter-spacing:.5px;margin-bottom:12px;color:var(--cream);" id="soon-name">Coming Soon</h2>
+    <p style="color:var(--cream-muted);max-width:280px;line-height:1.75;font-weight:300;" id="soon-desc">Dieses Tool wird gerade liebevoll entwickelt und ist bald für dich verfügbar.</p>
+    <div style="margin-top:28px;background:rgba(123,45,158,.1);border:1px solid rgba(212,168,32,.15);border-radius:14px;padding:14px 20px;max-width:280px;">
+      <div style="font-family:var(--display);font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--turquoise);margin-bottom:6px;">Bald verfügbar</div>
+      <div style="font-size:.83rem;color:var(--cream-muted);font-weight:300;">Du wirst benachrichtigt, sobald das Tool bereit ist.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── AUTH INIT ───
+window.addEventListener('DOMContentLoaded', async () => {
+  const session = await requireAuth();
+  if (session) {
+    const name  = session.user.user_metadata?.display_name || '';
+    const email = session.user.email || '';
+    document.getElementById('profile-name').textContent  = name  || 'Herzlich willkommen';
+    document.getElementById('profile-email').textContent = email;
+    const greet = name ? `Hallo, ${name.split(' ')[0]} ✦` : 'Guten Morgen ✦';
+    document.querySelector('.home-greeting').textContent = greet;
+  }
+});
+
+async function handleLogout() {
+  if (confirm('Möchtest du dich wirklich abmelden?')) {
+    await authSignOut();
+  }
+}
+
+// ─── NAVIGATION ───
+function showScreen(id, btn) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ─── FEELING ───
+function selectFeeling(btn) {
+  document.querySelectorAll('.feeling-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+// ─── TAGESIMPULSE ───
+const impulses = [
+  '„Was in dir wartet, wartet nicht auf die perfekte Zeit. Es wartet auf deine Bereitschaft."',
+  '„Dein Körper kennt jede Antwort. Du musst nur lernen, ihm zuzuhören."',
+  '„Heilung bedeutet nicht, dass der Schmerz nie war. Es bedeutet, dass er dich nicht mehr hält."',
+  '„Du bist nicht das, was dir passiert ist. Du bist das, was du daraus machst."',
+  '„Jede Blockade trägt eine Botschaft. Höre hin, bevor du loslässt."',
+  '„Energie folgt der Aufmerksamkeit. Richte dein Licht auf das, was wachsen soll."',
+];
+document.getElementById('daily-impulse').textContent = impulses[new Date().getDay() % impulses.length];
+
+// ─── OPEN / CLOSE TOOLS ───
+const comingSoon = {
+  wunsch:  { name: 'Wunschbucharbeit',    icon: '📖', desc: 'Formuliere deine Wünsche und aktiviere die energetische Frequenz der Manifestation.' },
+  schutz:  { name: 'Back to Sender',      icon: '🛡️', desc: 'Erkenne und gib fremde Energien liebevoll zurück – für mehr Schutz und Klarheit.' },
+  felder:  { name: 'Energiefelder anlegen', icon: '🌀', desc: 'Erschaffe kraftvolle Schutz- und Heilfelder für dich und andere.' },
+  fragen:  { name: 'Lösungsorientierte Fragen', icon: '🖊️', desc: 'Öffne neue Perspektiven durch kraftvolle innere Fragen.' },
+  wunder:  { name: 'Die 4 Schritte für Wunder', icon: '🪄', desc: 'Ein vollständiger Prozess: Wahrnehmen · Annehmen · Transformieren · Neu ausrichten.' },
+};
+
+function openTool(id) {
+  if (id === 'koerper') {
+    document.getElementById('modal-koerper').classList.add('open');
+    return;
+  }
+  if (id === 'strich') {
+    smOpen();
+    return;
+  }
+  if (id === 'blockaden') {
+    blReset();
+    document.getElementById('modal-blockaden').classList.add('open');
+  } else if (comingSoon[id]) {
+    const d = comingSoon[id];
+    document.getElementById('soon-title').textContent = d.name;
+    document.getElementById('soon-icon').textContent = d.icon;
+    document.getElementById('soon-name').textContent = d.name;
+    document.getElementById('soon-desc').textContent = d.desc;
+    document.getElementById('modal-soon').classList.add('open');
+  }
+}
+function closeTool(id)  { document.getElementById('modal-' + id).classList.remove('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ─── BLOCKADEN KOMPASS – Yvonnes echte Methode ───
+const BL_THEMES = {
+  1:"Angst / Starre", 2:"Trauer / Verlust", 3:"Frustration / Unzufriedenheit",
+  4:"Ärger / Wut", 5:"Unsicherheit / Zweifel", 6:"Scham / Schuld",
+  7:"Einsamkeit / Abweisung", 8:"Hilflosigkeit / Ohnmacht",
+  9:"Negatives Selbstbild / Minderwertigkeit", 10:"Belastung / Überwältigung"
+};
+const BL_LISTS = {
+  1:  ["Angst","Bedrohung","Entsetzen","Fassungslosigkeit","Neuheitsangst","Panik","Schrecken","Schock","Terror"],
+  2:  ["Betrübtheit","Gebrochenes Herz","Depression","Kummer","Sehnsucht","Traurigkeit","Verlassenheit","Verlust","Verzweiflung"],
+  3:  ["Eifersucht","Entmutigung","Enttäuschung","Frustration","Missmut","Sturheit","Unzufriedenheit","Niedergeschlagenheit","Vergebliche Mühe"],
+  4:  ["Ärger","Aggression","Empörung","Groll","Hass","Neid","Rachegelüste","Verbitterung","Wut"],
+  5:  ["Bedenken","Nervosität","Scheu","Selbstzweifel","Sprachlosigkeit","Unentschlossenheit","Unsicherheit","Verletzlichkeit","Zweifel"],
+  6:  ["Abscheu","Beschämung","Demütigung","Ekel","Reue","Scham","Schuldgefühle","Schuldzuweisung","Selbstmissbrauch"],
+  7:  ["Ablehnung","Alleinsein","Einsamkeit","Entfremdung","Isolation","Stolz","Unerwiderte Liebe","Zurückweisung","Verstrickung"],
+  8:  ["Erniedrigung","Hilflosigkeit","Kraftlosigkeit","Ohnmacht","Verlorenheit","Unterlegenheit","Hoffnungslosigkeit","Verrat","Sinnlosigkeit"],
+  9:  ["Bitterkeit","Geringschätzung","Herabsetzung","Selbstverachtung","Unzulänglichkeit","Undankbarkeit","Versagen","Unwertgefühl","Wertlosigkeit"],
+  10: ["Erschöpfung","Kontrollverlust","Gereiztheit","Strenge","Überempfindlichkeit","Überforderung","Überwältigung","Verwirrung","Verwundbarkeit"]
+};
+
+function blGetTriplet(n, col) {
+  const list = BL_LISTS[n] || [];
+  if (col === 'A') return list.slice(0,3);
+  if (col === 'B') return list.slice(3,6);
+  return list.slice(6,9);
+}
+
+let blData = {};
+const BL_TOTAL = 7;
+let blStep = 0;
+
+const blSteps = [
+  // 0 – INTRO
+  () => `
+    <div class="step-content">
+      <div class="step-icon-large">🌀</div>
+      <h2 class="step-title">Willkommen im BlockadenKompass</h2>
+      <p class="step-desc">Dieses Tool hilft dir, mit deiner Körperkommunikation eine aktuell wirksame Blockade zu erkennen. Nimm dir einen Moment Zeit, atme ruhig und teste jede Frage in deinem Tempo.</p>
+      <div class="breath-circle" style="margin-top:24px;">Atme<br/>tief ein</div>
+    </div>`,
+
+  // 1 – OBEN / UNTEN
+  () => `
+    <div class="step-content">
+      <div class="step-icon-large">🫀</div>
+      <h2 class="step-title">Teste: OBEN oder UNTEN?</h2>
+      <p class="step-desc">Stelle deinen Körper die Frage: <em style="font-family:var(--serif);font-size:1.05em;">„OBEN oder UNTEN?"</em><br/>und folge dem Muskeltest.</p>
+      <div class="connection-cards" style="margin-top:8px;">
+        <div class="connection-card ${blData.pos==='oben'?'sel':''}" onclick="blChoosePos('oben')">
+          <div class="cc-header"><span class="cc-icon">🔼</span><span class="cc-title">OBEN</span></div>
+          <p class="cc-desc">Themen 1–5: Angst · Trauer · Frustration · Wut · Unsicherheit</p>
+        </div>
+        <div class="connection-card ${blData.pos==='unten'?'sel':''}" onclick="blChoosePos('unten')">
+          <div class="cc-header"><span class="cc-icon">🔽</span><span class="cc-title">UNTEN</span></div>
+          <p class="cc-desc">Themen 6–10: Scham · Einsamkeit · Hilflosigkeit · Selbstbild · Belastung</p>
+        </div>
+      </div>
+    </div>`,
+
+  // 2 – ZAHL
+  () => {
+    const nums = blData.pos === 'oben' ? [1,2,3,4,5] : [6,7,8,9,10];
+    return `
+    <div class="step-content">
+      <div class="step-icon-large">🔢</div>
+      <h2 class="step-title">Teste: Welche Zahl?</h2>
+      <p class="step-desc">Gehe die Zahlen durch und teste jede einzeln mit deinem Muskeltest. Welche gibt ein klares JA?</p>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:8px;">
+        ${nums.map(n => `
+          <button onclick="blChooseNum(${n})" style="
+            padding:16px 8px;border-radius:14px;border:1px solid ${blData.num===n?'rgba(212,168,32,.5)':'rgba(212,168,32,.1)'};
+            background:${blData.num===n?'rgba(123,45,158,.2)':'rgba(5,6,8,.4)'};
+            font-family:var(--display);font-size:1.1rem;color:var(--cream);cursor:pointer;
+            transition:.2s;">
+            ${n}
+          </button>`).join('')}
+      </div>
+      ${blData.num ? `<div style="margin-top:16px;padding:10px 16px;background:rgba(212,168,32,.06);border:1px solid rgba(212,168,32,.15);border-radius:12px;text-align:center;">
+        <div style="font-family:var(--display);font-size:.62rem;letter-spacing:1.5px;color:var(--turquoise);">ZAHL ${blData.num} GEWÄHLT ✦</div>
+      </div>` : ''}
+    </div>`;
+  },
+
+  // 3 – SPALTE A/B/C
+  () => `
+    <div class="step-content">
+      <div class="step-icon-large">📋</div>
+      <h2 class="step-title">Teste: Spalte A, B oder C?</h2>
+      <p class="step-desc">Frage deinen Körper: <em style="font-family:var(--serif);">„Ist es Spalte A, B oder C?"</em></p>
+      <div class="pillrow" style="margin-top:16px;gap:12px;">
+        ${['A','B','C'].map(c => `
+          <button onclick="blChooseCol('${c}')" style="
+            flex:1;padding:20px;border-radius:50px;border:1px solid ${blData.col===c?'rgba(212,168,32,.5)':'rgba(212,168,32,.1)'};
+            background:${blData.col===c?'linear-gradient(135deg,var(--violet),var(--magenta))':'rgba(5,6,8,.4)'};
+            font-family:var(--display);font-size:1.3rem;color:var(--cream);cursor:pointer;letter-spacing:2px;
+            transition:.2s;">${c}</button>`).join('')}
+      </div>
+      ${blData.col ? `<div style="margin-top:16px;padding:10px 16px;background:rgba(212,168,32,.06);border:1px solid rgba(212,168,32,.15);border-radius:12px;text-align:center;">
+        <div style="font-family:var(--display);font-size:.62rem;letter-spacing:1.5px;color:var(--turquoise);">SPALTE ${blData.col} GEWÄHLT ✦</div>
+      </div>` : ''}
+    </div>`,
+
+  // 4 – KÄSTCHEN 1/2/3
+  () => {
+    const triplet = blGetTriplet(blData.num, blData.col);
+    return `
+    <div class="step-content">
+      <div class="step-icon-large">🎯</div>
+      <h2 class="step-title">Teste: Kästchen 1, 2 oder 3?</h2>
+      <p class="step-desc">Frage deinen Körper: <em style="font-family:var(--serif);">„Ist es 1, 2 oder 3?"</em></p>
+      <div style="display:flex;gap:14px;margin-top:20px;">
+        ${triplet.map((t,i) => `
+          <button onclick="blChooseIndex(${i+1})" style="
+            flex:1;padding:28px 10px;border-radius:18px;
+            border:2px solid ${blData.idx===i+1?'rgba(212,168,32,.7)':'rgba(212,168,32,.2)'};
+            background:${blData.idx===i+1?'linear-gradient(135deg,var(--violet),var(--magenta))':'rgba(255,255,255,.04)'};
+            cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;">
+            <span style="font-family:var(--display);font-size:2rem;font-weight:500;color:var(--cream);letter-spacing:1px;">${i+1}</span>
+          </button>`).join('')}
+      </div>
+    </div>`;
+  },
+
+  // 5 – ERGEBNIS + ABLÖSUNG
+  () => {
+    const blockade = blGetTriplet(blData.num, blData.col)[blData.idx - 1] || '—';
+    return `
+    <div class="step-content">
+      <div class="step-icon-large">✦</div>
+      <h2 class="step-title">Deine Blockade</h2>
+      <div style="text-align:center;margin:16px 0 24px;">
+        <div style="font-family:var(--display);font-size:.65rem;letter-spacing:2px;color:var(--turquoise);margin-bottom:8px;">${BL_THEMES[blData.num]} · Spalte ${blData.col} · ${blData.idx}</div>
+        <div style="font-family:var(--display);font-size:1.6rem;font-weight:500;color:var(--cream);letter-spacing:1px;margin-bottom:4px;">${blockade}</div>
+        <div style="font-family:var(--serif);font-style:italic;font-size:.95rem;color:var(--cream-muted);font-weight:300;">OBEN/UNTEN: ${blData.pos?.toUpperCase()} · Zahl ${blData.num}</div>
+      </div>
+      <div class="guided-box">
+        <div style="font-family:var(--display);font-size:.65rem;letter-spacing:1.5px;color:var(--gold);margin-bottom:14px;">ABLÖSUNG</div>
+        <div class="guided-step"><div class="gs-num">1</div><div class="gs-text">Frage deinen Körper: <em>„Darf ich diese Blockade – ${blockade} – jetzt ablösen?"</em></div></div>
+        <div class="guided-step"><div class="gs-num">2</div><div class="gs-text">Wenn JA: Klopfe sanft auf Schlüsselbein oder Scheitel – bewusst und verbunden.</div></div>
+        <div class="guided-step"><div class="gs-num">3</div><div class="gs-text">Nachtesten: <em>„Ist ${blockade} jetzt abgelöst?"</em></div></div>
+        <div class="guided-step"><div class="gs-num">4</div><div class="gs-text">Wenn NEIN: Frage: <em>„Muss ich mehr wissen?"</em> und folge dem Impuls.</div></div>
+      </div>
+    </div>`;
+  },
+
+  // 6 – ABSCHLUSS + JOURNAL
+  () => `
+    <div class="step-content" style="text-align:center;">
+      <div class="completion-glow">✓</div>
+      <h2 class="step-title">Danke, dass du dir Zeit für dich genommen hast.</h2>
+      <p class="step-desc" style="text-align:center;font-family:var(--serif);font-style:italic;">Ich danke mir, dass ich mir diese Zeit für mich genommen habe.</p>
+      <div class="card" style="text-align:left;margin-top:20px;">
+        <div style="font-family:var(--display);font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--turquoise);margin-bottom:10px;">Erkenntnis für dein Journal</div>
+        <textarea class="step-input" id="bl-journal-text" rows="4" placeholder="Was hat sich gezeigt? Was darf du mitnehmen?"></textarea>
+      </div>
+    </div>`,
+];
+
+function blReset() {
+  blStep = 0;
+  blData = {};
+  blRender();
+}
+
+function blRender() {
+  document.getElementById('bl-body').innerHTML = blSteps[blStep]();
+  const pct = Math.round(((blStep + 1) / BL_TOTAL) * 100);
+  document.getElementById('bl-progress').style.width = pct + '%';
+  document.getElementById('bl-step-ind').textContent = `Schritt ${blStep + 1} von ${BL_TOTAL}`;
+  const isLast = blStep === BL_TOTAL - 1;
+  document.getElementById('bl-next').textContent = blStep === 0 ? 'Ich bin bereit ✦' : isLast ? 'Im Journal speichern ✦' : 'Weiter';
+  document.getElementById('bl-skip').style.display = (blStep === 0 || isLast) ? 'none' : 'block';
+}
+
+function blNext() {
+  if (blStep === BL_TOTAL - 1) {
+    blData.journalText = document.getElementById('bl-journal-text')?.value;
+    saveJournalEntry();
+    closeModal('modal-blockaden');
+    showToast('Im Journal gespeichert ✦');
+    return;
+  }
+  // Validierung: Auswahl nötig?
+  if (blStep === 1 && !blData.pos)  { showToast('Bitte OBEN oder UNTEN wählen'); return; }
+  if (blStep === 2 && !blData.num)  { showToast('Bitte eine Zahl testen'); return; }
+  if (blStep === 3 && !blData.col)  { showToast('Bitte Spalte A, B oder C testen'); return; }
+  if (blStep === 4 && !blData.idx)  { showToast('Bitte 1, 2 oder 3 testen'); return; }
+  blStep++;
+  blRender();
+}
+
+function blSkip() {
+  if (blStep < BL_TOTAL - 1) { blStep++; blRender(); }
+}
+
+function blChoosePos(pos) {
+  blData.pos = pos;
+  blData.num = null; blData.col = null; blData.idx = null;
+  blRender();
+}
+function blChooseNum(n) {
+  blData.num = n;
+  blData.col = null; blData.idx = null;
+  blRender();
+}
+function blChooseCol(col) {
+  blData.col = col;
+  blData.idx = null;
+  blRender();
+}
+function blChooseIndex(i) {
+  blData.idx = i;
+  blRender();
+}
+
+// ─── JOURNAL ───
+let journalEntries = [];
+let sessionCount = 0;
+let uniqueTools = new Set();
+
+function saveJournalEntry() {
+  sessionCount++;
+  uniqueTools.add('blockaden');
+  const entry = {
+    tool: 'Blockaden lösen',
+    date: new Date().toLocaleDateString('de-DE', {day:'2-digit', month:'short', year:'numeric'}),
+    text: blData.journalText || blData.erkenntnis || 'Prozess abgeschlossen.',
+    before: blData.intensitaet || 5,
+    after: parseInt(blData.afterInt) || 5,
+  };
+  journalEntries.unshift(entry);
+  renderJournal();
+}
+
+function renderJournal() {
+  document.getElementById('stat-sessions').textContent = sessionCount;
+  document.getElementById('stat-tools').textContent = uniqueTools.size;
+  const container = document.getElementById('journal-entries');
+  if (journalEntries.length === 0) return;
+  container.innerHTML = journalEntries.map(e => {
+    const diff = e.before - e.after;
+    const badge = diff > 0
+      ? `<span class="je-badge">↓ Intensität von ${e.before} auf ${e.after} gesunken</span>`
+      : `<span class="je-badge" style="color:var(--cream-muted)">Prozess läuft weiter nach</span>`;
+    return `
+      <div class="journal-entry">
+        <div class="je-header">
+          <span class="je-tool">${e.tool}</span>
+          <span class="je-date">${e.date}</span>
+        </div>
+        <p class="je-text">${e.text || 'Kein Eintrag hinterlassen.'}</p>
+        ${badge}
+      </div>`;
+  }).join('');
+}
+
+// ─── MEDIA PLAYER ───
+const mediaItems = {
+  traenen: {
+    title: 'Wenn Tränen Heilen',
+    subtitle: 'Eine einfühlsame Reise durch den Schmerz – hin zu tiefer Heilung und innerem Frieden.',
+    type: 'video',
+    src: 'media/wenn-traenen-heilen.mp4',
+    hz: [],
+  },
+  vollmond: {
+    title: 'Vollmond – Loslassen, Aufladen & Fülle empfangen',
+    subtitle: 'Die Kraft des Vollmonds nutzen: loslassen, was nicht mehr dient, und Fülle einladen.',
+    type: 'video',
+    src: 'media/vollmond-meditation.mp4',
+    hz: [],
+  },
+  urklang: {
+    title: 'Urklang des Herzens',
+    subtitle: 'Heilende Herzfrequenzen für tiefe Verbindung, Mitgefühl und innere Harmonie.',
+    type: 'audio',
+    src: 'media/urklang-des-herzens.mp3',
+    hz: ['432 Hz', '639 Hz'],
+    icon: '💛',
+  },
+};
+
+function openPlayer(id) {
+  const item = mediaItems[id];
+  document.getElementById('player-modal-title').textContent = item.title;
+
+  let mediaHtml = '';
+  if (item.type === 'video') {
+    mediaHtml = `
+      <div class="video-wrap">
+        <video controls playsinline preload="metadata">
+          <source src="${item.src}" type="video/mp4" />
+        </video>
+      </div>`;
+  } else {
+    mediaHtml = `
+      <div class="audio-visual">${item.icon || '🎵'}</div>
+      <div class="audio-wrap">
+        <audio controls preload="metadata">
+          <source src="${item.src}" type="audio/mpeg" />
+        </audio>
+      </div>`;
+  }
+
+  const hzHtml = item.hz.length
+    ? `<div class="player-hz-badges">${item.hz.map(h => `<span class="hz-badge">✧ ${h}</span>`).join('')}</div>`
+    : '';
+
+  document.getElementById('player-body').innerHTML = `
+    ${mediaHtml}
+    <div class="player-title">${item.title}</div>
+    <div class="player-subtitle">${item.subtitle}</div>
+    ${hzHtml}
+  `;
+
+  document.getElementById('player-modal').classList.add('open');
+}
+
+function closePlayer() {
+  // Medien stoppen bevor Modal schließt
+  const video = document.querySelector('#player-modal video');
+  const audio = document.querySelector('#player-modal audio');
+  if (video) video.pause();
+  if (audio) audio.pause();
+  document.getElementById('player-modal').classList.remove('open');
+}
+
+// ══════ STRICHMÄNNCHENTECHNIK ══════
+const SM_CHAKRA_COLORS = ['#9B59B6','#5B8DEF','#1ABC9C','#2ECC71','#F1C40F','#E67E22','#E74C3C'];
+const SM_CHAKRA_NAMES  = ['Scheitel','Stirn','Kehle','Herz','Solarplexus','Sakral','Wurzel'];
+
+let smStep = 1, smMyName = '', smOtherName = '';
+let smDrawnCircles = new Set();
+let smCircleAnim = { type: null, progress: 0 };
+let smLinesDrawn = 0;
+let smLineAnim = { active: false, progress: 0, idx: 0 };
+let smCutLines = Array(7).fill(false);
+let smCutAnims = [];
+let smCanvas, smCtx, smDpr = 1;
+
+function smCw() { return smCanvas.width / smDpr; }
+function smCh() { return smCanvas.height / smDpr; }
+function smLine(x1,y1,x2,y2) { smCtx.beginPath(); smCtx.moveTo(x1,y1); smCtx.lineTo(x2,y2); smCtx.stroke(); }
+
+function smGetFig(side) {
+  const w = smCw(), h = smCh();
+  const cx = side === 'left' ? w * 0.25 : w * 0.75;
+  const R  = Math.round(w * 0.072);
+  const topY=h*0.05, headCY=topY+R, neckY=headCY+R+R*0.18, shoulderY=neckY+R*0.35;
+  const hipY=shoulderY+R*3.4, armLX=cx-R*1.85, armRX=cx+R*1.85, armMidY=shoulderY+R*1.35;
+  const footLX=cx-R*1.25, footRX=cx+R*1.25, footY=hipY+R*3.1, nameY=footY+R*1.05;
+  const chakras=[
+    {x:cx,y:topY+R*0.05},{x:cx,y:headCY},{x:cx,y:neckY+R*0.08},
+    {x:cx,y:shoulderY+R*1.05},{x:cx,y:shoulderY+R*1.9},{x:cx,y:shoulderY+R*2.75},{x:cx,y:hipY}
+  ];
+  return {cx,R,topY,headCY,neckY,shoulderY,hipY,armLX,armRX,armMidY,footLX,footRX,footY,nameY,chakras};
+}
+
+function smDrawFig(fig, color) {
+  color = color || 'rgba(245,236,208,.87)';
+  const {cx,R,headCY,neckY,shoulderY,hipY,armLX,armRX,armMidY,footLX,footRX,footY} = fig;
+  smCtx.save();
+  smCtx.strokeStyle=color; smCtx.lineWidth=Math.max(2,R*0.13); smCtx.lineCap='round'; smCtx.lineJoin='round';
+  smCtx.shadowColor=color; smCtx.shadowBlur=8;
+  smCtx.beginPath(); smCtx.arc(cx,headCY,R,0,Math.PI*2); smCtx.stroke();
+  smLine(cx,neckY,cx,hipY); smLine(cx,shoulderY+R*0.3,armLX,armMidY); smLine(cx,shoulderY+R*0.3,armRX,armMidY);
+  smLine(cx,hipY,footLX,footY); smLine(cx,hipY,footRX,footY);
+  smCtx.restore();
+}
+
+function smDrawFigName(fig, name) {
+  if (!name) return;
+  smCtx.save();
+  smCtx.fillStyle='rgba(245,236,208,.6)';
+  smCtx.font=`400 ${Math.max(11,Math.round(fig.R*0.62))}px 'Cormorant Garamond',serif`;
+  smCtx.textAlign='center'; smCtx.fillText(name,fig.cx,fig.nameY); smCtx.restore();
+}
+
+function smDrawChakras(fig) {
+  const r=Math.max(4,fig.R*0.21);
+  fig.chakras.forEach((c,i)=>{
+    smCtx.save(); smCtx.beginPath(); smCtx.arc(c.x,c.y,r,0,Math.PI*2);
+    smCtx.fillStyle=SM_CHAKRA_COLORS[i]; smCtx.shadowColor=SM_CHAKRA_COLORS[i]; smCtx.shadowBlur=10;
+    smCtx.fill(); smCtx.restore();
+  });
+}
+
+function smDrawLightCircle(cx,cy,radius,alpha,rays) {
+  rays=rays||16; smCtx.save(); smCtx.globalAlpha=alpha;
+  const grd=smCtx.createRadialGradient(cx,cy,radius*.6,cx,cy,radius*1.3);
+  grd.addColorStop(0,'rgba(212,168,32,0)'); grd.addColorStop(.55,'rgba(212,168,32,.1)'); grd.addColorStop(1,'rgba(212,168,32,0)');
+  smCtx.beginPath(); smCtx.arc(cx,cy,radius*1.3,0,Math.PI*2); smCtx.fillStyle=grd; smCtx.fill();
+  smCtx.beginPath(); smCtx.arc(cx,cy,radius,0,Math.PI*2);
+  smCtx.strokeStyle='#D4A820'; smCtx.lineWidth=1.8; smCtx.shadowColor='#D4A820'; smCtx.shadowBlur=12; smCtx.stroke();
+  for(let i=0;i<rays;i++){
+    const ang=(i/rays)*Math.PI*2, r1=radius+3, r2=radius+14+(i%2===0?10:0);
+    smCtx.beginPath(); smCtx.moveTo(cx+Math.cos(ang)*r1,cy+Math.sin(ang)*r1);
+    smCtx.lineTo(cx+Math.cos(ang)*r2,cy+Math.sin(ang)*r2);
+    smCtx.strokeStyle='rgba(212,168,32,.65)'; smCtx.lineWidth=1.4; smCtx.shadowBlur=6; smCtx.stroke();
+  }
+  smCtx.restore();
+}
+
+function smDrawCircleForType(type,L,R,alpha) {
+  const circFig=(fig)=>{ const cy=(fig.headCY+fig.footY)/2, rad=(fig.footY-fig.headCY)/2+fig.R*1.3; smDrawLightCircle(fig.cx,cy,rad,alpha); };
+  if(type==='left')  circFig(L);
+  if(type==='right') circFig(R);
+  if(type==='outer') smDrawLightCircle(smCw()/2,smCh()*0.46,smCw()*0.43,alpha,24);
+}
+
+function smDrawConnLine(c1,c2,idx,alpha,isCut,cutProg) {
+  const {x:x1,y:y1}=c1, {x:x2,y:y2}=c2;
+  smCtx.save(); smCtx.globalAlpha=alpha;
+  const grad=smCtx.createLinearGradient(x1,y1,x2,y2);
+  grad.addColorStop(0,SM_CHAKRA_COLORS[idx]); grad.addColorStop(.5,'rgba(212,168,32,.8)'); grad.addColorStop(1,SM_CHAKRA_COLORS[idx]);
+  smCtx.strokeStyle=grad; smCtx.lineWidth=2; smCtx.lineCap='round'; smCtx.shadowColor=SM_CHAKRA_COLORS[idx]; smCtx.shadowBlur=7;
+  if(!isCut){
+    smCtx.beginPath(); smCtx.moveTo(x1,y1); smCtx.lineTo(x2,y2); smCtx.stroke();
+  }else{
+    const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy),nx=dx/len,ny=dy/len,midX=(x1+x2)/2,midY=(y1+y2)/2,gap=Math.min(cutProg*28,22);
+    smCtx.globalAlpha=alpha*Math.max(0,1-cutProg*.85);
+    smCtx.beginPath(); smCtx.moveTo(x1,y1); smCtx.lineTo(midX-nx*gap,midY-ny*gap); smCtx.stroke();
+    smCtx.beginPath(); smCtx.moveTo(midX+nx*gap,midY+ny*gap); smCtx.lineTo(x2,y2); smCtx.stroke();
+    if(cutProg<.45){
+      const flash=(1-cutProg/.45)*.95; smCtx.save(); smCtx.globalAlpha=flash;
+      smCtx.beginPath(); smCtx.arc(midX,midY,gap*.5,0,Math.PI*2);
+      smCtx.fillStyle='#fff'; smCtx.shadowColor='#fff'; smCtx.shadowBlur=20; smCtx.fill(); smCtx.restore();
+    }
+  }
+  smCtx.restore();
+}
+
+function smDrawAll() {
+  if(!smCanvas||!smCtx) return;
+  smCtx.clearRect(0,0,smCw(),smCh());
+  const L=smGetFig('left'),R=smGetFig('right');
+  if(smStep>=1){smDrawFig(L);smDrawFigName(L,smMyName);}
+  if(smStep>=2){smDrawFig(R);smDrawFigName(R,smOtherName);}
+  smDrawnCircles.forEach(t=>smDrawCircleForType(t,L,R,1));
+  if(smCircleAnim.type) smDrawCircleForType(smCircleAnim.type,L,R,smCircleAnim.progress);
+  if(smStep>=6){
+    smDrawChakras(L); smDrawChakras(R);
+    for(let i=0;i<7;i++){
+      const isAnim=smLineAnim.active&&smLineAnim.idx===i;
+      if(i>=smLinesDrawn&&!isAnim) continue;
+      const alpha=isAnim?smLineAnim.progress:1;
+      const cutAnim=smCutAnims.find(a=>a.idx===i);
+      smDrawConnLine(L.chakras[i],R.chakras[i],i,alpha,smCutLines[i]||!!cutAnim,cutAnim?cutAnim.progress:(smCutLines[i]?1:0));
+    }
+  }
+}
+
+function smResizeCanvas() {
+  smDpr=window.devicePixelRatio||1;
+  const wrap=document.getElementById('sm-canvas-wrap');
+  if(!wrap||!smCanvas) return;
+  const w=wrap.clientWidth, h=Math.round(w*0.76);
+  smCanvas.width=w*smDpr; smCanvas.height=h*smDpr; smCanvas.style.height=h+'px';
+  smCtx.setTransform(smDpr,0,0,smDpr,0,0);
+  smDrawAll();
+}
+
+function smAnimateCircle(type,onDone) {
+  smCircleAnim={type,progress:0};
+  const start=performance.now(),dur=850;
+  (function frame(now){
+    smCircleAnim.progress=Math.min((now-start)/dur,1); smDrawAll();
+    if(smCircleAnim.progress<1) requestAnimationFrame(frame);
+    else{smDrawnCircles.add(type);smCircleAnim={type:null,progress:0};smDrawAll();if(onDone)onDone();}
+  })(performance.now());
+}
+
+function smAnimateLines(onDone) {
+  smLinesDrawn=0;
+  function nextLine(){
+    if(smLinesDrawn>=7){smLineAnim.active=false;smDrawAll();if(onDone)onDone();return;}
+    smLineAnim={active:true,progress:0,idx:smLinesDrawn};
+    const start=performance.now(),dur=480;
+    (function frame(now){
+      smLineAnim.progress=Math.min((now-start)/dur,1); smDrawAll();
+      if(smLineAnim.progress<1) requestAnimationFrame(frame);
+      else{smLinesDrawn++;smLineAnim.active=false;smDrawAll();setTimeout(nextLine,180);}
+    })(performance.now());
+  }
+  nextLine();
+}
+
+function smAnimateCut(idx) {
+  if(smCutLines[idx]||smCutAnims.find(a=>a.idx===idx)) return;
+  const obj={idx,progress:0}; smCutAnims.push(obj);
+  const start=performance.now(),dur=620;
+  (function frame(now){
+    obj.progress=Math.min((now-start)/dur,1); smDrawAll();
+    if(obj.progress<1) requestAnimationFrame(frame);
+    else{
+      smCutLines[idx]=true; smCutAnims=smCutAnims.filter(a=>a.idx!==idx); smDrawAll();
+      const el=document.getElementById('sm-cut-progress');
+      if(el) el.textContent=`${smCutLines.filter(Boolean).length} von 7 durchtrennt`;
+      if(smCutLines.every(Boolean)) setTimeout(smShowCompletion,700);
+    }
+  })(performance.now());
+}
+
+function smEnableTap()  { smCanvas.addEventListener('pointerdown',smHandleTap); }
+function smDisableTap() { if(smCanvas) smCanvas.removeEventListener('pointerdown',smHandleTap); }
+
+function smHandleTap(e) {
+  e.preventDefault();
+  const rect=smCanvas.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;
+  const L=smGetFig('left'),R=smGetFig('right'),thr=Math.max(18,smCw()*0.05);
+  for(let i=0;i<7;i++){
+    if(smCutLines[i]||smCutAnims.find(a=>a.idx===i)||i>=smLinesDrawn) continue;
+    const {x:x1,y:y1}=L.chakras[i],{x:x2,y:y2}=R.chakras[i];
+    const dx=x2-x1,dy=y2-y1,lenSq=dx*dx+dy*dy;
+    const t=lenSq===0?0:Math.max(0,Math.min(1,((x-x1)*dx+(y-y1)*dy)/lenSq));
+    if(Math.hypot(x-x1-t*dx,y-y1-t*dy)<thr){smAnimateCut(i);break;}
+  }
+}
+
+function smEscHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function smRender() {
+  const el=document.getElementById('sm-step-content'); if(!el) return;
+  const th=document.getElementById('sm-tap-hint'); if(th) th.style.display='none';
+  const inputStyle='width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(212,168,32,.22);border-radius:12px;padding:13px 16px;color:var(--cream);font-family:var(--serif);font-size:17px;outline:none;-webkit-appearance:none;';
+  const affStyle='background:linear-gradient(135deg,rgba(123,45,158,.1),rgba(196,37,122,.07));border:1px solid rgba(212,168,32,.2);border-radius:16px;padding:18px 20px;margin-bottom:14px;';
+  const lblStyle='font-family:var(--display);font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--turquoise);margin-bottom:10px;';
+  const txtStyle='font-family:var(--serif);font-size:17px;line-height:1.72;color:var(--cream);font-style:italic;';
+
+  if(smStep===1){
+    el.innerHTML=`<div style="margin-bottom:14px;"><label style="${lblStyle}">Mein Vor- und Nachname</label><input id="sm-inp-my" type="text" placeholder="z. B. Maria Muster" value="${smEscHtml(smMyName)}" inputmode="text" autocomplete="off" autocorrect="off" style="${inputStyle}"></div><button class="btn-next" onclick="smGoNext()">Weiter →</button>`;
+    const i=document.getElementById('sm-inp-my');
+    i.addEventListener('input',e=>{smMyName=e.target.value;smDrawAll();});
+    i.addEventListener('keydown',e=>{if(e.key==='Enter'){e.target.blur();smGoNext();}});
+    setTimeout(()=>i.focus(),350);
+  }
+  else if(smStep===2){
+    el.innerHTML=`<div style="margin-bottom:14px;"><label style="${lblStyle}">Name der anderen Person oder Situation</label><input id="sm-inp-other" type="text" placeholder="z. B. Anna Müller" value="${smEscHtml(smOtherName)}" inputmode="text" autocomplete="off" autocorrect="off" style="${inputStyle}"></div><button class="btn-next" onclick="smGoNext()">Weiter →</button>`;
+    const i=document.getElementById('sm-inp-other');
+    i.addEventListener('input',e=>{smOtherName=e.target.value;smDrawAll();});
+    i.addEventListener('keydown',e=>{if(e.key==='Enter'){e.target.blur();smGoNext();}});
+    setTimeout(()=>i.focus(),350);
+  }
+  else if(smStep===3){
+    el.innerHTML=`<div style="${affStyle}"><div style="${lblStyle}">Sprich laut oder innerlich:</div><div style="${txtStyle}">„Ich wünsche mir das, was für mich das Beste ist,<br>auch wenn ich nicht genau weiß, was es ist."</div></div><button class="btn-next" onclick="smGoNext()">Weiter →</button>`;
+    setTimeout(()=>smAnimateCircle('left'),250);
+  }
+  else if(smStep===4){
+    const name=smOtherName||'die andere Person';
+    el.innerHTML=`<div style="${affStyle}"><div style="${lblStyle}">Sprich laut oder innerlich:</div><div style="${txtStyle}">„Ich wünsche mir das, was für <strong style="font-style:normal;">${smEscHtml(name)}</strong> am Besten ist,<br>auch wenn ich nicht weiß, was es ist."</div></div><button class="btn-next" onclick="smGoNext()">Weiter →</button>`;
+    setTimeout(()=>smAnimateCircle('right'),250);
+  }
+  else if(smStep===5){
+    el.innerHTML=`<div style="${affStyle}"><div style="${lblStyle}">Sprich laut oder innerlich:</div><div style="${txtStyle}">„Ich wünsche mir das, was für uns beide am Besten ist,<br>auch wenn ich nicht genau weiß, was das ist."</div></div><button class="btn-next" onclick="smGoNext()">Weiter →</button>`;
+    setTimeout(()=>smAnimateCircle('outer'),250);
+  }
+  else if(smStep===6){
+    el.innerHTML=`<p style="font-size:13px;line-height:1.65;color:rgba(255,255,255,.6);margin-bottom:14px;text-align:center;">Die 7 Energiezentren beider Personen werden nun<br>durch Verbindungslinien verbunden.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin-bottom:16px;">${SM_CHAKRA_NAMES.map((n,i)=>`<div style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(245,236,208,.6);"><div style="width:9px;height:9px;border-radius:50%;background:${SM_CHAKRA_COLORS[i]};flex-shrink:0;"></div><span>${n}</span></div>`).join('')}</div><button class="btn-next" id="sm-btn-lines" onclick="smGoNext()" disabled>Linien werden gezeichnet …</button>`;
+    setTimeout(()=>smAnimateLines(()=>{const b=document.getElementById('sm-btn-lines');if(b){b.disabled=false;b.textContent='Weiter →';}}),300);
+  }
+  else if(smStep===7){
+    if(th) th.style.display='block';
+    el.innerHTML=`<div style="background:rgba(196,37,122,.07);border:1px solid rgba(196,37,122,.25);border-radius:14px;padding:16px 18px;margin-bottom:12px;text-align:center;"><p style="font-family:var(--serif);font-size:15px;line-height:1.7;color:var(--cream);">Tippe auf jede Verbindungslinie,<br>um sie zu durchtrennen.<br><br>Sage dabei:<br><strong style="color:var(--gold);">„Danke, danke, danke"</strong><br>oder<br><strong style="color:var(--gold);">„Ich akzeptiere, ich akzeptiere, ich akzeptiere."</strong></p></div><div id="sm-cut-progress" style="font-family:var(--display);font-size:.7rem;letter-spacing:.22em;color:var(--turquoise);text-align:center;margin-bottom:8px;">0 von 7 durchtrennt</div>`;
+    smEnableTap();
+  }
+}
+
+function smShowCompletion() {
+  smDisableTap();
+  const th=document.getElementById('sm-tap-hint'); if(th) th.style.display='none';
+  const ind=document.getElementById('sm-step-ind'); if(ind) ind.textContent='✦';
+  const prog=document.getElementById('sm-progress'); if(prog) prog.style.width='100%';
+  const el=document.getElementById('sm-step-content');
+  el.innerHTML=`<div style="text-align:center;padding:8px 0 4px;"><div style="font-size:44px;margin-bottom:14px;">✨</div><div style="font-family:var(--display);font-size:1.3rem;letter-spacing:.16em;background:linear-gradient(135deg,#D4A820,#F5ECD0,#D4A820);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;">Danke, es ist erledigt.</div><div style="width:100px;height:1px;margin:12px auto 16px;background:linear-gradient(90deg,transparent,rgba(212,168,32,.45),transparent);"></div><div style="font-family:var(--serif);font-size:16px;line-height:1.75;color:rgba(245,236,208,.75);margin-bottom:28px;">Alle Verbindungslinien sind durchtrennt.<br>Die Technik ist vollständig abgeschlossen.<br><br><em>„Danke, danke, danke."</em></div><button class="btn-next" onclick="smReset()">Neue Sitzung beginnen</button><button class="btn-skip" onclick="closeStrich()">Zurück zur Toolbox</button></div>`;
+}
+
+function smGoNext() {
+  if(smStep===1){const i=document.getElementById('sm-inp-my');    if(i) smMyName   =i.value.trim();}
+  if(smStep===2){const i=document.getElementById('sm-inp-other'); if(i) smOtherName=i.value.trim();}
+  if(smStep>=7) return;
+  smStep++;
+  const pct=Math.round((smStep/7)*100);
+  const prog=document.getElementById('sm-progress'); if(prog) prog.style.width=pct+'%';
+  const ind=document.getElementById('sm-step-ind');  if(ind)  ind.textContent=smStep+' / 7';
+  smDrawAll(); smRender();
+}
+
+function smReset() {
+  smDisableTap();
+  smStep=1; smMyName=''; smOtherName='';
+  smDrawnCircles.clear(); smCircleAnim={type:null,progress:0};
+  smLinesDrawn=0; smLineAnim={active:false,progress:0,idx:0};
+  smCutLines=Array(7).fill(false); smCutAnims=[];
+  const prog=document.getElementById('sm-progress'); if(prog) prog.style.width='14%';
+  const ind=document.getElementById('sm-step-ind');  if(ind)  ind.textContent='1 / 7';
+  smDrawAll(); smRender();
+}
+
+function smOpen() {
+  document.getElementById('modal-strich').classList.add('open');
+  requestAnimationFrame(()=>{
+    smCanvas=document.getElementById('sm-canvas');
+    smCtx=smCanvas.getContext('2d');
+    smDpr=window.devicePixelRatio||1;
+    smReset();
+    smResizeCanvas();
+  });
+}
+
+function closeStrich() {
+  smDisableTap();
+  document.getElementById('modal-strich').classList.remove('open');
+}
+
+// ─── TOAST ───
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--violet);color:var(--cream);padding:12px 24px;border-radius:50px;font-family:var(--display);font-size:.7rem;letter-spacing:1px;z-index:999;animation:fadeUp .3s ease;white-space:nowrap;box-shadow:0 8px 24px rgba(123,45,158,.4)';
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+</script>
+</body>
+</html>

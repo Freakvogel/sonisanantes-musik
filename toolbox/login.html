@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Energetic Toolbox – Anmelden</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #050608;
+      --card: rgba(123,45,158,0.08);
+      --card2: rgba(123,45,158,0.14);
+      --violet: #7B2D9E;
+      --violet-light: #A040C8;
+      --magenta: #C4257A;
+      --gold: #D4A820;
+      --gold-light: #E8C840;
+      --turquoise: #44D6D6;
+      --emerald: #3FB89B;
+      --cream: #F5ECD0;
+      --cream-muted: rgba(245,236,208,0.5);
+      --display: 'Cinzel', Georgia, serif;
+      --sans: 'Inter', -apple-system, sans-serif;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+    }
+    html, body {
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--cream);
+      font-family: var(--sans);
+      overflow-x: hidden;
+    }
+
+    /* ── BG GLOW ── */
+    .bg-glow {
+      position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0;
+    }
+    .bg-glow::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(123,45,158,.22) 0%, transparent 65%);
+      top: -160px; left: 50%; transform: translateX(-50%);
+    }
+    .bg-glow::after {
+      content: '';
+      position: absolute;
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(196,37,122,.12) 0%, transparent 65%);
+      bottom: 0; right: -60px;
+    }
+
+    /* ── LAYOUT ── */
+    .page {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 40px 20px;
+    }
+
+    /* ── LOGO ── */
+    .logo {
+      font-family: var(--display);
+      font-size: 1rem;
+      color: var(--gold);
+      margin-bottom: 6px;
+      text-align: center;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+    .logo span { color: var(--turquoise); }
+    .logo-sub {
+      font-family: var(--display);
+      font-size: .65rem;
+      color: var(--cream-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    /* ── CARD ── */
+    .auth-card {
+      width: 100%; max-width: 420px;
+      background: var(--card);
+      border: 1px solid rgba(212,168,32,.15);
+      border-radius: 24px;
+      padding: 32px 28px;
+      box-shadow: 0 24px 60px rgba(0,0,0,.5);
+    }
+
+    /* ── TABS ── */
+    .tabs {
+      display: flex;
+      background: rgba(5,6,8,.6);
+      border-radius: 50px;
+      padding: 4px;
+      margin-bottom: 28px;
+      border: 1px solid rgba(212,168,32,.1);
+    }
+    .tab {
+      flex: 1;
+      padding: 10px;
+      border-radius: 50px;
+      border: none;
+      background: transparent;
+      color: var(--cream-muted);
+      font-family: var(--display);
+      font-size: .7rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .25s, color .25s;
+    }
+    .tab.active {
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      color: var(--cream);
+    }
+
+    /* ── PANELS ── */
+    .panel { display: none; }
+    .panel.active { display: block; animation: fadeIn .3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── FORM ── */
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      display: block;
+      font-family: var(--display);
+      font-size: .65rem;
+      letter-spacing: 1.5px;
+      color: var(--cream-muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .form-input {
+      width: 100%;
+      background: rgba(5,6,8,.5);
+      border: 1px solid rgba(212,168,32,.15);
+      border-radius: 12px;
+      color: var(--cream);
+      font-family: var(--sans);
+      font-size: .92rem;
+      font-weight: 300;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .form-input:focus {
+      border-color: rgba(212,168,32,.4);
+      box-shadow: 0 0 0 3px rgba(123,45,158,.12);
+    }
+    .form-input::placeholder { color: rgba(245,236,208,.25); }
+
+    .input-wrap { position: relative; }
+    .pw-toggle {
+      position: absolute;
+      right: 14px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      color: var(--cream-muted); font-size: .9rem;
+      transition: color .2s;
+    }
+    .pw-toggle:hover { color: var(--cream); }
+
+    /* ── SUBMIT ── */
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      color: var(--cream);
+      font-family: var(--display);
+      font-size: .75rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      margin-top: 8px;
+      box-shadow: 0 8px 24px rgba(123,45,158,.3);
+      transition: transform .2s, opacity .2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-submit:hover { transform: scale(1.02); }
+    .btn-submit:disabled { opacity: .45; cursor: default; transform: none; }
+
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(245,236,208,.3);
+      border-top-color: var(--cream);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: none;
+    }
+    .btn-submit.loading .spinner { display: block; }
+    .btn-submit.loading .btn-label { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── FORGOT ── */
+    .forgot-link {
+      display: block;
+      text-align: right;
+      font-size: .78rem;
+      color: var(--cream-muted);
+      cursor: pointer;
+      margin-top: -8px;
+      margin-bottom: 16px;
+      background: none; border: none;
+      font-family: var(--sans);
+      font-weight: 300;
+      transition: color .2s;
+    }
+    .forgot-link:hover { color: var(--gold); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 20px 0;
+      color: var(--cream-muted); font-size: .75rem;
+      font-family: var(--display); letter-spacing: 1px;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: rgba(212,168,32,.12);
+    }
+
+    /* ── SOCIAL / DEMO ── */
+    .btn-social {
+      width: 100%;
+      padding: 13px;
+      border-radius: 50px;
+      background: rgba(5,6,8,.4);
+      border: 1px solid rgba(212,168,32,.15);
+      color: var(--cream-muted);
+      font-family: var(--display);
+      font-size: .7rem;
+      letter-spacing: 1px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-social:hover { border-color: var(--gold); color: var(--cream); }
+
+    /* ── ALERT ── */
+    .alert {
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: .83rem;
+      margin-bottom: 16px;
+      display: none;
+      line-height: 1.5;
+      font-weight: 300;
+    }
+    .alert.error   { background: rgba(196,37,122,.1); border: 1px solid rgba(196,37,122,.3); color: #F0A0C0; }
+    .alert.success { background: rgba(63,184,155,.08); border: 1px solid rgba(63,184,155,.3); color: var(--emerald); }
+    .alert.show { display: block; animation: fadeIn .3s ease; }
+
+    /* ── TERMS NOTE ── */
+    .terms-note {
+      font-size: .73rem;
+      color: var(--cream-muted);
+      text-align: center;
+      margin-top: 16px;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+    .terms-note a { color: var(--turquoise); text-decoration: none; }
+
+    /* ── BACK TO HOME ── */
+    .back-home {
+      margin-top: 24px;
+      text-align: center;
+      font-size: .8rem;
+      color: var(--cream-muted);
+      font-weight: 300;
+    }
+    .back-home a { color: var(--gold); text-decoration: none; }
+
+    /* ── SETUP BANNER ── */
+    .setup-banner {
+      width: 100%; max-width: 420px;
+      background: rgba(212,168,32,.08);
+      border: 1px solid rgba(212,168,32,.25);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      font-size: .8rem;
+      color: var(--gold-light);
+      line-height: 1.6;
+      font-weight: 300;
+      display: none;
+    }
+    .setup-banner.show { display: block; }
+    .setup-banner strong { display: block; margin-bottom: 4px; font-family: var(--display); font-size: .72rem; letter-spacing: 1px; }
+
+    /* ── RESET PANEL ── */
+    #panel-reset .reset-back {
+      display: flex; align-items: center; gap: 8px;
+      background: none; border: none;
+      color: var(--cream-muted); font-family: var(--sans);
+      font-size: .8rem; font-weight: 300; cursor: pointer;
+      margin-bottom: 20px; padding: 0;
+      transition: color .2s;
+    }
+    #panel-reset .reset-back:hover { color: var(--cream); }
+
+    /* ── DEMO BANNER ── */
+    .demo-banner {
+      width: 100%; max-width: 420px;
+      background: rgba(123,45,158,.1);
+      border: 1px solid rgba(212,168,32,.15);
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      font-size: .8rem;
+      color: var(--cream-muted);
+      line-height: 1.6;
+      text-align: center;
+      font-weight: 300;
+    }
+    .demo-banner strong { color: var(--turquoise); font-family: var(--display); font-size: .72rem; letter-spacing: 1px; display: block; margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<div class="page">
+
+  <div class="logo">Energetic <span>Toolbox</span></div>
+  <div class="logo-sub">✦ Dein energetischer Begleiter</div>
+
+  <div class="demo-banner" id="demo-banner">
+    <strong>Demo-Modus aktiv</strong>
+    Supabase noch nicht eingerichtet – du kannst die App trotzdem ausprobieren.<br />
+    <small>Klicke unten auf „Demo starten"</small>
+  </div>
+
+  <div class="setup-banner" id="setup-banner">
+    <strong>⚙️ Supabase noch nicht eingerichtet</strong>
+    Bitte trage deine Supabase-URL und deinen API-Key in <code>js/supabase-config.js</code> ein. Eine Anleitung findest du in <code>SETUP.md</code>.
+  </div>
+
+  <div class="auth-card">
+
+    <div class="tabs" id="main-tabs">
+      <button class="tab active" onclick="switchTab('login')">Anmelden</button>
+      <button class="tab"        onclick="switchTab('register')">Registrieren</button>
+    </div>
+
+    <!-- ── LOGIN ── -->
+    <div class="panel active" id="panel-login">
+      <div class="alert" id="login-alert"></div>
+      <form onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label">E-Mail</label>
+          <input class="form-input" type="email" id="login-email" placeholder="deine@email.de" required autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Passwort</label>
+          <div class="input-wrap">
+            <input class="form-input" type="password" id="login-pw" placeholder="••••••••" required autocomplete="current-password" style="padding-right:44px;" />
+            <button type="button" class="pw-toggle" onclick="togglePw('login-pw',this)">👁</button>
+          </div>
+        </div>
+        <button type="button" class="forgot-link" onclick="showReset()">Passwort vergessen?</button>
+        <button class="btn-submit" type="submit" id="btn-login">
+          <span class="spinner"></span>
+          <span class="btn-label">Anmelden</span>
+        </button>
+      </form>
+
+      <div class="divider">oder</div>
+      <button class="btn-social" onclick="handleDemo()">
+        <span>⚡</span> Demo starten – ohne Konto
+      </button>
+
+      <p class="terms-note">Mit der Anmeldung akzeptierst du unsere <a href="#">AGB</a> und <a href="#">Datenschutzrichtlinie</a>.</p>
+    </div>
+
+    <!-- ── REGISTER ── -->
+    <div class="panel" id="panel-register">
+      <div class="alert" id="register-alert"></div>
+      <form onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label class="form-label">Dein Name</label>
+          <input class="form-input" type="text" id="reg-name" placeholder="Wie heißt du?" required autocomplete="name" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">E-Mail</label>
+          <input class="form-input" type="email" id="reg-email" placeholder="deine@email.de" required autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Passwort</label>
+          <div class="input-wrap">
+            <input class="form-input" type="password" id="reg-pw" placeholder="Mindestens 8 Zeichen" required minlength="8" autocomplete="new-password" style="padding-right:44px;" />
+            <button type="button" class="pw-toggle" onclick="togglePw('reg-pw',this)">👁</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Passwort bestätigen</label>
+          <div class="input-wrap">
+            <input class="form-input" type="password" id="reg-pw2" placeholder="Passwort wiederholen" required autocomplete="new-password" style="padding-right:44px;" />
+            <button type="button" class="pw-toggle" onclick="togglePw('reg-pw2',this)">👁</button>
+          </div>
+        </div>
+        <button class="btn-submit" type="submit" id="btn-register">
+          <span class="spinner"></span>
+          <span class="btn-label">Konto erstellen</span>
+        </button>
+      </form>
+      <p class="terms-note">Mit der Registrierung akzeptierst du unsere <a href="#">AGB</a> und <a href="#">Datenschutzrichtlinie</a>.</p>
+    </div>
+
+    <!-- ── PASSWORT RESET ── -->
+    <div class="panel" id="panel-reset">
+      <button class="reset-back" onclick="showLogin()">← Zurück zur Anmeldung</button>
+      <div class="alert" id="reset-alert"></div>
+      <p style="color:var(--cream-muted);font-size:.88rem;margin-bottom:20px;line-height:1.7;font-weight:300;">Gib deine E-Mail-Adresse ein. Du erhältst einen Link, um dein Passwort zurückzusetzen.</p>
+      <form onsubmit="handleReset(event)">
+        <div class="form-group">
+          <label class="form-label">E-Mail</label>
+          <input class="form-input" type="email" id="reset-email" placeholder="deine@email.de" required autocomplete="email" />
+        </div>
+        <button class="btn-submit" type="submit" id="btn-reset">
+          <span class="spinner"></span>
+          <span class="btn-label">Reset-Link senden</span>
+        </button>
+      </form>
+    </div>
+
+  </div><!-- /auth-card -->
+
+  <div class="back-home"><a href="index.html">← Zurück zur Startseite</a></div>
+
+</div><!-- /page -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
+<script>
+
+window.addEventListener('DOMContentLoaded', async () => {
+  if (!_supabaseConfigured) {
+    document.getElementById('demo-banner').classList.add('show');
+  } else {
+    document.getElementById('demo-banner').style.display = 'none';
+    await redirectIfLoggedIn();
+  }
+});
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (tab==='login'&&i===0)||(tab==='register'&&i===1)));
+  document.getElementById('panel-login').classList.toggle('active', tab === 'login');
+  document.getElementById('panel-register').classList.toggle('active', tab === 'register');
+  document.getElementById('panel-reset').classList.remove('active');
+  document.getElementById('main-tabs').style.display = 'flex';
+}
+
+function showReset() {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-reset').classList.add('active');
+  document.getElementById('main-tabs').style.display = 'none';
+}
+function showLogin() { switchTab('login'); }
+
+function togglePw(id, btn) {
+  const inp = document.getElementById(id);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+}
+
+function showAlert(id, msg, type='error') {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = 'alert ' + type + ' show';
+}
+function hideAlert(id) { document.getElementById(id).className = 'alert'; }
+
+function setLoading(btnId, on) {
+  document.getElementById(btnId).classList.toggle('loading', on);
+  document.getElementById(btnId).disabled = on;
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  hideAlert('login-alert');
+  setLoading('btn-login', true);
+  if (!_supabaseConfigured) {
+    setTimeout(() => { window.location.href = 'app.html'; }, 600);
+    return;
+  }
+  const email = document.getElementById('login-email').value.trim();
+  const pw    = document.getElementById('login-pw').value;
+  const { error } = await authSignIn(email, pw);
+  setLoading('btn-login', false);
+  if (error) {
+    const msg = error.message.includes('Invalid login') || error.message.includes('credentials')
+      ? 'E-Mail oder Passwort ist falsch.'
+      : error.message.includes('Email not confirmed')
+      ? 'Bitte bestätige zuerst deine E-Mail-Adresse.'
+      : error.message;
+    showAlert('login-alert', msg);
+  } else {
+    window.location.href = 'app.html';
+  }
+}
+
+async function handleRegister(e) {
+  e.preventDefault();
+  hideAlert('register-alert');
+  const name  = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const pw    = document.getElementById('reg-pw').value;
+  const pw2   = document.getElementById('reg-pw2').value;
+  if (pw !== pw2) { showAlert('register-alert', 'Die Passwörter stimmen nicht überein.'); return; }
+  if (pw.length < 8) { showAlert('register-alert', 'Das Passwort muss mindestens 8 Zeichen lang sein.'); return; }
+  setLoading('btn-register', true);
+  if (!_supabaseConfigured) {
+    setTimeout(() => { window.location.href = 'app.html'; }, 600);
+    return;
+  }
+  const { error } = await authSignUp(email, pw, name);
+  setLoading('btn-register', false);
+  if (error) {
+    const msg = error.message.includes('already registered')
+      ? 'Diese E-Mail-Adresse ist bereits registriert.'
+      : error.message;
+    showAlert('register-alert', msg);
+  } else {
+    showAlert('register-alert', '✓ Konto erstellt! Bitte bestätige deine E-Mail-Adresse und melde dich dann an.', 'success');
+  }
+}
+
+async function handleReset(e) {
+  e.preventDefault();
+  hideAlert('reset-alert');
+  setLoading('btn-reset', true);
+  if (!_supabaseConfigured) {
+    setLoading('btn-reset', false);
+    showAlert('reset-alert', 'Supabase nicht eingerichtet – im Demo-Modus nicht verfügbar.', 'success');
+    return;
+  }
+  const email = document.getElementById('reset-email').value.trim();
+  const { error } = await authResetPassword(email);
+  setLoading('btn-reset', false);
+  if (error) {
+    showAlert('reset-alert', error.message);
+  } else {
+    showAlert('reset-alert', '✓ Reset-Link gesendet! Prüfe dein E-Mail-Postfach.', 'success');
+  }
+}
+
+function handleDemo() {
+  window.location.href = 'app.html';
+}
+</script>
+</body>
+</html>

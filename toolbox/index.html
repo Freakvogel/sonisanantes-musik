@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Energetic Toolbox – Dein energetischer Begleiter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #050608;
+      --card: rgba(123,45,158,0.08);
+      --card2: rgba(123,45,158,0.14);
+      --violet: #7B2D9E;
+      --violet-light: #A040C8;
+      --magenta: #C4257A;
+      --gold: #D4A820;
+      --gold-light: #E8C840;
+      --turquoise: #44D6D6;
+      --emerald: #3FB89B;
+      --cream: #F5ECD0;
+      --cream-muted: rgba(245,236,208,0.5);
+      --display: 'Cinzel', Georgia, serif;
+      --sans: 'Inter', -apple-system, sans-serif;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --radius: 20px;
+      --radius-sm: 12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--cream);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(5,6,8,.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(212,168,32,.12);
+    }
+    .nav-logo {
+      font-family: var(--display);
+      font-size: 1rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .nav-logo span { color: var(--turquoise); }
+    .nav-cta {
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      color: var(--cream);
+      border: none;
+      padding: 10px 24px;
+      border-radius: 50px;
+      font-family: var(--display);
+      font-size: .78rem;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: opacity .2s, transform .2s;
+      text-decoration: none;
+    }
+    .nav-cta:hover { opacity: .88; transform: scale(1.04); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(123,45,158,.28) 0%, transparent 65%);
+      top: -150px; left: 50%; transform: translateX(-50%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(196,37,122,.15) 0%, transparent 65%);
+      bottom: 0; right: -100px;
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(68,214,214,.08);
+      border: 1px solid rgba(68,214,214,.3);
+      color: var(--turquoise);
+      padding: 6px 20px;
+      border-radius: 50px;
+      font-family: var(--display);
+      font-size: .7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    .hero h1 {
+      font-family: var(--display);
+      font-size: clamp(1.8rem, 6vw, 3.4rem);
+      line-height: 1.2;
+      margin-bottom: 24px;
+      max-width: 800px;
+      color: var(--cream);
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+    .hero h1 em {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 300;
+      background: linear-gradient(135deg, var(--gold-light), var(--magenta));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-family: var(--sans);
+      font-size: clamp(.95rem, 2.5vw, 1.1rem);
+      color: var(--cream-muted);
+      max-width: 540px;
+      margin-bottom: 44px;
+      font-weight: 300;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      color: var(--cream);
+      border: none;
+      padding: 16px 38px;
+      border-radius: 50px;
+      font-family: var(--display);
+      font-size: .8rem;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 8px 32px rgba(123,45,158,.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(123,45,158,.45); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--cream-muted);
+      border: 1px solid rgba(212,168,32,.25);
+      padding: 16px 38px;
+      border-radius: 50px;
+      font-family: var(--display);
+      font-size: .8rem;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: border-color .2s, color .2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--cream); }
+
+    .hero-orbs { position: absolute; inset: 0; pointer-events: none; }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      animation: float 7s ease-in-out infinite;
+    }
+    .orb-1 { width:80px; height:80px; background:rgba(123,45,158,.1); top:22%; left:8%; animation-delay:0s; }
+    .orb-2 { width:50px; height:50px; background:rgba(212,168,32,.1); top:38%; right:10%; animation-delay:2.5s; }
+    .orb-3 { width:100px; height:100px; background:rgba(68,214,214,.06); bottom:28%; left:12%; animation-delay:5s; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* ── SECTION BASE ── */
+    section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
+    .section-tag {
+      text-align: center;
+      font-family: var(--display);
+      font-size: .68rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--turquoise);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: var(--display);
+      font-size: clamp(1.5rem, 4vw, 2.4rem);
+      text-align: center;
+      margin-bottom: 16px;
+      line-height: 1.25;
+      color: var(--cream);
+      font-weight: 500;
+      letter-spacing: .5px;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--cream-muted);
+      font-size: .95rem;
+      font-weight: 300;
+      max-width: 540px;
+      margin: 0 auto 60px;
+      font-family: var(--sans);
+    }
+
+    /* ── FOR WHOM ── */
+    .for-whom-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+    }
+    .for-whom-card {
+      background: var(--card);
+      border: 1px solid rgba(212,168,32,.12);
+      border-radius: var(--radius-sm);
+      padding: 26px 16px;
+      text-align: center;
+      transition: transform .2s, border-color .2s;
+    }
+    .for-whom-card:hover { transform: translateY(-4px); border-color: rgba(212,168,32,.3); }
+    .for-whom-card .icon { font-size: 1.8rem; margin-bottom: 12px; }
+    .for-whom-card p { font-size: .85rem; color: var(--cream-muted); font-family: var(--sans); font-weight: 300; }
+
+    /* ── TOOLS ── */
+    .tools-section { background: linear-gradient(180deg, var(--bg) 0%, rgba(123,45,158,.04) 100%); }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+    .tool-card {
+      background: var(--card);
+      border: 1px solid rgba(212,168,32,.1);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s, border-color .2s;
+    }
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+    .tool-card.violet::before  { background: linear-gradient(90deg, var(--violet), var(--magenta)); }
+    .tool-card.gold::before    { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+    .tool-card.magenta::before { background: linear-gradient(90deg, var(--magenta), #E8557A); }
+    .tool-card.teal::before    { background: linear-gradient(90deg, var(--turquoise), var(--emerald)); }
+    .tool-card:hover { transform: translateY(-4px); border-color: rgba(212,168,32,.25); }
+    .tool-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 18px;
+    }
+    .tool-card.violet .tool-icon  { background: rgba(123,45,158,.18); }
+    .tool-card.gold .tool-icon    { background: rgba(212,168,32,.15); }
+    .tool-card.magenta .tool-icon { background: rgba(196,37,122,.15); }
+    .tool-card.teal .tool-icon    { background: rgba(68,214,214,.12); }
+    .tool-card h3 { font-family: var(--display); font-size: .95rem; font-weight: 500; letter-spacing: .5px; margin-bottom: 10px; color: var(--cream); }
+    .tool-card p  { font-size: .85rem; color: var(--cream-muted); line-height: 1.7; font-weight: 300; }
+    .tool-tag {
+      display: inline-block;
+      margin-top: 16px;
+      font-family: var(--display);
+      font-size: .65rem;
+      letter-spacing: 1.5px;
+      padding: 4px 12px;
+      border-radius: 50px;
+      text-transform: uppercase;
+    }
+    .tool-card.violet .tool-tag  { background:rgba(123,45,158,.2); color:var(--turquoise); }
+    .tool-card.gold .tool-tag    { background:rgba(212,168,32,.15); color:var(--gold-light); }
+    .tool-card.magenta .tool-tag { background:rgba(196,37,122,.15); color:#F0A0C0; }
+    .tool-card.teal .tool-tag    { background:rgba(68,214,214,.12); color:var(--turquoise); }
+
+    /* ── HOW IT WORKS ── */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .step {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      position: relative;
+      padding-bottom: 40px;
+    }
+    .step:last-child { padding-bottom: 0; }
+    .step-line {
+      position: absolute;
+      left: 21px;
+      top: 52px;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(180deg, rgba(212,168,32,.3), transparent);
+    }
+    .step:last-child .step-line { display: none; }
+    .step-num {
+      flex-shrink: 0;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--display);
+      font-size: .85rem;
+      color: var(--cream);
+      box-shadow: 0 4px 20px rgba(123,45,158,.3);
+    }
+    .step-body h3 { font-family: var(--display); font-size: .9rem; font-weight: 500; letter-spacing: .5px; margin-bottom: 6px; color: var(--cream); }
+    .step-body p  { color: var(--cream-muted); font-size: .88rem; font-weight: 300; }
+
+    /* ── PRICING ── */
+    .pricing-wrapper {
+      background: linear-gradient(180deg, rgba(123,45,158,.04) 0%, var(--bg) 100%);
+      padding: 80px 0;
+    }
+    .toggle-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .toggle-label { color: var(--cream-muted); font-size: .88rem; font-family: var(--sans); font-weight: 300; }
+    .toggle-label.active { color: var(--cream); }
+    .toggle {
+      position: relative;
+      width: 52px; height: 26px;
+    }
+    .toggle input { opacity:0; width:0; height:0; }
+    .slider {
+      position: absolute;
+      inset: 0;
+      background: rgba(123,45,158,.2);
+      border-radius: 50px;
+      cursor: pointer;
+      border: 1px solid rgba(212,168,32,.2);
+      transition: background .3s;
+    }
+    .slider::before {
+      content: '';
+      position: absolute;
+      width: 18px; height: 18px;
+      left: 3px; top: 3px;
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      border-radius: 50%;
+      transition: transform .3s;
+    }
+    .toggle input:checked + .slider { background: rgba(123,45,158,.3); }
+    .toggle input:checked + .slider::before { transform: translateX(26px); }
+    .save-badge {
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: var(--bg);
+      font-family: var(--display);
+      font-size: .65rem;
+      letter-spacing: 1px;
+      padding: 3px 10px;
+      border-radius: 50px;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .price-card {
+      background: var(--card);
+      border: 1px solid rgba(212,168,32,.12);
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      position: relative;
+      transition: transform .2s;
+    }
+    .price-card:hover { transform: translateY(-4px); }
+    .price-card.featured {
+      border-color: rgba(212,168,32,.3);
+      background: linear-gradient(180deg, rgba(123,45,158,.12) 0%, var(--card) 100%);
+      box-shadow: 0 0 60px rgba(123,45,158,.15);
+    }
+    .popular-badge {
+      position: absolute;
+      top: -14px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      color: var(--cream);
+      font-family: var(--display);
+      font-size: .65rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 5px 18px;
+      border-radius: 50px;
+      white-space: nowrap;
+    }
+    .price-name { font-family: var(--display); font-size: .72rem; letter-spacing: 2px; text-transform: uppercase; color: var(--turquoise); margin-bottom: 16px; }
+    .price-amount {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+    .price-currency { font-size: 1.3rem; color: var(--cream-muted); margin-bottom: 8px; font-family: var(--sans); }
+    .price-number {
+      font-family: var(--display);
+      font-size: 2.8rem;
+      font-weight: 500;
+      line-height: 1;
+      color: var(--cream);
+    }
+    .price-period { font-size: .85rem; color: var(--cream-muted); margin-bottom: 6px; font-weight: 300; }
+    .price-note { font-size: .78rem; color: var(--cream-muted); margin-bottom: 28px; min-height: 18px; font-weight: 300; }
+    .price-divider { height: 1px; background: rgba(212,168,32,.12); margin-bottom: 24px; }
+    .price-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .price-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: .88rem;
+      color: var(--cream-muted);
+      font-weight: 300;
+    }
+    .price-features li .check { color: var(--emerald); font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+    .price-features li .minus { color: rgba(245,236,208,.25); flex-shrink: 0; margin-top: 1px; }
+    .btn-price {
+      width: 100%;
+      padding: 14px;
+      border-radius: 50px;
+      font-family: var(--display);
+      font-size: .78rem;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      border: none;
+      transition: transform .2s, opacity .2s;
+    }
+    .btn-price:hover { transform: scale(1.02); opacity: .9; }
+    .btn-price.primary { background: linear-gradient(135deg, var(--violet), var(--magenta)); color: var(--cream); box-shadow: 0 8px 24px rgba(123,45,158,.3); }
+    .btn-price.outline { background: transparent; color: var(--cream-muted); border: 1px solid rgba(212,168,32,.2); }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+    .testi-card {
+      background: var(--card);
+      border: 1px solid rgba(212,168,32,.1);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+    }
+    .stars { color: var(--gold); font-size: .9rem; margin-bottom: 14px; letter-spacing: 3px; }
+    .testi-text {
+      font-family: var(--serif);
+      font-size: 1rem;
+      color: var(--cream-muted);
+      line-height: 1.8;
+      font-style: italic;
+      font-weight: 300;
+      margin-bottom: 20px;
+    }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .testi-name { font-family: var(--display); font-size: .8rem; letter-spacing: .5px; color: var(--cream); }
+    .testi-role { font-size: .75rem; color: var(--cream-muted); font-weight: 300; margin-top: 2px; }
+
+    /* ── CTA FINAL ── */
+    .cta-final {
+      text-align: center;
+      padding: 100px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-final::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(123,45,158,.2) 0%, transparent 65%);
+      top: 50%; left: 50%; transform: translate(-50%,-50%);
+      pointer-events: none;
+    }
+    .cta-final h2 {
+      font-family: var(--display);
+      font-size: clamp(1.5rem, 4vw, 2.4rem);
+      margin-bottom: 16px;
+      max-width: 560px;
+      margin-left: auto; margin-right: auto;
+      color: var(--cream);
+      font-weight: 500;
+      letter-spacing: .5px;
+    }
+    .cta-final p { color: var(--cream-muted); margin-bottom: 40px; max-width: 440px; margin-left: auto; margin-right: auto; font-weight: 300; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 32px 24px;
+      border-top: 1px solid rgba(212,168,32,.08);
+      color: var(--cream-muted);
+      font-size: .8rem;
+      font-weight: 300;
+    }
+    footer .footer-logo {
+      font-family: var(--display);
+      font-size: .9rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    footer .footer-links { display: flex; justify-content: center; gap: 24px; margin-top: 16px; flex-wrap: wrap; }
+    footer .footer-links a { color: var(--cream-muted); text-decoration: none; font-size: .78rem; transition: color .2s; }
+    footer .footer-links a:hover { color: var(--cream); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 600px) {
+      .pricing-grid { grid-template-columns: 1fr; }
+      .price-card.featured { order: -1; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .btn-primary, .btn-ghost { width: 100%; max-width: 300px; text-align: center; }
+    }
+
+    /* ── SCROLL ANIM ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Energetic <span>Toolbox</span></div>
+  <a href="login.html" class="nav-cta">Jetzt starten</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="hero-badge">✦ Dein energetischer Begleiter</div>
+  <h1>Innere Klarheit –<br /><em>jederzeit in deiner Tasche</em></h1>
+  <p>Intuitive Tools für Blockadenlösung, Körperkommunikation, energetische Transformation und spirituelle Selbstentwicklung. Begleitet. Strukturiert. Tief.</p>
+  <div class="hero-buttons">
+    <a href="login.html" class="btn-primary">Jetzt kostenlos testen</a>
+    <a href="#tools" class="btn-ghost">Tools entdecken</a>
+  </div>
+</div>
+
+<!-- FÜR WEN -->
+<section class="reveal">
+  <div class="section-tag">Für wen?</div>
+  <h2 class="section-title">Diese App ist für dich –<br />wenn du spürst, dass mehr möglich ist</h2>
+  <p class="section-sub">Du musst keine Expertin sein. Du musst nur bereit sein, dich selbst zu begleiten.</p>
+  <div class="for-whom-grid">
+    <div class="for-whom-card"><div class="icon">🌸</div><p>Frauen in Transformation</p></div>
+    <div class="for-whom-card"><div class="icon">✨</div><p>Spirituell Suchende</p></div>
+    <div class="for-whom-card"><div class="icon">🧭</div><p>Coaches & Begleiter</p></div>
+    <div class="for-whom-card"><div class="icon">🌿</div><p>Energetisch Arbeitende</p></div>
+    <div class="for-whom-card"><div class="icon">💫</div><p>Menschen mit Blockaden</p></div>
+    <div class="for-whom-card"><div class="icon">🔮</div><p>Anfänger & Fortgeschrittene</p></div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<div id="tools" class="tools-section">
+<section class="reveal">
+  <div class="section-tag">Die Tools</div>
+  <h2 class="section-title">Deine energetische Werkzeugkiste</h2>
+  <p class="section-sub">Jedes Tool begleitet dich Schritt für Schritt durch einen tiefen inneren Prozess.</p>
+  <div class="tools-grid">
+
+    <div class="tool-card violet">
+      <div class="tool-icon">🔓</div>
+      <h3>Blockaden lösen</h3>
+      <p>Erkenne, spüre und löse emotionale, mentale und energetische Blockaden – auf allen Ebenen, geführt und strukturiert.</p>
+      <span class="tool-tag">Transformation</span>
+    </div>
+
+    <div class="tool-card magenta">
+      <div class="tool-icon">🫀</div>
+      <h3>Körperkommunikation</h3>
+      <p>Stelle Fragen an deinen Körper. Empfange intuitive Antworten. Verstehe deine Symptome auf einer tieferen Ebene.</p>
+      <span class="tool-tag">Intuition</span>
+    </div>
+
+    <div class="tool-card gold">
+      <div class="tool-icon">📖</div>
+      <h3>Wunschbucharbeit</h3>
+      <p>Formuliere deine Wünsche, aktiviere die emotionale Frequenz und begleite deine Manifestation bewusst.</p>
+      <span class="tool-tag">Manifestation</span>
+    </div>
+
+    <div class="tool-card teal">
+      <div class="tool-icon">🛡️</div>
+      <h3>Back to Sender</h3>
+      <p>Erkenne fremde Energien, gib sie liebevoll zurück und stärke deine energetische Abgrenzung.</p>
+      <span class="tool-tag">Schutz</span>
+    </div>
+
+    <div class="tool-card violet">
+      <div class="tool-icon">🌀</div>
+      <h3>Energiefelder anlegen</h3>
+      <p>Erschaffe Schutz-, Heil- und Manifestationsfelder für dich, andere oder Räume – intuitiv geführt.</p>
+      <span class="tool-tag">Energie</span>
+    </div>
+
+    <div class="tool-card magenta">
+      <div class="tool-icon">🪄</div>
+      <h3>Die 4 Schritte für Wunder</h3>
+      <p>Wahrnehmen · Annehmen · Transformieren · Neu ausrichten. Ein vollständiger Prozess für tiefe Veränderung.</p>
+      <span class="tool-tag">Prozess</span>
+    </div>
+
+    <div class="tool-card gold">
+      <div class="tool-icon">🖊️</div>
+      <h3>Lösungsorientierte Fragen</h3>
+      <p>Perspektivwechsel durch kraftvolle Fragen. Öffne neue Möglichkeiten und aktiviere deine innere Führung.</p>
+      <span class="tool-tag">Reflexion</span>
+    </div>
+
+    <div class="tool-card teal">
+      <div class="tool-icon">👤</div>
+      <h3>Strichmännchentechnik</h3>
+      <p>Visualisiere energetische Verbindungen zu Personen, löse Bindungen und setze klare Grenzen.</p>
+      <span class="tool-tag">Beziehungen</span>
+    </div>
+
+  </div>
+</section>
+</div>
+
+<!-- WIE ES FUNKTIONIERT -->
+<section class="reveal">
+  <div class="section-tag">So funktioniert es</div>
+  <h2 class="section-title">Dein persönlicher Prozess</h2>
+  <p class="section-sub">Kein Vorwissen nötig. Du wirst Schritt für Schritt begleitet.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-line"></div>
+      <div class="step-body">
+        <h3>Thema wählen</h3>
+        <p>Was beschäftigt dich gerade? Wähle ein Tool oder folge der intuitiven Empfehlung der App.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-line"></div>
+      <div class="step-body">
+        <h3>Einspüren & wahrnehmen</h3>
+        <p>Die App führt dich sanft in Kontakt mit deiner inneren Welt – Körper, Gefühl, Energie.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-line"></div>
+      <div class="step-body">
+        <h3>Prozess durchlaufen</h3>
+        <p>Schritt für Schritt begleitet dich das Tool durch den Transformationsprozess.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-line"></div>
+      <div class="step-body">
+        <h3>Nachspüren & integrieren</h3>
+        <p>Halte deine Erkenntnisse fest. Notiere Veränderungen. Dein Journal hält alles für dich.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<div id="pricing" class="pricing-wrapper">
+  <div style="max-width:1100px; margin:0 auto;">
+    <div class="section-tag reveal">Mitgliedschaft</div>
+    <h2 class="section-title reveal">Wähle deinen Weg</h2>
+    <p class="section-sub reveal">Starte kostenlos und entscheide dann, ob du tiefer eintauchen möchtest.</p>
+
+    <div class="toggle-wrap reveal">
+      <span class="toggle-label active" id="label-monthly">Monatlich</span>
+      <label class="toggle">
+        <input type="checkbox" id="billing-toggle" />
+        <span class="slider"></span>
+      </label>
+      <span class="toggle-label" id="label-yearly">Jährlich <span class="save-badge">2 Monate gratis</span></span>
+    </div>
+
+    <div class="pricing-grid reveal">
+
+      <!-- FREE -->
+      <div class="price-card">
+        <div class="price-name">Gratis</div>
+        <div class="price-amount">
+          <span class="price-currency">€</span>
+          <span class="price-number">0</span>
+        </div>
+        <div class="price-period">für immer</div>
+        <div class="price-note"></div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><span class="check">✓</span> 2 Tools vollständig</li>
+          <li><span class="check">✓</span> Tagesimpuls täglich</li>
+          <li><span class="check">✓</span> Basis-Journal</li>
+          <li><span class="minus">–</span> <span>Alle 8+ Tools</span></li>
+          <li><span class="minus">–</span> <span>Audio-Begleitung</span></li>
+          <li><span class="minus">–</span> <span>Prozesse speichern</span></li>
+        </ul>
+        <button class="btn-price outline" onclick="window.location.href='login.html'">Kostenlos starten</button>
+      </div>
+
+      <!-- PRO -->
+      <div class="price-card featured">
+        <div class="popular-badge">✦ Beliebteste Wahl</div>
+        <div class="price-name">Energetic Pro</div>
+        <div class="price-amount">
+          <span class="price-currency">€</span>
+          <span class="price-number" id="pro-price">17</span>
+        </div>
+        <div class="price-period" id="pro-period">pro Monat</div>
+        <div class="price-note" id="pro-note">&nbsp;</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><span class="check">✓</span> Alle 8+ Tools vollständig</li>
+          <li><span class="check">✓</span> Multidimensionales Blockaden-Tool</li>
+          <li><span class="check">✓</span> Audio-Begleitung</li>
+          <li><span class="check">✓</span> Unbegrenztes Journal</li>
+          <li><span class="check">✓</span> Prozesse speichern</li>
+          <li><span class="check">✓</span> Tagesimpuls & Rituale</li>
+        </ul>
+        <button class="btn-price primary" onclick="window.location.href='login.html'">Jetzt starten</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="reveal">
+  <div class="section-tag">Erfahrungen</div>
+  <h2 class="section-title">Was andere sagen</h2>
+  <p class="section-sub">Echte Erfahrungen – von Menschen wie du.</p>
+  <div class="testimonials-grid">
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">„Ich hatte nie gedacht, dass eine App mir so tief helfen kann. Das Blockaden-Tool hat in 20 Minuten etwas gelöst, das ich jahrelang mit mir getragen habe."</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:rgba(123,45,158,.2);">🌸</div>
+        <div>
+          <div class="testi-name">Sarah M.</div>
+          <div class="testi-role">Heilpraktikerin, Bayern</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">„Die Körperkommunikation hat mir endlich erklärt, warum mein Rücken immer wieder schmerzt. Das war ein echter Aha-Moment."</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:rgba(212,168,32,.15);">✨</div>
+        <div>
+          <div class="testi-name">Jana K.</div>
+          <div class="testi-role">Coach & Mama, Berlin</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">„Ich nutze die Toolbox jeden Morgen. Sie fühlt sich an wie ein liebevoller Freund, der immer für mich da ist. Keine andere App kommt da ran."</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:rgba(68,214,214,.1);">🔮</div>
+        <div>
+          <div class="testi-name">Miriam T.</div>
+          <div class="testi-role">Yoga-Lehrerin, Wien</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<div class="cta-final reveal">
+  <h2>Bist du bereit,<br /><em style="font-family:var(--serif);font-style:italic;background:linear-gradient(135deg,var(--gold-light),var(--magenta));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">dich selbst zu begleiten?</em></h2>
+  <p>Starte noch heute mit deinen ersten zwei Tools – kostenlos, ohne Kreditkarte.</p>
+  <a href="login.html" class="btn-primary">Jetzt kostenlos starten</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">ENERGETIC TOOLBOX</div>
+  <div>© 2025 Sonisanantes · Alle Rechte vorbehalten</div>
+  <div class="footer-links">
+    <a href="#">Impressum</a>
+    <a href="#">Datenschutz</a>
+    <a href="#">AGB</a>
+    <a href="#">Kontakt</a>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.getElementById('billing-toggle');
+  const proPrice = document.getElementById('pro-price');
+  const proPeriod = document.getElementById('pro-period');
+  const proNote = document.getElementById('pro-note');
+  const labelMonthly = document.getElementById('label-monthly');
+  const labelYearly = document.getElementById('label-yearly');
+
+  toggle.addEventListener('change', () => {
+    if (toggle.checked) {
+      proPrice.textContent = '142';
+      proPeriod.textContent = 'pro Jahr';
+      proNote.textContent = 'statt 204 € · 2 Monate gratis';
+      labelMonthly.classList.remove('active');
+      labelYearly.classList.add('active');
+    } else {
+      proPrice.textContent = '17';
+      proPeriod.textContent = 'pro Monat';
+      proNote.innerHTML = '&nbsp;';
+      labelMonthly.classList.add('active');
+      labelYearly.classList.remove('active');
+    }
+  });
+
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
