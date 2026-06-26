@@ -37,3 +37,36 @@ async function authSignOut() {
 function getSupabaseClient() {
   return _getSB();
 }
+
+// Leitet auf app.html weiter wenn bereits eingeloggt.
+async function redirectIfLoggedIn() {
+  const sb = _getSB();
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    window.location.href = 'app.html';
+  }
+}
+
+// Meldet einen Nutzer mit E-Mail und Passwort an.
+async function authSignIn(email, password) {
+  const sb = _getSB();
+  return await sb.auth.signInWithPassword({ email, password });
+}
+
+// Registriert einen neuen Nutzer.
+async function authSignUp(email, password, name) {
+  const sb = _getSB();
+  return await sb.auth.signUp({
+    email,
+    password,
+    options: { data: { full_name: name } }
+  });
+}
+
+// Sendet eine Passwort-Reset-E-Mail.
+async function authResetPassword(email) {
+  const sb = _getSB();
+  return await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/toolbox/app.html'
+  });
+}
