@@ -358,7 +358,10 @@ function checkOrientation() {
     hint.classList.remove('show');
   }
 }
-window.addEventListener('orientationchange', () => setTimeout(checkOrientation, 200));
+window.addEventListener('orientationchange', () => setTimeout(() => {
+  if (step >= 2) checkOrientation();
+  resizeCanvas();
+}, 200));
 
 // ── Constants ──────────────────────────────────────────────────────────────
 
@@ -397,21 +400,27 @@ function resizeCanvas() {
   dpr = window.devicePixelRatio || 1;
   const wrap = document.getElementById('canvas-wrap');
   const w = wrap.clientWidth;
-  const h = Math.round(w * 0.76);
+  const isPortrait = window.innerHeight > window.innerWidth;
+  const h = Math.round(w * (isPortrait ? 0.90 : 0.76));
   canvas.width = w * dpr;
   canvas.height = h * dpr;
   canvas.style.height = h + 'px';
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   drawAll();
 }
-window.addEventListener('resize', () => { checkOrientation(); resizeCanvas(); });
+window.addEventListener('resize', () => {
+  if (step >= 2) checkOrientation();
+  else document.getElementById('rotate-hint').classList.remove('show');
+  resizeCanvas();
+});
 
 // ── Figure Geometry ────────────────────────────────────────────────────────
 
 function getFig(side) {
   const w = cw(), h = ch();
-  const cx = side === 'left' ? w * 0.25 : w * 0.75;
-  const R  = Math.round(w * 0.038);
+  const isCenter = side === 'center';
+  const cx = isCenter ? w * 0.5 : (side === 'left' ? w * 0.25 : w * 0.75);
+  const R  = isCenter ? Math.round(w * 0.065) : Math.round(w * 0.038);
   const topY       = h * 0.10;
   const headCY     = topY + R;
   const neckY      = headCY + R + R * 0.18;
@@ -639,10 +648,16 @@ function drawConnLine(c1, c2, idx, alpha, isCut, cutProg) {
 
 function drawAll() {
   ctx.clearRect(0, 0, cw(), ch());
-  const L = getFig('left'), R = getFig('right');
 
-  if (step >= 1) { drawFig(L);  drawFigName(L, myName); }
-  if (step >= 2) { drawFig(R);  drawFigName(R, otherName); }
+  if (step === 1) {
+    const C = getFig('center');
+    drawFig(C); drawFigName(C, myName);
+    return;
+  }
+
+  const L = getFig('left'), R = getFig('right');
+  drawFig(L); drawFigName(L, myName);
+  if (step >= 2) { drawFig(R); drawFigName(R, otherName); }
 
   // Light circles (persistent + animating)
   drawnCircles.forEach(t => drawCircleForType(t, L, R, 1));
@@ -761,10 +776,13 @@ function renderContent() {
   document.getElementById('tap-hint').style.display = 'none';
   updateCanvasInstr(step);
 
+  if (step >= 2) checkOrientation();
+  else document.getElementById('rotate-hint').classList.remove('show');
+
   if (step === 1) {
     el.innerHTML = `
       <div class="input-group">
-        <label class="input-label">Mein Vor- und Nachname</label>
+        <label class="input-label">Dein Vor- und Nachname</label>
         <input class="name-input" id="inp-my" type="text" placeholder="z. B. Maria Muster"
                value="${myName}" inputmode="text" autocomplete="off" autocorrect="off">
       </div>
@@ -962,7 +980,6 @@ function escHtml(s) {
 
 // ── Init ──────────────────────────────────────────────────────────────────
 
-checkOrientation();
 resizeCanvas();
 updateDots();
 renderContent();
