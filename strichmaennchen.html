@@ -85,8 +85,8 @@
     #app {
       position: relative; z-index: 1;
       display: flex; flex-direction: column; align-items: center;
-      padding: 14px 14px calc(env(safe-area-inset-bottom, 0px) + 32px);
-      max-width: 860px; margin: 0 auto;
+      padding: 14px 20px calc(env(safe-area-inset-bottom, 0px) + 20px);
+      max-width: 1100px; margin: 0 auto;
     }
 
     /* ── Step indicator ── */
@@ -118,6 +118,18 @@
       position: relative;
     }
     #canvas { display: block; width: 100%; touch-action: none; }
+    .canvas-instr {
+      padding: 10px 16px 18px;
+      text-align: center;
+    }
+    .canvas-instr-star {
+      color: var(--gold); font-size: 13px; margin-bottom: 6px;
+    }
+    .canvas-instr-text {
+      font-family: var(--display); font-size: 10px;
+      letter-spacing: .28em; text-transform: uppercase;
+      color: rgba(212,168,32,.75); line-height: 1.7;
+    }
     .tap-hint {
       position: absolute; bottom: 10px; left: 0; right: 0;
       text-align: center; font-size: 11px; color: rgba(212,168,32,.55);
@@ -236,6 +248,21 @@
     }
     .btn-secondary:active { background: rgba(212,168,32,.07); }
 
+    /* ── Footer ── */
+    .app-footer {
+      position: relative; z-index: 1;
+      text-align: center; padding: 20px 20px calc(env(safe-area-inset-bottom,0px) + 24px);
+    }
+    .footer-geo {
+      width: 36px; height: 36px; margin: 0 auto 10px;
+      opacity: .45;
+    }
+    .footer-tagline {
+      font-family: var(--display); font-size: 9.5px;
+      letter-spacing: .32em; text-transform: uppercase;
+      color: rgba(212,168,32,.5);
+    }
+
     /* ── Rotate Hint ── */
     #rotate-hint {
       display: none;
@@ -295,10 +322,28 @@
     <div class="tap-hint" id="tap-hint" style="display:none">
       Tippe auf eine Verbindungslinie, um sie zu durchtrennen
     </div>
+    <div class="canvas-instr" id="canvas-instr">
+      <div class="canvas-instr-star">✦</div>
+      <div class="canvas-instr-text" id="canvas-instr-text"></div>
+    </div>
   </div>
 
   <div id="step-content"></div>
 </div>
+
+<footer class="app-footer">
+  <svg class="footer-geo" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="30" cy="30" r="28" stroke="#D4A820" stroke-width="0.9"/>
+    <circle cx="30" cy="19" r="11" stroke="#D4A820" stroke-width="0.8"/>
+    <circle cx="30" cy="41" r="11" stroke="#D4A820" stroke-width="0.8"/>
+    <circle cx="20.5" cy="24.5" r="11" stroke="#D4A820" stroke-width="0.8"/>
+    <circle cx="39.5" cy="24.5" r="11" stroke="#D4A820" stroke-width="0.8"/>
+    <circle cx="20.5" cy="35.5" r="11" stroke="#D4A820" stroke-width="0.8"/>
+    <circle cx="39.5" cy="35.5" r="11" stroke="#D4A820" stroke-width="0.8"/>
+    <circle cx="30" cy="30" r="11" stroke="#D4A820" stroke-width="0.8"/>
+  </svg>
+  <div class="footer-tagline">Verbinde dich &nbsp;&middot;&nbsp; Erkenne &nbsp;&middot;&nbsp; Verändere</div>
+</footer>
 
 <script>
 // ── Orientation ───────────────────────────────────────────────────────────
@@ -480,6 +525,54 @@ function drawLightCircle(cx, cy, radius, alpha, rays = 16) {
   ctx.restore();
 }
 
+function _pillPath(x, y, w, h, r) {
+  const r2 = Math.min(r, w / 2, h / 2);
+  if (typeof ctx.roundRect === 'function') {
+    ctx.roundRect(x, y, w, h, r2);
+  } else {
+    ctx.moveTo(x + r2, y);
+    ctx.lineTo(x + w - r2, y);
+    ctx.arcTo(x + w, y, x + w, y + r2, r2);
+    ctx.lineTo(x + w, y + h - r2);
+    ctx.arcTo(x + w, y + h, x + w - r2, y + h, r2);
+    ctx.lineTo(x + r2, y + h);
+    ctx.arcTo(x, y + h, x, y + h - r2, r2);
+    ctx.lineTo(x, y + r2);
+    ctx.arcTo(x, y, x + r2, y, r2);
+    ctx.closePath();
+  }
+}
+
+function drawPillShape(L, R, alpha) {
+  const pad = L.R * 0.6;
+  const x1  = L.cx - L.R * 1.85 - pad;
+  const x2  = R.cx + R.R * 1.85 + pad;
+  const y1  = L.topY - L.R * 0.5;
+  const y2  = L.nameY + L.R * 0.6;
+  const pw  = x2 - x1;
+  const ph  = y2 - y1;
+  const rx  = ph / 2;
+  const cx  = (x1 + x2) / 2;
+  const cy  = (y1 + y2) / 2;
+
+  ctx.save();
+  ctx.globalAlpha = alpha;
+
+  const grd = ctx.createRadialGradient(cx, cy, ph * 0.15, cx, cy, pw * 0.55);
+  grd.addColorStop(0,   'rgba(212,168,32,0)');
+  grd.addColorStop(.55, 'rgba(212,168,32,.09)');
+  grd.addColorStop(1,   'rgba(212,168,32,0)');
+  ctx.beginPath(); _pillPath(x1, y1, pw, ph, rx);
+  ctx.fillStyle = grd; ctx.fill();
+
+  ctx.beginPath(); _pillPath(x1, y1, pw, ph, rx);
+  ctx.strokeStyle = '#D4A820'; ctx.lineWidth = 1.8;
+  ctx.shadowColor = '#D4A820'; ctx.shadowBlur = 14;
+  ctx.stroke();
+
+  ctx.restore();
+}
+
 function drawCircleForType(type, L, R, alpha) {
   const circleForFig = (fig) => {
     const centerY = (fig.headCY + fig.footY) / 2;
@@ -488,9 +581,7 @@ function drawCircleForType(type, L, R, alpha) {
   };
   if (type === 'left')  circleForFig(L);
   if (type === 'right') circleForFig(R);
-  if (type === 'outer') {
-    drawLightCircle(cw() / 2, ch() * 0.46, cw() * 0.43, alpha, 24);
-  }
+  if (type === 'outer') drawPillShape(L, R, alpha);
 }
 
 // ── Draw: Connection Line ──────────────────────────────────────────────────
@@ -631,6 +722,22 @@ function animateCut(idx) {
 
 // ── Step UI ────────────────────────────────────────────────────────────────
 
+const CANVAS_INSTRS = [
+  '',
+  'Zeichne dich selbst als Strichmännchen',
+  'Benenne die andere Person oder Situation',
+  'Aktiviere deinen Lichtkreis',
+  'Aktiviere den Lichtkreis der anderen Person',
+  'Verbindet euch im gemeinsamen Lichtkreis',
+  'Verbinde die sieben Energiezentren',
+  'Durchtrennt die Verbindungslinien achtsam',
+];
+
+function updateCanvasInstr(s) {
+  const el = document.getElementById('canvas-instr-text');
+  if (el) el.textContent = CANVAS_INSTRS[s] || '';
+}
+
 const STEP_LABELS = [
   '', 'Schritt 1 – Ich selbst', 'Schritt 2 – Die andere Person / Situation',
   'Schritt 3 – Mein Lichtkreis', 'Schritt 4 – Ihr Lichtkreis',
@@ -652,6 +759,7 @@ function updateDots() {
 function renderContent() {
   const el = document.getElementById('step-content');
   document.getElementById('tap-hint').style.display = 'none';
+  updateCanvasInstr(step);
 
   if (step === 1) {
     el.innerHTML = `
@@ -803,6 +911,7 @@ function showCompletion() {
   disableTap();
   document.getElementById('tap-hint').style.display = 'none';
   document.getElementById('step-label').textContent = 'Abgeschlossen ✦';
+  updateCanvasInstr(0);
 
   const dots = document.getElementById('step-dots');
   dots.querySelectorAll('.step-dot').forEach(d => {
