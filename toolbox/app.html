@@ -6,9 +6,6 @@
   <title>Energetic Toolbox – App</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase-config.js"></script>
-  <script src="js/auth.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1572,23 +1569,21 @@
 </div>
 
 <script>
-// ─── AUTH INIT ───
-window.addEventListener('DOMContentLoaded', async () => {
-  const session = await requireAuth();
-  if (session) {
-    const name  = session.user.user_metadata?.display_name || '';
-    const email = session.user.email || '';
-    document.getElementById('profile-name').textContent  = name  || 'Herzlich willkommen';
-    document.getElementById('profile-email').textContent = email;
-    const greet = name ? `Hallo, ${name.split(' ')[0]} ✦` : 'Guten Morgen ✦';
-    document.querySelector('.home-greeting').textContent = greet;
-  }
+// ─── INIT: Name aus URL-Param (von WordPress übergeben) ───
+window.addEventListener('DOMContentLoaded', () => {
+  const p = new URLSearchParams(window.location.search);
+  const name  = p.get('name')  || '';
+  const email = p.get('email') || '';
+  document.getElementById('profile-name').textContent  = name  || 'Herzlich willkommen';
+  document.getElementById('profile-email').textContent = email;
+  const greet = name ? `Hallo, ${name.split(' ')[0]} ✦` : 'Guten Morgen ✦';
+  document.querySelector('.home-greeting').textContent = greet;
 });
 
-async function handleLogout() {
-  if (confirm('Möchtest du dich wirklich abmelden?')) {
-    await authSignOut();
-  }
+function handleLogout() {
+  // Elternfenster (WordPress) zur Abmeldeseite schicken
+  const target = window.parent !== window ? window.parent : window;
+  target.location.href = '/wp-login.php?action=logout&_wpnonce=' + (window._wpLogoutNonce || '');
 }
 
 // ─── NAVIGATION ───
