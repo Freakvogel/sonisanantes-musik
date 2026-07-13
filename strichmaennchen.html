@@ -260,19 +260,16 @@
     }
     .btn-secondary:active { background: rgba(212,168,32,.07); }
 
-    /* ── Footer ── */
-    .app-footer {
-      position: relative; z-index: 1;
-      text-align: center; padding: 20px 20px calc(env(safe-area-inset-bottom,0px) + 24px);
+    /* ── Circle-trace hint ── */
+    .circle-hint {
+      display: flex; align-items: flex-start; gap: 9px;
+      margin-top: 13px; padding-top: 13px;
+      border-top: 1px solid rgba(212,168,32,.12);
+      font-family: var(--sans); font-size: 12px; line-height: 1.55;
+      color: rgba(212,168,32,.6); letter-spacing: .04em;
     }
-    .footer-geo {
-      width: 36px; height: 36px; margin: 0 auto 10px;
-      opacity: .45;
-    }
-    .footer-tagline {
-      font-family: var(--display); font-size: 9.5px;
-      letter-spacing: .32em; text-transform: uppercase;
-      color: rgba(212,168,32,.5);
+    .circle-hint-icon {
+      font-size: 15px; flex-shrink: 0; margin-top: 1px;
     }
 
     /* ── Rotate Hint ── */
@@ -348,19 +345,6 @@
   </div>
 </div>
 
-<footer class="app-footer">
-  <svg class="footer-geo" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="30" cy="30" r="28" stroke="#D4A820" stroke-width="0.9"/>
-    <circle cx="30" cy="19" r="11" stroke="#D4A820" stroke-width="0.8"/>
-    <circle cx="30" cy="41" r="11" stroke="#D4A820" stroke-width="0.8"/>
-    <circle cx="20.5" cy="24.5" r="11" stroke="#D4A820" stroke-width="0.8"/>
-    <circle cx="39.5" cy="24.5" r="11" stroke="#D4A820" stroke-width="0.8"/>
-    <circle cx="20.5" cy="35.5" r="11" stroke="#D4A820" stroke-width="0.8"/>
-    <circle cx="39.5" cy="35.5" r="11" stroke="#D4A820" stroke-width="0.8"/>
-    <circle cx="30" cy="30" r="11" stroke="#D4A820" stroke-width="0.8"/>
-  </svg>
-  <div class="footer-tagline">Verbinde dich &nbsp;&middot;&nbsp; Erkenne &nbsp;&middot;&nbsp; Verändere</div>
-</footer>
 
 <script>
 // ── Orientation ───────────────────────────────────────────────────────────
@@ -907,6 +891,10 @@ function renderContent() {
           „Ich wünsche mir das, was für mich das Beste ist,<br>
           auch wenn ich nicht genau weiß, was es ist."
         </div>
+        <div class="circle-hint">
+          <span class="circle-hint-icon">☝</span>
+          <span>Fahre dabei mit dem Finger deinen Lichtkreis entlang, während du sprichst.</span>
+        </div>
       </div>
       <button class="btn-primary" onclick="goNext()">Weiter →</button>`;
     setTimeout(() => animateCircle('left'), 250);
@@ -921,6 +909,10 @@ function renderContent() {
           „Ich wünsche mir das, was für <strong>${escHtml(name)}</strong> am Besten ist,<br>
           auch wenn ich nicht weiß, was es ist."
         </div>
+        <div class="circle-hint">
+          <span class="circle-hint-icon">☝</span>
+          <span>Fahre dabei mit dem Finger den Lichtkreis von <strong>${escHtml(name)}</strong> entlang, während du sprichst.</span>
+        </div>
       </div>
       <button class="btn-primary" onclick="goNext()">Weiter →</button>`;
     setTimeout(() => animateCircle('right'), 250);
@@ -933,6 +925,10 @@ function renderContent() {
         <div class="affirmation-text">
           „Ich wünsche mir das, was für uns beide am Besten ist,<br>
           auch wenn ich nicht genau weiß, was das ist."
+        </div>
+        <div class="circle-hint">
+          <span class="circle-hint-icon">☝</span>
+          <span>Fahre dabei mit dem Finger den gemeinsamen Lichtkreis entlang, während du sprichst.</span>
         </div>
       </div>
       <button class="btn-primary" onclick="goNext()">Weiter →</button>`;
