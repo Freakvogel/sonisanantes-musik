@@ -366,8 +366,8 @@ window.addEventListener('resize', () => { checkOrientation(); resizeCanvas(); })
 function getFig(side) {
   const w = cw(), h = ch();
   const cx = side === 'left' ? w * 0.25 : w * 0.75;
-  const R  = Math.round(w * 0.055);
-  const topY       = h * 0.05;
+  const R  = Math.round(w * 0.038);
+  const topY       = h * 0.10;
   const headCY     = topY + R;
   const neckY      = headCY + R + R * 0.18;
   const shoulderY  = neckY + R * 0.35;
