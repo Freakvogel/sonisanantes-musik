@@ -1545,6 +1545,10 @@
       <div id="sm-tap-hint" style="display:none;position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:11px;color:rgba(212,168,32,.55);letter-spacing:.12em;pointer-events:none;animation:pulse 2s ease-in-out infinite;">
         Tippe auf eine Verbindungslinie
       </div>
+      <div style="padding:8px 16px 14px;text-align:center;">
+        <div style="color:var(--gold);font-size:11px;margin-bottom:4px;">✦</div>
+        <div id="sm-canvas-instr" style="font-family:var(--display);font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:rgba(212,168,32,.75);line-height:1.7;"></div>
+      </div>
     </div>
     <div id="sm-step-content"></div>
   </div>
@@ -1983,6 +1987,8 @@ let smLinesDrawn = 0;
 let smLineAnim = { active: false, progress: 0, idx: 0 };
 let smCutLines = Array(7).fill(false);
 let smCutAnims = [];
+let smFinalCutProgress = 0;
+let smOuterAlphaOverride = null;
 let smCanvas, smCtx, smDpr = 1;
 
 function smCw() { return smCanvas.width / smDpr; }
@@ -1991,9 +1997,10 @@ function smLine(x1,y1,x2,y2) { smCtx.beginPath(); smCtx.moveTo(x1,y1); smCtx.lin
 
 function smGetFig(side) {
   const w = smCw(), h = smCh();
-  const cx = side === 'left' ? w * 0.25 : w * 0.75;
-  const R  = Math.round(w * 0.072);
-  const topY=h*0.05, headCY=topY+R, neckY=headCY+R+R*0.18, shoulderY=neckY+R*0.35;
+  const isCenter = side === 'center';
+  const cx = isCenter ? w * 0.5 : (side === 'left' ? w * 0.25 : w * 0.75);
+  const R  = isCenter ? Math.round(w * 0.065) : Math.round(w * 0.038);
+  const topY=h*0.10, headCY=topY+R, neckY=headCY+R+R*0.18, shoulderY=neckY+R*0.35;
   const hipY=shoulderY+R*3.4, armLX=cx-R*1.85, armRX=cx+R*1.85, armMidY=shoulderY+R*1.35;
   const footLX=cx-R*1.25, footRX=cx+R*1.25, footY=hipY+R*3.1, nameY=footY+R*1.05;
   const chakras=[
@@ -2048,11 +2055,41 @@ function smDrawLightCircle(cx,cy,radius,alpha,rays) {
   smCtx.restore();
 }
 
+function smPillPath(x,y,w,h,r) {
+  const r2=Math.min(r,w/2,h/2);
+  if(typeof smCtx.roundRect==='function'){ smCtx.roundRect(x,y,w,h,r2); return; }
+  smCtx.moveTo(x+r2,y); smCtx.lineTo(x+w-r2,y); smCtx.arcTo(x+w,y,x+w,y+r2,r2);
+  smCtx.lineTo(x+w,y+h-r2); smCtx.arcTo(x+w,y+h,x+w-r2,y+h,r2);
+  smCtx.lineTo(x+r2,y+h); smCtx.arcTo(x,y+h,x,y+h-r2,r2);
+  smCtx.lineTo(x,y+r2); smCtx.arcTo(x,y,x+r2,y,r2); smCtx.closePath();
+}
+
+function smDrawPillShape(L,R,alpha) {
+  const cr=(L.footY-L.headCY)/2+L.R*1.3, centerY=(L.headCY+L.footY)/2, pad=L.R*0.5;
+  const x1=L.cx-cr-pad, x2=R.cx+cr+pad, y1=centerY-cr-pad, y2=centerY+cr+pad;
+  const pw=x2-x1, ph=y2-y1, rx=ph/2, cx=(x1+x2)/2, cy=(y1+y2)/2, a=pw/2, b=ph/2;
+  smCtx.save(); smCtx.globalAlpha=alpha;
+  const grd=smCtx.createRadialGradient(cx,cy,ph*0.15,cx,cy,pw*0.55);
+  grd.addColorStop(0,'rgba(212,168,32,0)'); grd.addColorStop(.55,'rgba(212,168,32,.09)'); grd.addColorStop(1,'rgba(212,168,32,0)');
+  smCtx.beginPath(); smPillPath(x1,y1,pw,ph,rx); smCtx.fillStyle=grd; smCtx.fill();
+  smCtx.beginPath(); smPillPath(x1,y1,pw,ph,rx);
+  smCtx.strokeStyle='#D4A820'; smCtx.lineWidth=1.8; smCtx.shadowColor='#D4A820'; smCtx.shadowBlur=14; smCtx.stroke();
+  const nRays=28; smCtx.lineWidth=1.4; smCtx.shadowBlur=5;
+  for(let i=0;i<nRays;i++){
+    const t=(i/nRays)*Math.PI*2, ex=cx+a*Math.cos(t), ey=cy+b*Math.sin(t);
+    const nxr=Math.cos(t)/a, nyr=Math.sin(t)/b, nl=Math.hypot(nxr,nyr);
+    const rnx=nxr/nl, rny=nyr/nl, r2=i%3===0?16:(i%2===0?11:7);
+    smCtx.strokeStyle='rgba(212,168,32,.65)'; smCtx.beginPath();
+    smCtx.moveTo(ex+rnx*3,ey+rny*3); smCtx.lineTo(ex+rnx*r2,ey+rny*r2); smCtx.stroke();
+  }
+  smCtx.restore();
+}
+
 function smDrawCircleForType(type,L,R,alpha) {
   const circFig=(fig)=>{ const cy=(fig.headCY+fig.footY)/2, rad=(fig.footY-fig.headCY)/2+fig.R*1.3; smDrawLightCircle(fig.cx,cy,rad,alpha); };
   if(type==='left')  circFig(L);
   if(type==='right') circFig(R);
-  if(type==='outer') smDrawLightCircle(smCw()/2,smCh()*0.46,smCw()*0.43,alpha,24);
+  if(type==='outer') smDrawPillShape(L,R,alpha);
 }
 
 function smDrawConnLine(c1,c2,idx,alpha,isCut,cutProg) {
@@ -2080,11 +2117,29 @@ function smDrawConnLine(c1,c2,idx,alpha,isCut,cutProg) {
 function smDrawAll() {
   if(!smCanvas||!smCtx) return;
   smCtx.clearRect(0,0,smCw(),smCh());
+  if(smStep===1){
+    const C=smGetFig('center'); smDrawFig(C); smDrawFigName(C,smMyName); return;
+  }
   const L=smGetFig('left'),R=smGetFig('right');
-  if(smStep>=1){smDrawFig(L);smDrawFigName(L,smMyName);}
-  if(smStep>=2){smDrawFig(R);smDrawFigName(R,smOtherName);}
-  smDrawnCircles.forEach(t=>smDrawCircleForType(t,L,R,1));
+  smDrawFig(L); smDrawFigName(L,smMyName);
+  if(smStep>=2){ smDrawFig(R); smDrawFigName(R,smOtherName); }
+  smDrawnCircles.forEach(t=>{
+    const alpha=(t==='outer'&&smOuterAlphaOverride!==null)?smOuterAlphaOverride:1;
+    if(alpha>0) smDrawCircleForType(t,L,R,alpha);
+  });
   if(smCircleAnim.type) smDrawCircleForType(smCircleAnim.type,L,R,smCircleAnim.progress);
+  if(smFinalCutProgress>0){
+    const midX=smCw()/2, p=smFinalCutProgress;
+    const cutH=Math.min(1,p/0.45)*smCh();
+    const glow=p<0.72?1:Math.max(0,1-(p-0.72)/0.28);
+    smCtx.save(); smCtx.globalAlpha=glow;
+    const lg=smCtx.createLinearGradient(midX-9,0,midX+9,0);
+    lg.addColorStop(0,'rgba(255,255,255,0)'); lg.addColorStop(0.5,'rgba(255,255,255,.95)'); lg.addColorStop(1,'rgba(255,255,255,0)');
+    smCtx.fillStyle=lg; smCtx.shadowColor='#D4A820'; smCtx.shadowBlur=22;
+    smCtx.fillRect(midX-9,0,18,cutH);
+    if(p<0.5){ smCtx.beginPath(); smCtx.arc(midX,cutH,5,0,Math.PI*2); smCtx.fillStyle='#fff'; smCtx.shadowBlur=30; smCtx.fill(); }
+    smCtx.restore();
+  }
   if(smStep>=6){
     smDrawChakras(L); smDrawChakras(R);
     for(let i=0;i<7;i++){
@@ -2101,7 +2156,12 @@ function smResizeCanvas() {
   smDpr=window.devicePixelRatio||1;
   const wrap=document.getElementById('sm-canvas-wrap');
   if(!wrap||!smCanvas) return;
-  const w=wrap.clientWidth, h=Math.round(w*0.76);
+  const w=wrap.clientWidth;
+  const isPortrait=window.innerHeight>window.innerWidth;
+  const idealH=Math.round(w*(isPortrait?0.90:0.76));
+  const maxH=Math.round(window.innerHeight*0.55);
+  const minH=Math.round(w*0.47);
+  const h=Math.max(minH,Math.min(idealH,maxH));
   smCanvas.width=w*smDpr; smCanvas.height=h*smDpr; smCanvas.style.height=h+'px';
   smCtx.setTransform(smDpr,0,0,smDpr,0,0);
   smDrawAll();
@@ -2132,6 +2192,19 @@ function smAnimateLines(onDone) {
   nextLine();
 }
 
+function smAnimateFinalCut(onDone) {
+  smFinalCutProgress=0.001; smOuterAlphaOverride=1;
+  const start=performance.now(),dur=1700;
+  (function frame(now){
+    const p=Math.min((now-start)/dur,1);
+    smFinalCutProgress=p;
+    smOuterAlphaOverride=p<0.45?1:Math.max(0,1-(p-0.45)/0.35);
+    smDrawAll();
+    if(p<1) requestAnimationFrame(frame);
+    else{ smFinalCutProgress=0; smOuterAlphaOverride=0; smDrawAll(); if(onDone) onDone(); }
+  })(performance.now());
+}
+
 function smAnimateCut(idx) {
   if(smCutLines[idx]||smCutAnims.find(a=>a.idx===idx)) return;
   const obj={idx,progress:0}; smCutAnims.push(obj);
@@ -2143,7 +2216,7 @@ function smAnimateCut(idx) {
       smCutLines[idx]=true; smCutAnims=smCutAnims.filter(a=>a.idx!==idx); smDrawAll();
       const el=document.getElementById('sm-cut-progress');
       if(el) el.textContent=`${smCutLines.filter(Boolean).length} von 7 durchtrennt`;
-      if(smCutLines.every(Boolean)) setTimeout(smShowCompletion,700);
+      if(smCutLines.every(Boolean)) setTimeout(()=>smAnimateFinalCut(smShowCompletion),700);
     }
   })(performance.now());
 }
@@ -2166,13 +2239,21 @@ function smHandleTap(e) {
 
 function smEscHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
+const SM_CANVAS_INSTRS = ['','Zeichne dich selbst als Strichmännchen','Benenne die andere Person oder Situation','Aktiviere deinen Lichtkreis','Aktiviere den Lichtkreis der anderen Person','Verbindet euch im gemeinsamen Lichtkreis','Verbinde die sieben Energiezentren','Durchtrennt die Verbindungslinien achtsam'];
+
+function smUpdateCanvasInstr(s) {
+  const el=document.getElementById('sm-canvas-instr'); if(el) el.textContent=SM_CANVAS_INSTRS[s]||'';
+}
+
 function smRender() {
   const el=document.getElementById('sm-step-content'); if(!el) return;
   const th=document.getElementById('sm-tap-hint'); if(th) th.style.display='none';
+  smUpdateCanvasInstr(smStep);
   const inputStyle='width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(212,168,32,.22);border-radius:12px;padding:13px 16px;color:var(--cream);font-family:var(--serif);font-size:17px;outline:none;-webkit-appearance:none;';
   const affStyle='background:linear-gradient(135deg,rgba(123,45,158,.1),rgba(196,37,122,.07));border:1px solid rgba(212,168,32,.2);border-radius:16px;padding:18px 20px;margin-bottom:14px;';
   const lblStyle='font-family:var(--display);font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--turquoise);margin-bottom:10px;';
   const txtStyle='font-family:var(--serif);font-size:17px;line-height:1.72;color:var(--cream);font-style:italic;';
+  const hintStyle='display:flex;align-items:flex-start;gap:9px;margin-top:13px;padding-top:13px;border-top:1px solid rgba(212,168,32,.12);font-size:12px;line-height:1.55;color:rgba(212,168,32,.6);letter-spacing:.04em;';
 
   if(smStep===1){
     el.innerHTML=`<div style="margin-bottom:14px;"><label style="${lblStyle}">Mein Vor- und Nachname</label><input id="sm-inp-my" type="text" placeholder="z. B. Maria Muster" value="${smEscHtml(smMyName)}" inputmode="text" autocomplete="off" autocorrect="off" style="${inputStyle}"></div><button class="btn-next" onclick="smGoNext()">Weiter →</button>`;
@@ -2189,16 +2270,16 @@ function smRender() {
     setTimeout(()=>i.focus(),350);
   }
   else if(smStep===3){
-    el.innerHTML=`<div style="${affStyle}"><div style="${lblStyle}">Sprich laut oder innerlich:</div><div style="${txtStyle}">„Ich wünsche mir das, was für mich das Beste ist,<br>auch wenn ich nicht genau weiß, was es ist."</div></div><button class="btn-next" onclick="smGoNext()">Weiter →</button>`;
+    el.innerHTML=`<div style="${affStyle}"><div style="${lblStyle}">Sprich laut oder innerlich:</div><div style="${txtStyle}">„Ich wünsche mir das, was für mich das Beste ist,<br>auch wenn ich nicht genau weiß, was es ist."</div><div style="${hintStyle}"><span style="font-size:15px;flex-shrink:0;margin-top:1px;">☝</span><span>Fahre dabei mit dem Finger deinen Lichtkreis entlang, während du sprichst.</span></div></div><button class="btn-next" onclick="smGoNext()">Weiter →</button>`;
     setTimeout(()=>smAnimateCircle('left'),250);
   }
   else if(smStep===4){
     const name=smOtherName||'die andere Person';
-    el.innerHTML=`<div style="${affStyle}"><div style="${lblStyle}">Sprich laut oder innerlich:</div><div style="${txtStyle}">„Ich wünsche mir das, was für <strong style="font-style:normal;">${smEscHtml(name)}</strong> am Besten ist,<br>auch wenn ich nicht weiß, was es ist."</div></div><button class="btn-next" onclick="smGoNext()">Weiter →</button>`;
+    el.innerHTML=`<div style="${affStyle}"><div style="${lblStyle}">Sprich laut oder innerlich:</div><div style="${txtStyle}">„Ich wünsche mir das, was für <strong style="font-style:normal;">${smEscHtml(name)}</strong> am Besten ist,<br>auch wenn ich nicht weiß, was es ist."</div><div style="${hintStyle}"><span style="font-size:15px;flex-shrink:0;margin-top:1px;">☝</span><span>Fahre dabei mit dem Finger den Lichtkreis von <strong>${smEscHtml(name)}</strong> entlang, während du sprichst.</span></div></div><button class="btn-next" onclick="smGoNext()">Weiter →</button>`;
     setTimeout(()=>smAnimateCircle('right'),250);
   }
   else if(smStep===5){
-    el.innerHTML=`<div style="${affStyle}"><div style="${lblStyle}">Sprich laut oder innerlich:</div><div style="${txtStyle}">„Ich wünsche mir das, was für uns beide am Besten ist,<br>auch wenn ich nicht genau weiß, was das ist."</div></div><button class="btn-next" onclick="smGoNext()">Weiter →</button>`;
+    el.innerHTML=`<div style="${affStyle}"><div style="${lblStyle}">Sprich laut oder innerlich:</div><div style="${txtStyle}">„Ich wünsche mir das, was für uns beide am Besten ist,<br>auch wenn ich nicht genau weiß, was das ist."</div><div style="${hintStyle}"><span style="font-size:15px;flex-shrink:0;margin-top:1px;">☝</span><span>Fahre dabei mit dem Finger den gemeinsamen Lichtkreis entlang, während du sprichst.</span></div></div><button class="btn-next" onclick="smGoNext()">Weiter →</button>`;
     setTimeout(()=>smAnimateCircle('outer'),250);
   }
   else if(smStep===6){
@@ -2238,6 +2319,7 @@ function smReset() {
   smDrawnCircles.clear(); smCircleAnim={type:null,progress:0};
   smLinesDrawn=0; smLineAnim={active:false,progress:0,idx:0};
   smCutLines=Array(7).fill(false); smCutAnims=[];
+  smFinalCutProgress=0; smOuterAlphaOverride=null;
   const prog=document.getElementById('sm-progress'); if(prog) prog.style.width='14%';
   const ind=document.getElementById('sm-step-ind');  if(ind)  ind.textContent='1 / 7';
   smDrawAll(); smRender();
@@ -2253,6 +2335,8 @@ function smOpen() {
     smResizeCanvas();
   });
 }
+
+window.addEventListener('resize',()=>{ if(smCanvas&&document.getElementById('modal-strich').classList.contains('open')) smResizeCanvas(); });
 
 function closeStrich() {
   smDisableTap();
