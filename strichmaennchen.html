@@ -235,9 +235,46 @@
       margin-top: 10px; transition: background .2s;
     }
     .btn-secondary:active { background: rgba(212,168,32,.07); }
+
+    /* ── Rotate Hint ── */
+    #rotate-hint {
+      display: none;
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(5,6,8,.97);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 24px; text-align: center; padding: 32px;
+    }
+    #rotate-hint.show { display: flex; }
+    .rotate-icon {
+      font-size: 64px;
+      animation: rotateHint 2s ease-in-out infinite;
+    }
+    @keyframes rotateHint {
+      0%,100% { transform: rotate(0deg); }
+      40%     { transform: rotate(90deg); }
+      60%     { transform: rotate(90deg); }
+    }
+    .rotate-title {
+      font-family: var(--display); font-size: 1.1rem; letter-spacing: .18em;
+      background: linear-gradient(135deg, #D4A820, #F5ECD0);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .rotate-text {
+      font-family: var(--serif); font-size: 15px; line-height: 1.7;
+      color: rgba(245,236,208,.6);
+    }
   </style>
 </head>
 <body>
+
+<div id="rotate-hint">
+  <div class="rotate-icon">📱</div>
+  <div class="rotate-title">Handy drehen</div>
+  <div class="rotate-text">
+    Drehe dein Gerät ins Querformat,<br>
+    damit beide Figuren gut sichtbar sind.
+  </div>
+</div>
 
 <header>
   <button class="back-btn" onclick="goBack()">← Zurück</button>
@@ -264,6 +301,20 @@
 </div>
 
 <script>
+// ── Orientation ───────────────────────────────────────────────────────────
+
+function checkOrientation() {
+  const isTouchDevice = navigator.maxTouchPoints > 0;
+  const isPortrait = window.innerHeight > window.innerWidth;
+  const hint = document.getElementById('rotate-hint');
+  if (isTouchDevice && isPortrait) {
+    hint.classList.add('show');
+  } else {
+    hint.classList.remove('show');
+  }
+}
+window.addEventListener('orientationchange', () => setTimeout(checkOrientation, 200));
+
 // ── Constants ──────────────────────────────────────────────────────────────
 
 const CHAKRA_COLORS = [
@@ -297,60 +348,23 @@ let dpr = window.devicePixelRatio || 1;
 function cw() { return canvas.width / dpr; }
 function ch() { return canvas.height / dpr; }
 
-function isMobile() { return cw() < 500; }
-
 function resizeCanvas() {
   dpr = window.devicePixelRatio || 1;
   const wrap = document.getElementById('canvas-wrap');
   const w = wrap.clientWidth;
-  const mobile = w < 500;
-  const h = Math.round(mobile ? w * 1.85 : w * 0.76);
+  const h = Math.round(w * 0.76);
   canvas.width = w * dpr;
   canvas.height = h * dpr;
   canvas.style.height = h + 'px';
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   drawAll();
 }
-window.addEventListener('resize', resizeCanvas);
+window.addEventListener('resize', () => { checkOrientation(); resizeCanvas(); });
 
 // ── Figure Geometry ────────────────────────────────────────────────────────
 
 function getFig(side) {
   const w = cw(), h = ch();
-
-  if (isMobile()) {
-    // Stacked: 'left' = top figure, 'right' = bottom figure
-    const isTop = side === 'left';
-    const cx    = w * 0.5;
-    const R     = Math.round(w * 0.09);
-    const topY      = isTop ? h * 0.015 : h * 0.515;
-    const headCY    = topY + R;
-    const neckY     = headCY + R + R * 0.18;
-    const shoulderY = neckY + R * 0.35;
-    const hipY      = shoulderY + R * 3.4;
-    const armLX     = cx - R * 1.85;
-    const armRX     = cx + R * 1.85;
-    const armMidY   = shoulderY + R * 1.35;
-    const footLX    = cx - R * 1.25;
-    const footRX    = cx + R * 1.25;
-    const footY     = hipY + R * 3.1;
-    const nameY     = footY + R * 1.0;
-
-    const chakras = [
-      { x: cx, y: topY + R * 0.05 },
-      { x: cx, y: headCY },
-      { x: cx, y: neckY + R * 0.08 },
-      { x: cx, y: shoulderY + R * 1.05 },
-      { x: cx, y: shoulderY + R * 1.9 },
-      { x: cx, y: shoulderY + R * 2.75 },
-      { x: cx, y: hipY },
-    ];
-
-    return { cx, R, topY, headCY, neckY, shoulderY, hipY,
-             armLX, armRX, armMidY, footLX, footRX, footY, nameY, chakras };
-  }
-
-  // Desktop: side-by-side
   const cx = side === 'left' ? w * 0.25 : w * 0.75;
   const R  = Math.round(w * 0.072);
   const topY       = h * 0.05;
@@ -475,12 +489,7 @@ function drawCircleForType(type, L, R, alpha) {
   if (type === 'left')  circleForFig(L);
   if (type === 'right') circleForFig(R);
   if (type === 'outer') {
-    if (isMobile()) {
-      const r = Math.min(cw() * 0.48, ch() * 0.46);
-      drawLightCircle(cw() / 2, ch() * 0.5, r, alpha, 24);
-    } else {
-      drawLightCircle(cw() / 2, ch() * 0.46, cw() * 0.43, alpha, 24);
-    }
+    drawLightCircle(cw() / 2, ch() * 0.46, cw() * 0.43, alpha, 24);
   }
 }
 
@@ -844,6 +853,7 @@ function escHtml(s) {
 
 // ── Init ──────────────────────────────────────────────────────────────────
 
+checkOrientation();
 resizeCanvas();
 updateDots();
 renderContent();
