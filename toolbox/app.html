@@ -551,50 +551,25 @@
 
   <!-- ── Klang & Meditation ── -->
   <div class="section-label">🎵 Klang & Meditation</div>
-  <div class="media-section">
 
-    <div class="media-category-label">🌊 Geführte Meditationen</div>
-
-    <div class="media-card" onclick="openPlayer('traenen')">
-      <div class="media-card-thumb meditation">
-        🌊
-        <div class="play-btn">▶</div>
+  <div class="tools-category">
+    <div class="tool-item" onclick="openSubSection('meditationen')">
+      <div class="tool-item-icon" style="background:rgba(123,45,158,.15);">🌊</div>
+      <div class="tool-item-body">
+        <div class="tool-item-name">Geführte Meditationen</div>
+        <div class="tool-item-desc">Einfühlsame Reisen zur inneren Heilung & Stille</div>
       </div>
-      <div class="media-card-body">
-        <div class="media-card-tag">Geführte Meditation · Video</div>
-        <div class="media-card-title">Wenn Tränen Heilen</div>
-        <div class="media-card-desc">Eine einfühlsame Reise durch den Schmerz – hin zu tiefer Heilung und innerem Frieden.</div>
-      </div>
+      <span class="tool-item-arrow">›</span>
     </div>
-
-    <div class="media-card" onclick="openPlayer('vollmond')">
-      <div class="media-card-thumb meditation">
-        🌕
-        <div class="play-btn">▶</div>
+    <div class="tool-item" onclick="openSubSection('frequenzen')">
+      <div class="tool-item-icon" style="background:rgba(212,168,32,.1);">✧</div>
+      <div class="tool-item-body">
+        <div class="tool-item-name">Frequenzreisen & Musik</div>
+        <div class="tool-item-desc">Heilende Klangfrequenzen für Harmonie & Verbindung</div>
       </div>
-      <div class="media-card-body">
-        <div class="media-card-tag">Geführte Meditation · Video</div>
-        <div class="media-card-title">Vollmond – Loslassen, Aufladen & Fülle empfangen</div>
-        <div class="media-card-desc">Die Kraft des Vollmonds nutzen: loslassen, was nicht mehr dient, und Fülle einladen.</div>
-      </div>
+      <span class="tool-item-arrow">›</span>
     </div>
-
-    <div class="media-category-label">✧ Frequenzreisen</div>
-
-    <div class="media-card" onclick="openPlayer('urklang')">
-      <div class="media-card-thumb frequenz">
-        💛
-        <div class="play-btn">▶</div>
-      </div>
-      <div class="media-card-body">
-        <div class="media-card-tag">Frequenzreise · Musik</div>
-        <div class="media-card-title">Urklang des Herzens</div>
-        <div class="media-card-desc">Heilende Herzfrequenzen für tiefe Verbindung und innere Harmonie.</div>
-        <span class="media-card-hz">432 Hz · 639 Hz</span>
-      </div>
-    </div>
-
-  </div><!-- /media-section -->
+  </div>
 
 </main>
 
@@ -820,6 +795,60 @@
   </div>
 </div>
 
+<!-- ══════════ MODAL: GEFÜHRTE MEDITATIONEN ══════════ -->
+<div class="tool-modal" id="modal-meditationen">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="closeModal('modal-meditationen')">←</button>
+    <div class="modal-title">Geführte Meditationen</div>
+  </div>
+  <div class="tool-modal-body" style="padding:20px 16px;">
+    <div class="media-card" onclick="openPlayer('traenen')">
+      <div class="media-card-thumb meditation">
+        🌊
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="media-card-body">
+        <div class="media-card-tag">Geführte Meditation · Video</div>
+        <div class="media-card-title">Wenn Tränen Heilen</div>
+        <div class="media-card-desc">Eine einfühlsame Reise durch den Schmerz – hin zu tiefer Heilung und innerem Frieden.</div>
+      </div>
+    </div>
+    <div class="media-card" onclick="openPlayer('vollmond')">
+      <div class="media-card-thumb meditation">
+        🌕
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="media-card-body">
+        <div class="media-card-tag">Geführte Meditation · Video</div>
+        <div class="media-card-title">Vollmond – Loslassen, Aufladen & Fülle empfangen</div>
+        <div class="media-card-desc">Die Kraft des Vollmonds nutzen: loslassen, was nicht mehr dient, und Fülle einladen.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL: FREQUENZREISEN & MUSIK ══════════ -->
+<div class="tool-modal" id="modal-frequenzen">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="closeModal('modal-frequenzen')">←</button>
+    <div class="modal-title">Frequenzreisen & Musik</div>
+  </div>
+  <div class="tool-modal-body" style="padding:20px 16px;">
+    <div class="media-card" onclick="openPlayer('urklang')">
+      <div class="media-card-thumb frequenz">
+        💛
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="media-card-body">
+        <div class="media-card-tag">Frequenzreise · Musik</div>
+        <div class="media-card-title">Urklang des Herzens</div>
+        <div class="media-card-desc">Heilende Herzfrequenzen für tiefe Verbindung und innere Harmonie.</div>
+        <span class="media-card-hz">432 Hz · 639 Hz</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 // ─── INIT: Name aus URL-Param (von WordPress übergeben) ───
 window.addEventListener('DOMContentLoaded', () => {
@@ -877,8 +906,9 @@ function openTool(id) {
     document.getElementById('modal-soon').classList.add('open');
   }
 }
-function closeTool(id)  { document.getElementById('modal-' + id).classList.remove('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function closeTool(id)      { document.getElementById('modal-' + id).classList.remove('open'); }
+function closeModal(id)    { document.getElementById(id).classList.remove('open'); }
+function openSubSection(id) { document.getElementById('modal-' + id).classList.add('open'); }
 
 // ─── BLOCKADEN KOMPASS ───
 const BL_THEMES = {
