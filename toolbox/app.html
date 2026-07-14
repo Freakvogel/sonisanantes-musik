@@ -447,6 +447,60 @@
       border-radius: 18px;
       padding: 20px;
     }
+
+    /* ─── BACK TO SENDER ─── */
+    @keyframes bts-breathe {
+      0%,100% { transform: scale(1); opacity: .55; }
+      50%      { transform: scale(1.2); opacity: 1; }
+    }
+    .bts-breathe-ring {
+      width: 112px; height: 112px; border-radius: 50%;
+      border: 2px solid rgba(68,214,214,.4);
+      box-shadow: 0 0 32px rgba(68,214,214,.1), 0 0 64px rgba(68,214,214,.05);
+      display: flex; align-items: center; justify-content: center;
+      animation: bts-breathe 4.5s ease-in-out infinite;
+    }
+    .bts-chip {
+      padding: 8px 16px; border-radius: 50px;
+      border: 1px solid rgba(68,214,214,.22);
+      background: rgba(68,214,214,.05); color: var(--cream-muted);
+      font-family: var(--sans); font-size: .78rem; font-weight: 300;
+      cursor: pointer; transition: background .16s, border-color .16s, color .16s;
+      user-select: none;
+    }
+    .bts-chip.active {
+      background: rgba(68,214,214,.16); border-color: rgba(68,214,214,.55);
+      color: var(--cream);
+    }
+    .bts-btn-primary {
+      display: block; width: 100%; max-width: 280px; margin: 0 auto;
+      padding: 15px 24px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(68,214,214,.18), rgba(68,214,214,.1));
+      border: 1px solid rgba(68,214,214,.32);
+      color: var(--cream); font-family: var(--display);
+      font-size: .78rem; letter-spacing: 1.5px; text-transform: uppercase;
+      cursor: pointer; transition: transform .2s;
+    }
+    .bts-btn-primary:hover { transform: scale(1.02); }
+    .bts-btn-send {
+      display: block; width: 100%; max-width: 280px; margin: 0 auto;
+      padding: 16px 24px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(212,168,32,.22), rgba(68,214,214,.16));
+      border: 1px solid rgba(212,168,32,.38);
+      color: var(--cream); font-family: var(--display);
+      font-size: .8rem; letter-spacing: 2.5px; text-transform: uppercase;
+      cursor: pointer; transition: transform .2s, box-shadow .2s;
+    }
+    .bts-btn-send:hover { transform: scale(1.02); box-shadow: 0 0 28px rgba(212,168,32,.18); }
+    .bts-affirmation {
+      background: rgba(68,214,214,.05); border: 1px solid rgba(68,214,214,.16);
+      border-radius: 18px; padding: 26px 22px;
+    }
+    .bts-affirmation p {
+      font-family: var(--serif); font-style: italic; font-size: .98rem;
+      color: rgba(255,255,255,.9); line-height: 1.9; margin-bottom: 16px;
+    }
+    .bts-affirmation p:last-child { margin-bottom: 0; }
   </style>
 </head>
 <body>
@@ -861,6 +915,16 @@
   </div>
 </div>
 
+<!-- ══════════ MODAL: BACK TO SENDER ══════════ -->
+<div class="tool-modal" id="modal-schutz">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="btsClose()">←</button>
+    <div class="modal-title">Back to Sender</div>
+    <div id="bts-step-indicator" style="font-family:var(--display);font-size:.58rem;color:var(--turquoise);letter-spacing:1.5px;"></div>
+  </div>
+  <div class="tool-modal-body" id="bts-body" style="overflow-y:auto;-webkit-overflow-scrolling:touch;"></div>
+</div>
+
 <!-- ══════════ MODAL: GEFÜHRTE MEDITATIONEN ══════════ -->
 <div class="tool-modal" id="modal-meditationen">
   <div class="tool-modal-header">
@@ -945,7 +1009,6 @@ document.getElementById('daily-impulse').textContent = impulses[new Date().getDa
 // ─── OPEN / CLOSE TOOLS ───
 const comingSoon = {
   wunsch:  { name: 'Wunschbucharbeit',           icon: '📖', desc: 'Formuliere deine Wünsche und aktiviere die energetische Frequenz der Manifestation.' },
-  schutz:  { name: 'Back to Sender',             icon: '🛡️', desc: 'Erkenne und gib fremde Energien liebevoll zurück – für mehr Schutz und Klarheit.' },
   felder:  { name: 'Energiefelder anlegen',       icon: '🌀', desc: 'Erschaffe kraftvolle Schutz- und Heilfelder für dich und andere.' },
   fragen:  { name: 'Lösungsorientierte Fragen',  icon: '🖊️', desc: 'Öffne neue Perspektiven durch kraftvolle innere Fragen.' },
   wunder:  { name: 'Die 4 Schritte für Wunder',  icon: '🪄', desc: 'Ein vollständiger Prozess: Wahrnehmen · Annehmen · Transformieren · Neu ausrichten.' },
@@ -963,6 +1026,8 @@ function openTool(id) {
   if (id === 'blockaden') {
     blReset();
     document.getElementById('modal-blockaden').classList.add('open');
+  } else if (id === 'schutz') {
+    btsOpen();
   } else if (comingSoon[id]) {
     const d = comingSoon[id];
     document.getElementById('soon-title').textContent = d.name;
@@ -1582,6 +1647,224 @@ function closeStrich() {
 }
 
 // ─── TOAST ───
+// ─── BACK TO SENDER ───
+let btsStep = 0;
+
+function btsOpen() {
+  btsStep = 0;
+  document.getElementById('modal-schutz').classList.add('open');
+  btsRender();
+}
+
+function btsClose() {
+  document.getElementById('modal-schutz').classList.remove('open');
+}
+
+function btsNext() {
+  btsStep++;
+  btsRender();
+}
+
+function btsToggleChip(el) {
+  el.classList.toggle('active');
+}
+
+function btsRender() {
+  const body = document.getElementById('bts-body');
+  const ind  = document.getElementById('bts-step-indicator');
+  body.scrollTop = 0;
+
+  if (btsStep === 0) {
+    ind.textContent = '';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:44px 24px 32px;text-align:center;">
+        <svg width="84" height="84" viewBox="0 0 22 22" fill="none" style="margin-bottom:28px;">
+          <path d="M11 2L3 5.5V11c0 4.2 3.3 7.2 8 8.8 4.7-1.6 8-4.6 8-8.8V5.5L11 2z"
+            stroke="rgba(68,214,214,.8)" stroke-width="1" stroke-linejoin="round" fill="rgba(68,214,214,.07)"/>
+          <path d="M11 14.5V9M8.5 11.5l2.5-2.5 2.5 2.5"
+            stroke="rgba(68,214,214,.8)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h2 style="font-family:var(--display);font-size:1.4rem;font-weight:500;letter-spacing:.5px;color:var(--cream);margin-bottom:20px;text-wrap:balance;">Back to Sender</h2>
+        <p style="font-family:var(--sans);font-size:.9rem;color:var(--cream-muted);line-height:1.8;font-weight:300;max-width:300px;margin-bottom:14px;">
+          Gedanken, Gefühle, Schwere — die nicht dir gehören. Wir tragen sie oft, ohne es zu erkennen.
+        </p>
+        <p style="font-family:var(--sans);font-size:.9rem;color:var(--cream-muted);line-height:1.8;font-weight:300;max-width:300px;margin-bottom:40px;">
+          Dieser Prozess führt dich klar und liebevoll durch das Erkennen, Loslassen und Zurückgeben — energetisch vollständig.
+        </p>
+        <button class="bts-btn-primary" onclick="btsNext()">Prozess starten</button>
+      </div>`;
+
+  } else if (btsStep === 1) {
+    ind.textContent = 'SCHRITT 1 / 4';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:36px 24px 32px;text-align:center;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--turquoise);text-transform:uppercase;margin-bottom:18px;">Ankommen</div>
+        <h2 style="font-family:var(--display);font-size:1.25rem;font-weight:500;color:var(--cream);margin-bottom:36px;">Komm zu dir.</h2>
+        <div class="bts-breathe-ring">
+          <span style="font-family:var(--serif);font-style:italic;font-size:.82rem;color:rgba(68,214,214,.75);">atme</span>
+        </div>
+        <p style="font-family:var(--sans);font-size:.88rem;color:var(--cream-muted);line-height:1.8;font-weight:300;max-width:270px;margin:36px 0 40px;">
+          Schließe kurz die Augen. Spüre deinen Körper. Atme dreimal tief und bewusst in den Bauch.
+        </p>
+        <button class="bts-btn-primary" onclick="btsNext()">Ich bin angekommen</button>
+      </div>`;
+
+  } else if (btsStep === 2) {
+    ind.textContent = 'SCHRITT 2 / 4';
+    const opts = ['Schwere & Erschöpfung','Gedrückte Stimmung','Fremde Gedanken','Angst ohne Grund','Körperspannung','Gereiztheit','Innere Unruhe','Etwas stimmt nicht'];
+    body.innerHTML = `
+      <div style="padding:32px 20px 32px;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--turquoise);text-transform:uppercase;margin-bottom:14px;text-align:center;">Wahrnehmen</div>
+        <h2 style="font-family:var(--display);font-size:1.15rem;font-weight:500;color:var(--cream);text-align:center;margin-bottom:8px;text-wrap:balance;">Was spürst du, das sich fremd anfühlt?</h2>
+        <p style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);text-align:center;font-weight:300;margin-bottom:24px;">Wähle alles aus, was gerade zutrifft.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:36px;">
+          ${opts.map(o => `<div class="bts-chip" onclick="btsToggleChip(this)">${o}</div>`).join('')}
+        </div>
+        <button class="bts-btn-primary" onclick="btsNext()">Weiter</button>
+      </div>`;
+
+  } else if (btsStep === 3) {
+    ind.textContent = 'SCHRITT 3 / 4';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:36px 24px 32px;text-align:center;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--turquoise);text-transform:uppercase;margin-bottom:18px;">Erkennen</div>
+        <h2 style="font-family:var(--display);font-size:1.15rem;font-weight:500;color:var(--cream);margin-bottom:28px;text-wrap:balance;">Lies diese Worte — laut oder leise.</h2>
+        <div class="bts-affirmation" style="max-width:320px;margin-bottom:40px;text-align:left;">
+          <p>„Diese Energie, diese Gedanken, diese Gefühle — sie gehören nicht zu mir."</p>
+          <p>„Ich habe sie aufgenommen — aber ich bin nicht sie."</p>
+          <p>„Ich gebe alles zurück, was nicht zu mir gehört — mit Liebe und ohne Urteil."</p>
+        </div>
+        <button class="bts-btn-primary" onclick="btsNext()">Ich bin bereit</button>
+      </div>`;
+
+  } else if (btsStep === 4) {
+    ind.textContent = 'SCHRITT 4 / 4';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:32px 24px 32px;text-align:center;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--turquoise);text-transform:uppercase;margin-bottom:18px;">Zurückgeben</div>
+        <div style="position:relative;width:220px;height:220px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+          <canvas id="bts-canvas" width="220" height="220" style="position:absolute;inset:0;"></canvas>
+          <svg id="bts-shield" width="80" height="80" viewBox="0 0 22 22" fill="none" style="position:relative;z-index:2;transition:opacity .6s;">
+            <path d="M11 2L3 5.5V11c0 4.2 3.3 7.2 8 8.8 4.7-1.6 8-4.6 8-8.8V5.5L11 2z"
+              stroke="rgba(68,214,214,.85)" stroke-width="1" stroke-linejoin="round" fill="rgba(68,214,214,.09)"/>
+            <path d="M11 14.5V9M8.5 11.5l2.5-2.5 2.5 2.5"
+              stroke="rgba(68,214,214,.85)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div id="bts-sent-label" style="font-family:var(--display);font-size:1.1rem;letter-spacing:4px;color:var(--turquoise);margin-bottom:12px;opacity:0;transition:opacity .8s;">ZURÜCKGEGEBEN</div>
+        <p id="bts-sent-desc" style="font-family:var(--serif);font-style:italic;font-size:.92rem;color:var(--cream-muted);line-height:1.8;max-width:270px;margin-bottom:32px;opacity:0;transition:opacity 1s .4s;">
+          Alles, was nicht dir gehört, kehrt jetzt vollständig zurück. Mit Liebe. Ohne Rest.
+        </p>
+        <button id="bts-send-btn" class="bts-btn-send" onclick="btsSend()">Jetzt zurückgeben</button>
+        <div style="height:12px;"></div>
+        <button id="bts-done-btn" class="bts-btn-primary" onclick="btsNext()" style="display:none;">Abschließen</button>
+      </div>`;
+    btsDrawIdle();
+
+  } else if (btsStep === 5) {
+    ind.textContent = '';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:56px 24px 44px;text-align:center;">
+        <canvas id="bts-done-canvas" width="160" height="160" style="margin-bottom:28px;"></canvas>
+        <h2 style="font-family:var(--display);font-size:1.3rem;font-weight:500;color:var(--cream);margin-bottom:12px;">Prozess abgeschlossen.</h2>
+        <p style="font-family:var(--sans);font-size:.86rem;color:var(--cream-muted);font-weight:300;margin-bottom:32px;">Dein Energiefeld ist klar und versiegelt.</p>
+        <div class="bts-affirmation" style="max-width:300px;margin-bottom:44px;">
+          <p style="text-align:center;">„Ich bin in meiner Energie. Geerdet. Klar. Frei."</p>
+        </div>
+        <button class="bts-btn-primary" onclick="btsClose()">Zur Toolbox</button>
+      </div>`;
+    btsAnimateDone();
+  }
+}
+
+function btsDrawIdle() {
+  const c = document.getElementById('bts-canvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const cx = 110, cy = 110;
+  ctx.clearRect(0, 0, 220, 220);
+  [44, 66, 88].forEach((r, i) => {
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(68,214,214,${0.1 - i * 0.025})`;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+}
+
+function btsSend() {
+  const sendBtn = document.getElementById('bts-send-btn');
+  if (sendBtn) { sendBtn.disabled = true; sendBtn.style.opacity = '.3'; }
+
+  const c = document.getElementById('bts-canvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const cx = 110, cy = 110;
+  let rings = [], tick = 0;
+
+  function frame() {
+    ctx.clearRect(0, 0, 220, 220);
+    if (tick % 10 === 0 && tick < 80) {
+      rings.push({ r: 8, a: 0.85, gold: tick % 20 === 0 });
+    }
+    rings = rings.filter(r => r.a > 0.02);
+    rings.forEach(r => {
+      r.r += 2.8;
+      r.a *= 0.958;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r.r, 0, Math.PI * 2);
+      ctx.strokeStyle = r.gold
+        ? `rgba(212,168,32,${r.a})`
+        : `rgba(68,214,214,${r.a})`;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    });
+    tick++;
+    if (tick < 120 || rings.length > 0) {
+      requestAnimationFrame(frame);
+    } else {
+      const shield = document.getElementById('bts-shield');
+      if (shield) shield.style.opacity = '0.25';
+      setTimeout(() => {
+        const lbl  = document.getElementById('bts-sent-label');
+        const desc = document.getElementById('bts-sent-desc');
+        const done = document.getElementById('bts-done-btn');
+        if (lbl)  lbl.style.opacity  = '1';
+        if (desc) desc.style.opacity = '1';
+        if (done) done.style.display = '';
+        if (sendBtn) sendBtn.style.display = 'none';
+      }, 200);
+    }
+  }
+  frame();
+}
+
+function btsAnimateDone() {
+  const c = document.getElementById('bts-done-canvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const cx = 80, cy = 80;
+  let a = 0;
+
+  function draw() {
+    a = Math.min(a + 0.025, 1);
+    ctx.clearRect(0, 0, 160, 160);
+    [24, 42, 58].forEach((r, i) => {
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(68,214,214,${(0.55 - i * 0.14) * a})`;
+      ctx.lineWidth = 1.1 - i * 0.15;
+      ctx.stroke();
+    });
+    ctx.beginPath();
+    ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(212,168,32,${0.85 * a})`;
+    ctx.fill();
+    if (a < 1) requestAnimationFrame(draw);
+  }
+  draw();
+}
+
 function showToast(msg) {
   const t = document.createElement('div');
   t.textContent = msg;
