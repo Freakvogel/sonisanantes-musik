@@ -501,6 +501,52 @@
       color: rgba(255,255,255,.9); line-height: 1.9; margin-bottom: 16px;
     }
     .bts-affirmation p:last-child { margin-bottom: 0; }
+
+    /* ─── WUNSCHBUCHARBEIT ─── */
+    .wbw-btn-primary {
+      display: block; width: 100%; max-width: 280px; margin: 0 auto;
+      padding: 15px 24px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(212,168,32,.2), rgba(212,168,32,.1));
+      border: 1px solid rgba(212,168,32,.35);
+      color: var(--cream); font-family: var(--display);
+      font-size: .78rem; letter-spacing: 1.5px; text-transform: uppercase;
+      cursor: pointer; transition: transform .2s;
+    }
+    .wbw-btn-primary:hover { transform: scale(1.02); }
+    .wbw-chip {
+      padding: 9px 18px; border-radius: 50px;
+      border: 1px solid rgba(212,168,32,.22);
+      background: rgba(212,168,32,.05); color: var(--cream-muted);
+      font-family: var(--sans); font-size: .78rem; font-weight: 300;
+      cursor: pointer; transition: all .18s; user-select: none;
+    }
+    .wbw-chip.active {
+      background: rgba(212,168,32,.18); border-color: rgba(212,168,32,.55);
+      color: var(--cream);
+    }
+    .wbw-rule {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 15px 0; border-bottom: 1px solid rgba(212,168,32,.07);
+    }
+    .wbw-rule:last-child { border-bottom: none; padding-bottom: 0; }
+    .wbw-rule-num {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: rgba(212,168,32,.12); border: 1px solid rgba(212,168,32,.28);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      font-family: var(--display); font-size: .68rem; color: var(--gold); letter-spacing: 0;
+    }
+    .wbw-question-card {
+      background: rgba(212,168,32,.04); border: 1px solid rgba(212,168,32,.12);
+      border-radius: 14px; padding: 16px 18px; margin-bottom: 10px;
+      font-family: var(--serif); font-style: italic;
+      font-size: .95rem; color: rgba(255,255,255,.82); line-height: 1.7;
+    }
+    .wbw-example-box {
+      background: rgba(212,168,32,.06); border-left: 2px solid rgba(212,168,32,.5);
+      border-radius: 0 12px 12px 0; padding: 18px 18px 18px 20px; margin: 20px 0;
+      font-family: var(--serif); font-style: italic;
+      font-size: .95rem; color: rgba(255,255,255,.88); line-height: 1.8;
+    }
   </style>
 </head>
 <body>
@@ -915,6 +961,16 @@
   </div>
 </div>
 
+<!-- ══════════ MODAL: WUNSCHBUCHARBEIT ══════════ -->
+<div class="tool-modal" id="modal-wunsch">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="wbwClose()">←</button>
+    <div class="modal-title">Wunschbucharbeit</div>
+    <div id="wbw-step-indicator" style="font-family:var(--display);font-size:.58rem;color:var(--gold);letter-spacing:1.5px;"></div>
+  </div>
+  <div class="tool-modal-body" id="wbw-body" style="overflow-y:auto;-webkit-overflow-scrolling:touch;"></div>
+</div>
+
 <!-- ══════════ MODAL: BACK TO SENDER ══════════ -->
 <div class="tool-modal" id="modal-schutz">
   <div class="tool-modal-header">
@@ -1008,7 +1064,6 @@ document.getElementById('daily-impulse').textContent = impulses[new Date().getDa
 
 // ─── OPEN / CLOSE TOOLS ───
 const comingSoon = {
-  wunsch:  { name: 'Wunschbucharbeit',           icon: '📖', desc: 'Formuliere deine Wünsche und aktiviere die energetische Frequenz der Manifestation.' },
   felder:  { name: 'Energiefelder anlegen',       icon: '🌀', desc: 'Erschaffe kraftvolle Schutz- und Heilfelder für dich und andere.' },
   fragen:  { name: 'Lösungsorientierte Fragen',  icon: '🖊️', desc: 'Öffne neue Perspektiven durch kraftvolle innere Fragen.' },
   wunder:  { name: 'Die 4 Schritte für Wunder',  icon: '🪄', desc: 'Ein vollständiger Prozess: Wahrnehmen · Annehmen · Transformieren · Neu ausrichten.' },
@@ -1028,6 +1083,8 @@ function openTool(id) {
     document.getElementById('modal-blockaden').classList.add('open');
   } else if (id === 'schutz') {
     btsOpen();
+  } else if (id === 'wunsch') {
+    wbwOpen();
   } else if (comingSoon[id]) {
     const d = comingSoon[id];
     document.getElementById('soon-title').textContent = d.name;
@@ -1861,6 +1918,224 @@ function btsAnimateDone() {
     ctx.fillStyle = `rgba(212,168,32,${0.85 * a})`;
     ctx.fill();
     if (a < 1) requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// ─── WUNSCHBUCHARBEIT ───
+let wbwStep = 0;
+let wbwArea = '';
+
+const wbwAreas = [
+  'Liebe & Partnerschaft','Gesundheit & Wohlbefinden','Beruf & Finanzen',
+  'Kreativität & Ausdruck','Beziehungen & Familie','Innere Freiheit & Wachstum',
+  'Haus & Lebensraum','Spiritualität & Verbindung'
+];
+
+const wbwExamples = {
+  'Liebe & Partnerschaft':       'Ich bin so dankbar und glücklich, dass ich eine tiefe, liebevolle Verbindung in meinem Leben erfahre — ich fühle Geborgenheit, Freude und echte Nähe.',
+  'Gesundheit & Wohlbefinden':   'Ich bin so dankbar und glücklich, dass mein Körper voller Lebenskraft und Vitalität ist — ich fühle mich lebendig, leicht und in meiner Mitte.',
+  'Beruf & Finanzen':            'Ich bin so dankbar und glücklich, dass ich meine Gaben sinnvoll einbringe und in finanziellem Überfluss lebe — ich fühle Erfüllung und tiefe Sicherheit.',
+  'Kreativität & Ausdruck':      'Ich bin so dankbar und glücklich, dass meine Kreativität frei fließt und ich mich authentisch ausdrücken kann — ich fühle Leichtigkeit und innere Freude.',
+  'Beziehungen & Familie':       'Ich bin so dankbar und glücklich, dass meine Beziehungen von Liebe, Vertrauen und gegenseitigem Respekt getragen werden — ich fühle Verbundenheit und Frieden.',
+  'Innere Freiheit & Wachstum':  'Ich bin so dankbar und glücklich, dass ich in meiner eigenen Kraft lebe und wachse — ich fühle mich frei, klar und vollständig bei mir.',
+  'Haus & Lebensraum':           'Ich bin so dankbar und glücklich, dass ich in einem Zuhause lebe, das mich nährt und inspiriert — ich fühle Wärme, Sicherheit und Freude.',
+  'Spiritualität & Verbindung':  'Ich bin so dankbar und glücklich, dass ich meine spirituelle Verbindung täglich spüre und vertiefe — ich fühle Führung, Vertrauen und inneren Frieden.',
+};
+
+function wbwOpen() {
+  wbwStep = 0;
+  wbwArea = '';
+  document.getElementById('modal-wunsch').classList.add('open');
+  wbwRender();
+}
+
+function wbwClose() {
+  document.getElementById('modal-wunsch').classList.remove('open');
+}
+
+function wbwNext() {
+  if (wbwStep === 1 && !wbwArea) { showToast('Wähle einen Lebensbereich aus.'); return; }
+  wbwStep++;
+  wbwRender();
+}
+
+function wbwSelectArea(el, val) {
+  document.querySelectorAll('.wbw-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  wbwArea = val;
+}
+
+function wbwRender() {
+  const body = document.getElementById('wbw-body');
+  const ind  = document.getElementById('wbw-step-indicator');
+  body.scrollTop = 0;
+
+  if (wbwStep === 0) {
+    ind.textContent = '';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:44px 24px 36px;text-align:center;">
+        <svg width="80" height="80" viewBox="0 0 22 22" fill="none" style="margin-bottom:28px;">
+          <path d="M3 5.5A1.5 1.5 0 0 1 4.5 4H11v14H4.5A1.5 1.5 0 0 1 3 16.5V5.5z"
+            stroke="rgba(212,168,32,.8)" stroke-width="1" fill="rgba(212,168,32,.07)"/>
+          <path d="M11 4h6.5A1.5 1.5 0 0 1 19 5.5v11A1.5 1.5 0 0 1 17.5 18H11V4z"
+            stroke="rgba(212,168,32,.8)" stroke-width="1" fill="rgba(212,168,32,.05)"/>
+          <path d="M15 7.5l.55 1.6 1.7.05-1.35 1 .5 1.65L15 10.9l-1.4.9.5-1.65-1.35-1 1.7-.05L15 7.5z"
+            fill="rgba(212,168,32,.85)"/>
+        </svg>
+        <h2 style="font-family:var(--display);font-size:1.4rem;font-weight:500;letter-spacing:.5px;color:var(--cream);margin-bottom:20px;text-wrap:balance;">Wunschbucharbeit</h2>
+        <p style="font-family:var(--sans);font-size:.9rem;color:var(--cream-muted);line-height:1.8;font-weight:300;max-width:300px;margin-bottom:14px;">
+          Das Wunschbuch ist kein Tagebuch. Es ist ein energetisches Werkzeug — ein Ort, an dem du Wünsche nicht nur aufschreibst, sondern sie in die Realität einpflanzt.
+        </p>
+        <p style="font-family:var(--sans);font-size:.9rem;color:var(--cream-muted);line-height:1.8;font-weight:300;max-width:300px;margin-bottom:40px;">
+          Dieser Assistent führt dich durch die richtige Haltung, die Formel und die Aktivierung — damit dein Eintrag die maximale Frequenz trägt.
+        </p>
+        <button class="wbw-btn-primary" onclick="wbwNext()">Assistent starten</button>
+      </div>`;
+
+  } else if (wbwStep === 1) {
+    ind.textContent = 'SCHRITT 1 / 4';
+    body.innerHTML = `
+      <div style="padding:32px 20px 36px;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:14px;text-align:center;">Fokus wählen</div>
+        <h2 style="font-family:var(--display);font-size:1.15rem;font-weight:500;color:var(--cream);text-align:center;margin-bottom:8px;text-wrap:balance;">Welchen Bereich möchtest du heute erschaffen?</h2>
+        <p style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);text-align:center;font-weight:300;margin-bottom:24px;">Wähle einen Bereich — für diesen Eintrag.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:36px;">
+          ${wbwAreas.map(a => `<div class="wbw-chip" onclick="wbwSelectArea(this,'${a}')">${a}</div>`).join('')}
+        </div>
+        <button class="wbw-btn-primary" onclick="wbwNext()">Weiter</button>
+      </div>`;
+
+  } else if (wbwStep === 2) {
+    ind.textContent = 'SCHRITT 2 / 4';
+    body.innerHTML = `
+      <div style="padding:32px 20px 36px;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:14px;text-align:center;">Kernwunsch klären</div>
+        <h2 style="font-family:var(--display);font-size:1.15rem;font-weight:500;color:var(--cream);text-align:center;margin-bottom:6px;text-wrap:balance;">Was will dein Herz wirklich?</h2>
+        <p style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);text-align:center;font-weight:300;margin-bottom:24px;">Lass diese Fragen in dir wirken. Dein Verstand kennt Ziele — dein Herz kennt Wünsche.</p>
+        <div class="wbw-question-card">„Was möchte ich wirklich erleben — jenseits von dem, was ich glaube, verdienen zu dürfen?"</div>
+        <div class="wbw-question-card">„Wie würde sich mein Alltag anfühlen, wenn dieser Wunsch bereits wahr ist?"</div>
+        <div class="wbw-question-card">„Was würde sich in mir verändern — welche Version von mir zeigt sich dann?"</div>
+        <div style="background:rgba(212,168,32,.05);border:1px solid rgba(212,168,32,.12);border-radius:14px;padding:16px 18px;margin:20px 0 32px;">
+          <p style="font-family:var(--sans);font-size:.82rem;color:var(--cream-muted);font-weight:300;line-height:1.75;margin:0;">
+            Nimm dir einen Moment. Schließ kurz die Augen. Dann hol dein Wunschbuch — und bring das, was entsteht, auf die nächste Seite.
+          </p>
+        </div>
+        <button class="wbw-btn-primary" onclick="wbwNext()">Ich habe meinen Wunsch</button>
+      </div>`;
+
+  } else if (wbwStep === 3) {
+    ind.textContent = 'SCHRITT 3 / 4';
+    const example = wbwExamples[wbwArea] || 'Ich bin so dankbar und glücklich, dass [dein Wunsch in der Gegenwart] — ich fühle [das Gefühl, das damit kommt].';
+    body.innerHTML = `
+      <div style="padding:32px 20px 36px;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:14px;text-align:center;">Die Formel</div>
+        <h2 style="font-family:var(--display);font-size:1.15rem;font-weight:500;color:var(--cream);text-align:center;margin-bottom:6px;text-wrap:balance;">So schreibst du mit maximaler Frequenz.</h2>
+        <p style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);text-align:center;font-weight:300;margin-bottom:22px;">Drei Prinzipien — sie machen den Unterschied.</p>
+        <div style="background:rgba(212,168,32,.04);border:1px solid rgba(212,168,32,.1);border-radius:16px;padding:16px 18px;margin-bottom:20px;">
+          <div class="wbw-rule">
+            <div class="wbw-rule-num">1</div>
+            <div>
+              <div style="font-family:var(--display);font-size:.82rem;color:var(--cream);margin-bottom:4px;">Gegenwart</div>
+              <div style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);font-weight:300;line-height:1.65;">Schreib, als wäre es bereits wahr. Nicht „Ich will" oder „Ich wünsche mir" — sondern „Ich bin", „Ich habe", „Ich erlebe".</div>
+            </div>
+          </div>
+          <div class="wbw-rule">
+            <div class="wbw-rule-num">2</div>
+            <div>
+              <div style="font-family:var(--display);font-size:.82rem;color:var(--cream);margin-bottom:4px;">Gefühl</div>
+              <div style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);font-weight:300;line-height:1.65;">Füg das Gefühl hinzu. Das Universum reagiert nicht auf Worte — es reagiert auf die Frequenz, die du dabei aussendest.</div>
+            </div>
+          </div>
+          <div class="wbw-rule">
+            <div class="wbw-rule-num">3</div>
+            <div>
+              <div style="font-family:var(--display);font-size:.82rem;color:var(--cream);margin-bottom:4px;">Dankbarkeit</div>
+              <div style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);font-weight:300;line-height:1.65;">Dankbarkeit ist die höchste Empfangsfrequenz. Beginne jeden Eintrag mit „Ich bin so dankbar und glücklich, dass…"</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2px;color:var(--gold);opacity:.7;margin-bottom:6px;">BEISPIEL FÜR ${wbwArea.toUpperCase()}</div>
+        <div class="wbw-example-box">${example}</div>
+        <button class="wbw-btn-primary" onclick="wbwNext()">Jetzt eintragen</button>
+      </div>`;
+
+  } else if (wbwStep === 4) {
+    ind.textContent = 'SCHRITT 4 / 4';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:44px 24px 40px;text-align:center;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:18px;">Aktivierung</div>
+        <canvas id="wbw-canvas" width="160" height="160" style="margin-bottom:24px;"></canvas>
+        <h2 style="font-family:var(--display);font-size:1.2rem;font-weight:500;color:var(--cream);margin-bottom:16px;text-wrap:balance;">Schreib deinen Eintrag jetzt.</h2>
+        <p style="font-family:var(--sans);font-size:.88rem;color:var(--cream-muted);line-height:1.8;font-weight:300;max-width:280px;margin-bottom:28px;">
+          In der Gegenwart. Mit dem Gefühl, das du dir wünschst. Und mit aufrichtigem Dank — als wäre es bereits geschehen.
+        </p>
+        <div style="background:rgba(212,168,32,.05);border:1px solid rgba(212,168,32,.15);border-radius:16px;padding:20px 22px;max-width:300px;margin-bottom:40px;">
+          <p style="font-family:var(--serif);font-style:italic;font-size:.98rem;color:rgba(255,255,255,.88);line-height:1.88;margin:0;">„Diese Worte tragen die Frequenz meines Herzens. Sie sind gesetzt."</p>
+        </div>
+        <button class="wbw-btn-primary" onclick="wbwClose()">Zur Toolbox</button>
+      </div>`;
+    wbwAnimateActivation();
+  }
+}
+
+function wbwAnimateActivation() {
+  const c = document.getElementById('wbw-canvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const cx = 80, cy = 80;
+  let t = 0;
+  // Particles radiating outward
+  const particles = Array.from({length: 24}, (_, i) => ({
+    angle: (i / 24) * Math.PI * 2,
+    r: 0,
+    speed: 0.4 + Math.random() * 0.4,
+    alpha: 0,
+    size: 1 + Math.random() * 1.5,
+  }));
+  let alpha = 0;
+
+  function draw() {
+    t++;
+    alpha = Math.min(alpha + 0.03, 1);
+    ctx.clearRect(0, 0, 160, 160);
+
+    // Concentric glow rings
+    [20, 36, 52].forEach((r, i) => {
+      ctx.beginPath();
+      ctx.arc(cx, cy, r + Math.sin(t * 0.04) * 2, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(212,168,32,${(0.45 - i * 0.1) * alpha})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    });
+
+    // Expanding particles
+    particles.forEach(p => {
+      if (t > 20) {
+        p.r += p.speed;
+        p.alpha = Math.max(0, 0.8 - p.r / 65);
+        if (p.r < 65) {
+          ctx.beginPath();
+          ctx.arc(
+            cx + Math.cos(p.angle) * p.r,
+            cy + Math.sin(p.angle) * p.r,
+            p.size, 0, Math.PI * 2
+          );
+          ctx.fillStyle = `rgba(212,168,32,${p.alpha * alpha})`;
+          ctx.fill();
+        }
+        // Reset when faded out
+        if (p.r > 65) { p.r = 0; p.alpha = 0.8; }
+      }
+    });
+
+    // Central star point
+    ctx.beginPath();
+    ctx.arc(cx, cy, 4.5 + Math.sin(t * 0.06) * 1, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(212,168,32,${0.9 * alpha})`;
+    ctx.fill();
+
+    requestAnimationFrame(draw);
   }
   draw();
 }
