@@ -165,6 +165,7 @@
     .tool-item-name { font-family: var(--display); font-size: .84rem; font-weight: 500; letter-spacing: .02em; margin-bottom: 3px; color: var(--cream); }
     .tool-item-desc { font-size: .74rem; color: var(--cream-muted); font-weight: 300; line-height: 1.45; }
     .tool-item-arrow { color: rgba(255,255,255,.28); font-size: .85rem; flex-shrink: 0; }
+    .tool-item-icon svg { width: 22px; height: 22px; display: block; }
     .tool-item-badge {
       font-family: var(--display);
       font-size: .56rem;
@@ -471,92 +472,169 @@
   <div class="section-label">Deine Werkzeuge</div>
 
   <div class="tools-category">
+
+    <!-- Blockaden lösen -->
     <div class="tool-item" onclick="openTool('blockaden')">
-      <div class="tool-item-icon" style="background:rgba(123,45,158,.18);">🔓</div>
+      <div class="tool-item-icon" style="background:rgba(123,45,158,.18);">
+        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="11" width="16" height="9" rx="2.5" stroke="rgba(185,130,255,.85)" stroke-width="1.4"/>
+          <path d="M7 11V8.5a4 4 0 0 1 8 0" stroke="rgba(185,130,255,.85)" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+          <circle cx="11" cy="15.5" r="1.3" fill="rgba(185,130,255,.85)"/>
+          <rect x="10.35" y="15.5" width="1.3" height="2" rx=".5" fill="rgba(185,130,255,.85)"/>
+        </svg>
+      </div>
       <div class="tool-item-body">
         <div class="tool-item-name">Blockaden lösen</div>
         <div class="tool-item-desc">Multidimensionaler geführter Prozess</div>
       </div>
       <span class="tool-item-arrow">›</span>
     </div>
+
+    <!-- Strichmännchentechnik -->
     <div class="tool-item" onclick="openTool('strich')">
-      <div class="tool-item-icon" style="background:rgba(196,37,122,.12);">👤</div>
+      <div class="tool-item-icon" style="background:rgba(196,37,122,.12);">
+        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="6" cy="5.5" r="1.8" stroke="rgba(230,120,190,.85)" stroke-width="1.3"/>
+          <line x1="6" y1="7.3" x2="6" y2="13" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/>
+          <circle cx="16" cy="5.5" r="1.8" stroke="rgba(230,120,190,.85)" stroke-width="1.3"/>
+          <line x1="16" y1="7.3" x2="16" y2="13" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/>
+          <path d="M6 10.5 Q11 7.5 16 10.5" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="2 1.8" fill="none"/>
+        </svg>
+      </div>
       <div class="tool-item-body">
         <div class="tool-item-name">Strichmännchentechnik</div>
         <div class="tool-item-desc">Energetische Verbindungen lösen</div>
       </div>
       <span class="tool-item-arrow">›</span>
     </div>
+
+    <!-- Körperkommunikation -->
     <div class="tool-item" onclick="openTool('koerper')">
-      <div class="tool-item-icon" style="background:rgba(196,37,122,.1);">🫀</div>
+      <div class="tool-item-icon" style="background:rgba(196,37,122,.1);">
+        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="11" cy="5" r="2" stroke="rgba(230,120,190,.85)" stroke-width="1.3"/>
+          <path d="M11 7v5" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/>
+          <path d="M8.5 9.5l-2 1.5M13.5 9.5l2 1.5" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/>
+          <path d="M11 12v3" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/>
+          <path d="M6 17.5 Q8.5 15.5 11 17 Q13.5 18.5 16 17.5" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+          <path d="M7.5 16 Q9.5 14.5 11 15.8 Q12.5 17 14.5 16" stroke="rgba(230,120,190,.4)" stroke-width="1" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
       <div class="tool-item-body">
         <div class="tool-item-name">Körperkommunikation</div>
         <div class="tool-item-desc">Fragen an den Körper – intuitive Antworten</div>
       </div>
       <span class="tool-item-arrow">›</span>
     </div>
+
+    <!-- Back to Sender -->
     <div class="tool-item" onclick="openTool('schutz')">
-      <div class="tool-item-icon" style="background:rgba(68,214,214,.1);">🛡️</div>
+      <div class="tool-item-icon" style="background:rgba(68,214,214,.1);">
+        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11 2L3 5.5V11c0 4.2 3.3 7.2 8 8.8 4.7-1.6 8-4.6 8-8.8V5.5L11 2z" stroke="rgba(68,214,214,.9)" stroke-width="1.3" stroke-linejoin="round"/>
+          <path d="M11 14.5V9M8.5 11.5l2.5-2.5 2.5 2.5" stroke="rgba(68,214,214,.9)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
       <div class="tool-item-body">
         <div class="tool-item-name">Back to Sender</div>
         <div class="tool-item-desc">Fremde Energien erkennen & zurückgeben</div>
       </div>
       <span class="tool-item-arrow">›</span>
     </div>
+
+    <!-- Wunschbucharbeit -->
     <div class="tool-item" onclick="openTool('wunsch')">
-      <div class="tool-item-icon" style="background:rgba(212,168,32,.1);">📖</div>
+      <div class="tool-item-icon" style="background:rgba(212,168,32,.1);">
+        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 5.5A1.5 1.5 0 0 1 4.5 4H11v14H4.5A1.5 1.5 0 0 1 3 16.5V5.5z" stroke="rgba(212,168,32,.9)" stroke-width="1.3"/>
+          <path d="M11 4h6.5A1.5 1.5 0 0 1 19 5.5v11A1.5 1.5 0 0 1 17.5 18H11V4z" stroke="rgba(212,168,32,.9)" stroke-width="1.3"/>
+          <path d="M15 7.5l.55 1.6 1.7.05-1.35 1 .5 1.65L15 10.9l-1.4.9.5-1.65-1.35-1 1.7-.05L15 7.5z" fill="rgba(212,168,32,.9)"/>
+        </svg>
+      </div>
       <div class="tool-item-body">
         <div class="tool-item-name">Wunschbucharbeit</div>
         <div class="tool-item-desc">Wünsche formulieren & Frequenz aktivieren</div>
       </div>
       <span class="tool-item-arrow">›</span>
     </div>
+
+    <!-- Energiefelder anlegen -->
     <div class="tool-item" onclick="openTool('felder')">
-      <div class="tool-item-icon" style="background:rgba(68,214,214,.08);">🌀</div>
+      <div class="tool-item-icon" style="background:rgba(68,214,214,.08);">
+        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="11" cy="11" r="2.2" stroke="rgba(68,214,214,.9)" stroke-width="1.4"/>
+          <circle cx="11" cy="11" r="5.3" stroke="rgba(68,214,214,.55)" stroke-width="1.1"/>
+          <circle cx="11" cy="11" r="8.5" stroke="rgba(68,214,214,.25)" stroke-width="1"/>
+        </svg>
+      </div>
       <div class="tool-item-body">
         <div class="tool-item-name">Energiefelder anlegen</div>
         <div class="tool-item-desc">Schutz-, Heil- und Manifestationsfelder</div>
       </div>
       <span class="tool-item-arrow">›</span>
     </div>
+
+    <!-- Lösungsorientierte Fragen -->
     <div class="tool-item" onclick="openTool('fragen')">
-      <div class="tool-item-icon" style="background:rgba(212,168,32,.08);">🖊️</div>
+      <div class="tool-item-icon" style="background:rgba(212,168,32,.08);">
+        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11 2L20 11L11 20L2 11Z" stroke="rgba(212,168,32,.9)" stroke-width="1.3" stroke-linejoin="round"/>
+          <path d="M9.5 9a1.8 1.8 0 0 1 3.2 1.1c0 1.3-1.7 1.6-1.7 2.9" stroke="rgba(212,168,32,.9)" stroke-width="1.3" stroke-linecap="round"/>
+          <circle cx="11" cy="15" r=".7" fill="rgba(212,168,32,.9)"/>
+        </svg>
+      </div>
       <div class="tool-item-body">
         <div class="tool-item-name">Lösungsorientierte Fragen</div>
         <div class="tool-item-desc">Perspektivwechsel durch kraftvolle Impulse</div>
       </div>
       <span class="tool-item-arrow">›</span>
     </div>
+
+    <!-- Die 4 Schritte für Wunder -->
     <div class="tool-item" onclick="openTool('wunder')">
-      <div class="tool-item-icon" style="background:rgba(123,45,158,.1);">🪄</div>
+      <div class="tool-item-icon" style="background:rgba(123,45,158,.1);">
+        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11 1.5L12.8 9.2L20.5 11L12.8 12.8L11 20.5L9.2 12.8L1.5 11L9.2 9.2Z" stroke="rgba(185,130,255,.85)" stroke-width="1.3" stroke-linejoin="round"/>
+        </svg>
+      </div>
       <div class="tool-item-body">
         <div class="tool-item-name">Die 4 Schritte für Wunder</div>
         <div class="tool-item-desc">Wahrnehmen · Annehmen · Transformieren · Neu ausrichten</div>
       </div>
       <span class="tool-item-arrow">›</span>
     </div>
-  </div>
 
-  <!-- ── Klang & Meditation ── -->
-  <div class="section-label">🎵 Klang & Meditation</div>
-
-  <div class="tools-category">
+    <!-- Geführte Meditationen -->
     <div class="tool-item" onclick="openSubSection('meditationen')">
-      <div class="tool-item-icon" style="background:rgba(123,45,158,.15);">🌊</div>
+      <div class="tool-item-icon" style="background:rgba(123,45,158,.15);">
+        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="11" cy="5.5" r="2" stroke="rgba(185,130,255,.85)" stroke-width="1.3"/>
+          <path d="M11 7.5v4" stroke="rgba(185,130,255,.85)" stroke-width="1.3" stroke-linecap="round"/>
+          <path d="M9 9.5L7 11M13 9.5l2 1" stroke="rgba(185,130,255,.85)" stroke-width="1.3" stroke-linecap="round"/>
+          <path d="M6.5 13 Q8.5 17.5 11 15.5 Q13.5 17.5 15.5 13" stroke="rgba(185,130,255,.85)" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
       <div class="tool-item-body">
         <div class="tool-item-name">Geführte Meditationen</div>
         <div class="tool-item-desc">Einfühlsame Reisen zur inneren Heilung & Stille</div>
       </div>
       <span class="tool-item-arrow">›</span>
     </div>
+
+    <!-- Frequenzreisen & Musik -->
     <div class="tool-item" onclick="openSubSection('frequenzen')">
-      <div class="tool-item-icon" style="background:rgba(212,168,32,.1);">✧</div>
+      <div class="tool-item-icon" style="background:rgba(212,168,32,.1);">
+        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1.5 11 Q3.5 4.5 5.5 11 Q7.5 17.5 9.5 11 Q11.5 4.5 13.5 11 Q15.5 17.5 17.5 11 Q19 6.5 20.5 11" stroke="rgba(212,168,32,.9)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
       <div class="tool-item-body">
         <div class="tool-item-name">Frequenzreisen & Musik</div>
         <div class="tool-item-desc">Heilende Klangfrequenzen für Harmonie & Verbindung</div>
       </div>
       <span class="tool-item-arrow">›</span>
     </div>
+
   </div>
 
 </main>
