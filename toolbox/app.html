@@ -21,7 +21,7 @@
       --turquoise: #44D6D6;
       --emerald: #3FB89B;
       --cream: #F5ECD0;
-      --cream-muted: rgba(245,236,208,0.5);
+      --cream-muted: rgba(255,255,255,0.78);
       --display: 'Cinzel', Georgia, serif;
       --sans: 'Inter', -apple-system, sans-serif;
       --serif: 'Cormorant Garamond', Georgia, serif;
@@ -93,7 +93,7 @@
       border: 1px solid rgba(212,168,32,.18);
       border-radius: 18px;
       padding: 22px;
-      margin: 14px 16px 0;
+      margin: 16px 16px 0;
       position: relative;
       overflow: hidden;
     }
@@ -115,7 +115,7 @@
     .impulse-text {
       font-family: var(--serif);
       font-size: 1.05rem;
-      color: var(--cream-muted);
+      color: rgba(255,255,255,0.9);
       line-height: 1.8;
       font-style: italic;
       font-weight: 300;
@@ -124,54 +124,65 @@
     /* ─── SECTION LABEL ─── */
     .section-label {
       font-family: var(--display);
-      font-size: .62rem;
-      letter-spacing: 2px;
+      font-size: .58rem;
+      letter-spacing: .28em;
       text-transform: uppercase;
       color: var(--turquoise);
+      opacity: .7;
       padding: 0 20px;
-      margin: 28px 0 12px;
+      margin: 36px 0 10px;
     }
+    .section-label:first-of-type { margin-top: 28px; }
 
     /* ─── TOOLS LIST ─── */
-    .tools-category { margin-bottom: 8px; }
+    .tools-category {
+      background: rgba(255,255,255,.028);
+      border: 1px solid rgba(212,168,32,.1);
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 0 16px 12px;
+    }
     .tools-category-heading {
       font-family: var(--display);
-      font-size: .62rem;
-      letter-spacing: 2px;
+      font-size: .58rem;
+      letter-spacing: .26em;
       text-transform: uppercase;
-      color: rgba(68,214,214,.6);
-      margin-bottom: 8px;
-      padding: 0 20px;
+      color: var(--turquoise);
+      opacity: .65;
+      padding: 12px 16px 10px;
+      border-bottom: 1px solid rgba(212,168,32,.07);
     }
     .tool-item {
       display: flex;
       align-items: center;
-      gap: 16px;
-      padding: 16px 20px;
+      gap: 14px;
+      padding: 15px 16px;
       cursor: pointer;
-      transition: background .2s;
-      border-bottom: 1px solid rgba(212,168,32,.05);
+      transition: background .18s;
+      border-bottom: 1px solid rgba(255,255,255,.04);
     }
-    .tool-item:hover { background: rgba(123,45,158,.07); }
-    .tool-item:active { background: rgba(123,45,158,.12); }
+    .tools-category .tool-item:last-child { border-bottom: none; }
+    .tool-item:hover  { background: rgba(123,45,158,.08); }
+    .tool-item:active { background: rgba(123,45,158,.14); }
     .tool-item-icon {
-      width: 48px; height: 48px;
-      border-radius: 12px;
+      width: 44px; height: 44px;
+      border-radius: 11px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       flex-shrink: 0;
     }
-    .tool-item-body { flex: 1; }
-    .tool-item-name { font-family: var(--display); font-size: .82rem; font-weight: 500; letter-spacing: .3px; margin-bottom: 3px; color: var(--cream); }
-    .tool-item-desc { font-size: .75rem; color: var(--cream-muted); font-weight: 300; }
-    .tool-item-arrow { color: var(--cream-muted); font-size: .9rem; }
+    .tool-item-body { flex: 1; min-width: 0; }
+    .tool-item-name { font-family: var(--display); font-size: .84rem; font-weight: 500; letter-spacing: .02em; margin-bottom: 3px; color: var(--cream); }
+    .tool-item-desc { font-size: .74rem; color: var(--cream-muted); font-weight: 300; line-height: 1.45; }
+    .tool-item-arrow { color: rgba(255,255,255,.28); font-size: .85rem; flex-shrink: 0; }
     .tool-item-badge {
       font-family: var(--display);
-      font-size: .58rem;
+      font-size: .56rem;
       letter-spacing: 1px;
       padding: 2px 8px;
       border-radius: 50px;
       text-transform: uppercase;
+      flex-shrink: 0;
     }
 
     /* ─── MEDIA CARDS ─── */
@@ -219,7 +230,7 @@
     .media-card-body { flex: 1; padding: 14px 16px 14px 14px; }
     .media-card-tag { font-family: var(--display); font-size: .58rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--turquoise); margin-bottom: 6px; }
     .media-card-title { font-family: var(--display); font-size: .82rem; font-weight: 500; color: var(--cream); line-height: 1.3; margin-bottom: 5px; }
-    .media-card-desc { font-size: .73rem; color: var(--cream-muted); font-weight: 300; line-height: 1.5; }
+    .media-card-desc { font-size: .75rem; color: rgba(255,255,255,.82); font-weight: 300; line-height: 1.5; }
     .media-card-hz {
       display: inline-block; margin-top: 6px;
       font-family: var(--display); font-size: .58rem; letter-spacing: 1px;
