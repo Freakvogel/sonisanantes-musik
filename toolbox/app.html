@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <title>Energetic Toolbox – App</title>
+  <title>Energetic Toolbox – Sonisanantes</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400&display=swap" rel="stylesheet" />
   <style>
@@ -25,124 +25,75 @@
       --display: 'Cinzel', Georgia, serif;
       --sans: 'Inter', -apple-system, sans-serif;
       --serif: 'Cormorant Garamond', Georgia, serif;
-      --nav-h: 70px;
     }
 
     html, body {
-      height: 100%;
+      min-height: 100%;
       background: var(--bg);
       color: var(--cream);
       font-family: var(--sans);
-      overflow: hidden;
-    }
-
-    /* ─── SCREENS ─── */
-    .screen {
-      position: fixed;
-      inset: 0;
-      bottom: var(--nav-h);
       overflow-y: auto;
-      display: none;
-      flex-direction: column;
       -webkit-overflow-scrolling: touch;
     }
-    .screen.active { display: flex; }
 
-    /* ─── BOTTOM NAV ─── */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      height: var(--nav-h);
+    /* ─── HEADER ─── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
       background: rgba(5,6,8,.96);
-      backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(212,168,32,.1);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(212,168,32,.15);
+      padding: 12px 20px 10px;
       display: flex;
       align-items: center;
-      justify-content: space-around;
-      z-index: 200;
+      justify-content: center;
+      text-align: center;
     }
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
-      padding: 8px 12px;
-      border-radius: 12px;
-      transition: background .2s;
-      border: none;
-      background: transparent;
-    }
-    .nav-icon { font-size: 1.3rem; opacity: .4; transition: opacity .2s; }
-    .nav-item.active .nav-icon { opacity: 1; }
-    .nav-label { font-family: var(--display); font-size: .6rem; letter-spacing: 1px; color: var(--cream-muted); text-transform: uppercase; }
-    .nav-item.active .nav-label { color: var(--turquoise); }
-
-    /* ─── SHARED ─── */
-    .page-header {
-      padding: 24px 20px 0;
-      flex-shrink: 0;
-    }
-    .page-header .greeting { font-family: var(--display); font-size: .65rem; color: var(--turquoise); letter-spacing: 2px; text-transform: uppercase; }
-    .page-header h1 { font-family: var(--display); font-size: 1.4rem; margin-top: 6px; line-height: 1.2; color: var(--cream); font-weight: 500; letter-spacing: .5px; }
-    .scrollable { flex: 1; overflow-y: auto; padding: 20px; -webkit-overflow-scrolling: touch; }
-
-    .card {
-      background: var(--card);
-      border: 1px solid rgba(212,168,32,.1);
-      border-radius: 18px;
-      padding: 20px;
-    }
-    .card + .card { margin-top: 14px; }
-
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(68,214,214,.08);
-      border: 1px solid rgba(68,214,214,.2);
-      color: var(--turquoise);
-      font-family: var(--display);
-      font-size: .62rem;
-      letter-spacing: 1.5px;
+    .logo-name {
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: clamp(1rem, 3.5vw, 1.35rem);
+      font-weight: 500;
+      letter-spacing: .22em;
       text-transform: uppercase;
-      padding: 4px 12px;
-      border-radius: 50px;
-    }
-
-    /* ─── HOME ─── */
-    #home { background: linear-gradient(180deg, rgba(5,6,8,1) 0%, var(--bg) 40%); }
-    .home-top {
-      padding: 32px 20px 0;
-      position: relative;
-    }
-    .home-top::before {
-      content: '';
-      position: absolute;
-      width: 320px; height: 320px;
-      background: radial-gradient(circle, rgba(123,45,158,.2) 0%, transparent 65%);
-      top: -80px; right: -80px;
-      pointer-events: none;
-    }
-    .home-greeting { font-family: var(--display); font-size: .65rem; color: var(--turquoise); letter-spacing: 2px; text-transform: uppercase; }
-    .home-title { font-family: var(--display); font-size: 1.5rem; margin: 8px 0 24px; line-height: 1.25; color: var(--cream); font-weight: 500; }
-    .home-title span {
-      font-family: var(--serif);
-      font-style: italic;
-      font-weight: 300;
-      background: linear-gradient(135deg, var(--gold-light), var(--magenta));
+      background: linear-gradient(135deg, #D4A820, #F5ECD0, #D4A820);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      line-height: 1.2;
+    }
+    .logo-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: .56rem;
+      letter-spacing: .40em;
+      text-transform: uppercase;
+      color: #44D6D6;
+      margin-top: 3px;
     }
 
-    /* Daily impulse */
+    /* ─── MAIN ─── */
+    main {
+      padding: 0 0 48px;
+    }
+
+    /* ─── GREETING ─── */
+    .greeting-bar {
+      padding: 18px 20px 0;
+      font-family: var(--display);
+      font-size: .65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--turquoise);
+    }
+
+    /* ─── IMPULSE CARD ─── */
     .impulse-card {
       background: linear-gradient(135deg, rgba(123,45,158,.18), rgba(196,37,122,.1));
       border: 1px solid rgba(212,168,32,.18);
       border-radius: 18px;
       padding: 22px;
-      margin-bottom: 20px;
+      margin: 14px 16px 0;
       position: relative;
       overflow: hidden;
     }
@@ -153,7 +104,14 @@
       font-size: 1.2rem;
       color: rgba(212,168,32,.25);
     }
-    .impulse-label { font-family: var(--display); font-size: .65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+    .impulse-label {
+      font-family: var(--display);
+      font-size: .65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
     .impulse-text {
       font-family: var(--serif);
       font-size: 1.05rem;
@@ -163,71 +121,26 @@
       font-weight: 300;
     }
 
-    /* Feeling check */
-    .feeling-card { margin-bottom: 20px; }
-    .feeling-card h3 { font-family: var(--display); font-size: .8rem; font-weight: 500; letter-spacing: .5px; margin-bottom: 14px; }
-    .feeling-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-    .feeling-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-      background: rgba(5,6,8,.5);
-      border: 1px solid rgba(212,168,32,.08);
-      border-radius: 12px;
-      padding: 12px 6px;
-      cursor: pointer;
-      transition: border-color .2s, background .2s;
-      font-family: var(--sans);
-    }
-    .feeling-btn:hover, .feeling-btn.selected {
-      border-color: rgba(212,168,32,.3);
-      background: rgba(123,45,158,.12);
-    }
-    .feeling-btn .emoji { font-size: 1.3rem; }
-    .feeling-btn span { font-size: .62rem; color: var(--cream-muted); font-family: var(--display); letter-spacing: .5px; text-transform: uppercase; }
-
-    /* Quick access */
-    .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .quick-card {
-      background: var(--card);
-      border: 1px solid rgba(212,168,32,.1);
-      border-radius: 16px;
-      padding: 18px 16px;
-      cursor: pointer;
-      transition: transform .2s, border-color .2s;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .quick-card:hover { transform: translateY(-2px); border-color: rgba(212,168,32,.25); }
-    .quick-card .q-icon { font-size: 1.5rem; }
-    .quick-card .q-title { font-family: var(--display); font-size: .78rem; font-weight: 500; letter-spacing: .3px; color: var(--cream); }
-    .quick-card .q-sub { font-size: .7rem; color: var(--cream-muted); font-weight: 300; }
-    .quick-card.violet { border-top: 2px solid var(--violet); }
-    .quick-card.magenta { border-top: 2px solid var(--magenta); }
-    .quick-card.gold    { border-top: 2px solid var(--gold); }
-    .quick-card.teal    { border-top: 2px solid var(--turquoise); }
-
-    /* ─── TOOLS SCREEN ─── */
-    .tools-list { padding: 16px 0 0; }
-    .tools-category { margin-bottom: 24px; }
-    .tools-category h3 {
+    /* ─── SECTION LABEL ─── */
+    .section-label {
       font-family: var(--display);
       font-size: .62rem;
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--turquoise);
-      margin-bottom: 12px;
+      padding: 0 20px;
+      margin: 28px 0 12px;
+    }
+
+    /* ─── TOOLS LIST ─── */
+    .tools-category { margin-bottom: 8px; }
+    .tools-category-heading {
+      font-family: var(--display);
+      font-size: .62rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(68,214,214,.6);
+      margin-bottom: 8px;
       padding: 0 20px;
     }
     .tool-item {
@@ -240,6 +153,7 @@
       border-bottom: 1px solid rgba(212,168,32,.05);
     }
     .tool-item:hover { background: rgba(123,45,158,.07); }
+    .tool-item:active { background: rgba(123,45,158,.12); }
     .tool-item-icon {
       width: 48px; height: 48px;
       border-radius: 12px;
@@ -260,92 +174,58 @@
       text-transform: uppercase;
     }
 
-    /* ─── JOURNAL ─── */
-    .journal-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    .stat-box {
-      background: var(--card);
-      border: 1px solid rgba(212,168,32,.1);
-      border-radius: 12px;
-      padding: 14px 10px;
-      text-align: center;
-    }
-    .stat-num { font-family: var(--display); font-size: 1.5rem; font-weight: 500; color: var(--turquoise); }
-    .stat-label { font-family: var(--display); font-size: .6rem; letter-spacing: 1px; color: var(--cream-muted); text-transform: uppercase; margin-top: 4px; }
-    .journal-empty {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--cream-muted);
-    }
-    .journal-empty .icon { font-size: 2.5rem; margin-bottom: 12px; }
-    .journal-empty p { font-size: .88rem; font-weight: 300; line-height: 1.7; }
-    .journal-entry {
-      background: var(--card);
-      border: 1px solid rgba(212,168,32,.1);
-      border-radius: 14px;
-      padding: 16px 18px;
-      margin-bottom: 12px;
-    }
-    .je-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-    .je-tool { font-family: var(--display); font-size: .62rem; letter-spacing: 1px; color: var(--turquoise); text-transform: uppercase; }
-    .je-date { font-size: .7rem; color: var(--cream-muted); font-weight: 300; }
-    .je-text { font-size: .85rem; color: var(--cream-muted); line-height: 1.65; font-weight: 300; }
-    .je-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      margin-top: 10px;
-      font-size: .7rem;
-      font-weight: 300;
-      color: var(--emerald);
-    }
-
-    /* ─── PROFIL ─── */
-    .profile-avatar {
-      width: 80px; height: 80px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--violet), var(--magenta));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 2rem;
-      margin: 28px auto 0;
-      box-shadow: 0 0 40px rgba(123,45,158,.3);
-    }
-    .profile-name { text-align: center; font-family: var(--display); font-size: 1rem; font-weight: 500; letter-spacing: .5px; margin-top: 14px; color: var(--cream); }
-    .profile-plan { text-align: center; margin-top: 8px; }
-    .profile-plan span {
-      background: linear-gradient(135deg, var(--violet), var(--magenta));
-      color: var(--cream);
+    /* ─── MEDIA CARDS ─── */
+    .media-section { padding: 0 16px; }
+    .media-category-label {
       font-family: var(--display);
-      font-size: .65rem;
-      letter-spacing: 1.5px;
+      font-size: .62rem;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      padding: 4px 16px;
-      border-radius: 50px;
+      color: rgba(68,214,214,.6);
+      margin: 20px 0 10px;
     }
-    .profile-menu { margin-top: 28px; }
-    .profile-menu-item {
+    .media-category-label:first-child { margin-top: 4px; }
+    .media-card {
+      background: var(--card);
+      border: 1px solid rgba(212,168,32,.12);
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      cursor: pointer;
+      transition: transform .2s, border-color .2s;
       display: flex;
       align-items: center;
-      gap: 16px;
-      padding: 16px 20px;
-      border-bottom: 1px solid rgba(212,168,32,.05);
-      cursor: pointer;
-      transition: background .2s;
     }
-    .profile-menu-item:hover { background: rgba(123,45,158,.06); }
-    .pmi-icon {
-      width: 38px; height: 38px;
-      border-radius: 10px;
-      background: rgba(123,45,158,.12);
+    .media-card:hover { transform: translateY(-2px); border-color: rgba(212,168,32,.28); }
+    .media-card-thumb {
+      width: 88px; height: 88px;
+      flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1rem;
+      font-size: 2.2rem;
+      position: relative;
     }
-    .pmi-label { flex: 1; font-family: var(--display); font-size: .78rem; font-weight: 400; letter-spacing: .3px; color: var(--cream); }
-    .pmi-arrow { color: var(--cream-muted); font-size: .85rem; }
+    .media-card-thumb.meditation { background: linear-gradient(135deg, rgba(123,45,158,.4), rgba(196,37,122,.25)); }
+    .media-card-thumb.frequenz   { background: linear-gradient(135deg, rgba(212,168,32,.2), rgba(63,184,155,.15)); }
+    .media-card-thumb .play-btn {
+      position: absolute;
+      bottom: 6px; right: 6px;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: rgba(212,168,32,.85);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem;
+      color: #050608;
+    }
+    .media-card-body { flex: 1; padding: 14px 16px 14px 14px; }
+    .media-card-tag { font-family: var(--display); font-size: .58rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--turquoise); margin-bottom: 6px; }
+    .media-card-title { font-family: var(--display); font-size: .82rem; font-weight: 500; color: var(--cream); line-height: 1.3; margin-bottom: 5px; }
+    .media-card-desc { font-size: .73rem; color: var(--cream-muted); font-weight: 300; line-height: 1.5; }
+    .media-card-hz {
+      display: inline-block; margin-top: 6px;
+      font-family: var(--display); font-size: .58rem; letter-spacing: 1px;
+      color: var(--gold); background: rgba(212,168,32,.1);
+      border: 1px solid rgba(212,168,32,.2); padding: 2px 8px; border-radius: 50px;
+    }
 
     /* ─── TOOL MODAL ─── */
     .tool-modal {
@@ -389,17 +269,8 @@
       text-transform: uppercase;
     }
 
-    /* Progress bar */
-    .progress-bar-wrap {
-      height: 2px;
-      background: rgba(212,168,32,.08);
-      flex-shrink: 0;
-    }
-    .progress-bar {
-      height: 100%;
-      background: linear-gradient(90deg, var(--violet), var(--magenta));
-      transition: width .5s ease;
-    }
+    .progress-bar-wrap { height: 2px; background: rgba(212,168,32,.08); flex-shrink: 0; }
+    .progress-bar { height: 100%; background: linear-gradient(90deg, var(--violet), var(--magenta)); transition: width .5s ease; }
 
     .tool-modal-body {
       flex: 1;
@@ -408,26 +279,16 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    /* Step content */
+    /* ─── STEP CONTENT ─── */
     .step-content { animation: fadeUp .4s ease; }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(16px); }
       to   { opacity: 1; transform: translateY(0); }
     }
     .step-icon-large { font-size: 2.8rem; margin-bottom: 20px; text-align: center; }
-    .step-title {
-      font-family: var(--display);
-      font-size: 1.3rem;
-      font-weight: 500;
-      letter-spacing: .5px;
-      margin-bottom: 12px;
-      line-height: 1.3;
-      color: var(--cream);
-    }
+    .step-title { font-family: var(--display); font-size: 1.3rem; font-weight: 500; letter-spacing: .5px; margin-bottom: 12px; line-height: 1.3; color: var(--cream); }
     .step-desc { color: var(--cream-muted); font-size: .92rem; line-height: 1.75; margin-bottom: 24px; font-weight: 300; }
-    .step-sub { font-size: .8rem; color: rgba(245,236,208,.35); margin-top: 8px; line-height: 1.6; font-weight: 300; }
 
-    /* Input styles */
     .step-input {
       width: 100%;
       background: rgba(5,6,8,.5);
@@ -446,88 +307,6 @@
     .step-input:focus { border-color: rgba(212,168,32,.35); }
     .step-input::placeholder { color: rgba(245,236,208,.2); }
 
-    /* Emotion grid */
-    .emotion-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .emotion-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      background: rgba(5,6,8,.5);
-      border: 1px solid rgba(212,168,32,.08);
-      border-radius: 12px;
-      padding: 14px 8px;
-      cursor: pointer;
-      font-family: var(--sans);
-      transition: border-color .2s, background .2s;
-    }
-    .emotion-btn:hover, .emotion-btn.sel {
-      border-color: rgba(212,168,32,.3);
-      background: rgba(123,45,158,.12);
-    }
-    .emotion-btn .e-icon { font-size: 1.4rem; }
-    .emotion-btn .e-label { font-family: var(--display); font-size: .6rem; letter-spacing: .5px; color: var(--cream-muted); text-transform: uppercase; text-align: center; }
-
-    /* Body map */
-    .body-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-    .body-btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(5,6,8,.5);
-      border: 1px solid rgba(212,168,32,.08);
-      border-radius: 12px;
-      padding: 14px;
-      cursor: pointer;
-      font-family: var(--sans);
-      transition: border-color .2s, background .2s;
-    }
-    .body-btn:hover, .body-btn.sel {
-      border-color: rgba(212,168,32,.3);
-      background: rgba(123,45,158,.12);
-    }
-    .body-btn .b-icon { font-size: 1.1rem; }
-    .body-btn .b-label { font-family: var(--display); font-size: .68rem; letter-spacing: .3px; color: var(--cream-muted); }
-
-    /* Intensity slider */
-    .intensity-wrap { margin: 10px 0 6px; }
-    .intensity-slider {
-      width: 100%;
-      -webkit-appearance: none;
-      height: 4px;
-      border-radius: 2px;
-      background: linear-gradient(90deg, var(--emerald) 0%, var(--gold) 50%, var(--magenta) 100%);
-      outline: none;
-      cursor: pointer;
-    }
-    .intensity-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 24px; height: 24px;
-      border-radius: 50%;
-      background: var(--cream);
-      box-shadow: 0 2px 12px rgba(0,0,0,.5);
-      cursor: pointer;
-    }
-    .intensity-value {
-      text-align: center;
-      font-family: var(--display);
-      font-size: 2rem;
-      font-weight: 500;
-      color: var(--turquoise);
-      margin: 16px 0 4px;
-    }
-    .intensity-label { text-align: center; font-size: .78rem; color: var(--cream-muted); font-weight: 300; }
-
-    /* Connection choice */
     .connection-cards { display: flex; flex-direction: column; gap: 14px; }
     .connection-card {
       background: rgba(5,6,8,.4);
@@ -537,16 +316,12 @@
       cursor: pointer;
       transition: border-color .2s, background .2s;
     }
-    .connection-card:hover, .connection-card.sel {
-      border-color: rgba(212,168,32,.3);
-      background: rgba(123,45,158,.1);
-    }
+    .connection-card:hover, .connection-card.sel { border-color: rgba(212,168,32,.3); background: rgba(123,45,158,.1); }
     .cc-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
     .cc-icon { font-size: 1.5rem; }
     .cc-title { font-family: var(--display); font-size: .85rem; font-weight: 500; letter-spacing: .3px; color: var(--cream); }
     .cc-desc { font-size: .82rem; color: var(--cream-muted); line-height: 1.65; font-weight: 300; }
 
-    /* Breathing animation */
     .breath-circle {
       width: 150px; height: 150px;
       border-radius: 50%;
@@ -565,27 +340,7 @@
       0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(123,45,158,.15); }
       50% { transform: scale(1.15); box-shadow: 0 0 40px 10px rgba(123,45,158,.1); }
     }
-    .breath-instruction { text-align: center; font-size: .9rem; color: var(--cream-muted); line-height: 1.75; font-weight: 300; }
 
-    /* Release type */
-    .release-cards { display: flex; flex-direction: column; gap: 14px; }
-    .release-card {
-      background: rgba(5,6,8,.4);
-      border: 1px solid rgba(212,168,32,.1);
-      border-radius: 16px;
-      padding: 20px;
-      cursor: pointer;
-      transition: border-color .2s, background .2s;
-    }
-    .release-card.violet-theme:hover, .release-card.violet-theme.sel { border-color: var(--violet); background: rgba(123,45,158,.1); }
-    .release-card.gold-theme:hover,   .release-card.gold-theme.sel   { border-color: var(--gold); background: rgba(212,168,32,.06); }
-    .release-card.magenta-theme:hover, .release-card.magenta-theme.sel { border-color: var(--magenta); background: rgba(196,37,122,.07); }
-    .rc-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-    .rc-icon { font-size: 1.4rem; }
-    .rc-title { font-family: var(--display); font-size: .82rem; font-weight: 500; letter-spacing: .3px; color: var(--cream); }
-    .rc-desc { font-size: .8rem; color: var(--cream-muted); line-height: 1.65; font-weight: 300; }
-
-    /* Guided process box */
     .guided-box {
       background: linear-gradient(135deg, rgba(123,45,158,.12), rgba(196,37,122,.06));
       border: 1px solid rgba(212,168,32,.12);
@@ -593,50 +348,22 @@
       padding: 24px;
       margin-bottom: 20px;
     }
-    .guided-step {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      margin-bottom: 18px;
-      animation: fadeUp .4s ease;
-    }
+    .guided-step { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 18px; animation: fadeUp .4s ease; }
     .guided-step:last-child { margin-bottom: 0; }
     .gs-num {
-      width: 26px; height: 26px;
-      border-radius: 50%;
+      width: 26px; height: 26px; border-radius: 50%;
       background: linear-gradient(135deg, var(--violet), var(--magenta));
       display: flex; align-items: center; justify-content: center;
-      font-family: var(--display);
-      font-size: .68rem;
-      color: var(--cream);
-      flex-shrink: 0;
+      font-family: var(--display); font-size: .68rem; color: var(--cream); flex-shrink: 0;
     }
     .gs-text { font-size: .85rem; color: var(--cream-muted); line-height: 1.7; font-weight: 300; }
 
-    /* Questions */
-    .question-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
-    .question-item {
-      background: rgba(5,6,8,.4);
-      border-left: 2px solid var(--gold);
-      border-radius: 0 10px 10px 0;
-      padding: 14px 16px;
-      font-family: var(--serif);
-      font-size: .95rem;
-      color: var(--cream-muted);
-      font-style: italic;
-      font-weight: 300;
-      line-height: 1.65;
-    }
-
-    /* Completion */
     .completion-glow {
-      width: 110px; height: 110px;
-      border-radius: 50%;
+      width: 110px; height: 110px; border-radius: 50%;
       background: radial-gradient(circle, rgba(63,184,155,.25) 0%, transparent 70%);
       border: 1px solid rgba(63,184,155,.3);
       display: flex; align-items: center; justify-content: center;
-      font-size: 2.8rem;
-      margin: 0 auto 24px;
+      font-size: 2.8rem; margin: 0 auto 24px;
       animation: pulse 2.5s ease-in-out infinite;
     }
     @keyframes pulse {
@@ -645,618 +372,188 @@
     }
 
     /* ─── MODAL FOOTER ─── */
-    .modal-footer {
-      padding: 16px 20px;
-      border-top: 1px solid rgba(212,168,32,.08);
-      flex-shrink: 0;
-    }
+    .modal-footer { padding: 16px 20px; border-top: 1px solid rgba(212,168,32,.08); flex-shrink: 0; }
     .btn-next {
-      width: 100%;
-      padding: 15px;
-      border-radius: 50px;
+      width: 100%; padding: 15px; border-radius: 50px;
       background: linear-gradient(135deg, var(--violet), var(--magenta));
-      color: var(--cream);
-      font-family: var(--display);
-      font-size: .75rem;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 8px 24px rgba(123,45,158,.3);
-      transition: transform .2s, opacity .2s;
+      color: var(--cream); font-family: var(--display); font-size: .75rem;
+      letter-spacing: 1.5px; text-transform: uppercase; border: none; cursor: pointer;
+      box-shadow: 0 8px 24px rgba(123,45,158,.3); transition: transform .2s, opacity .2s;
     }
     .btn-next:hover { transform: scale(1.02); }
     .btn-next:disabled { opacity: .35; cursor: default; transform: none; }
     .btn-skip {
-      display: block;
-      text-align: center;
-      margin-top: 10px;
-      font-size: .78rem;
-      color: var(--cream-muted);
-      cursor: pointer;
-      background: none;
-      border: none;
-      font-family: var(--sans);
-      font-weight: 300;
-      width: 100%;
-      padding: 6px;
-      transition: color .2s;
+      display: block; text-align: center; margin-top: 10px;
+      font-size: .78rem; color: var(--cream-muted); cursor: pointer;
+      background: none; border: none; font-family: var(--sans); font-weight: 300;
+      width: 100%; padding: 6px; transition: color .2s;
     }
     .btn-skip:hover { color: var(--cream); }
 
-    .char-hint { font-size: .7rem; color: var(--cream-muted); text-align: right; margin-top: 6px; font-weight: 300; }
-
-    /* ─── BUCH-CARD ─── */
-    .book-card {
-      margin-top: 28px;
-      background: linear-gradient(135deg, rgba(212,168,32,.08) 0%, rgba(123,45,158,.1) 100%);
-      border: 1px solid rgba(212,168,32,.2);
-      border-radius: 20px;
-      overflow: hidden;
-      position: relative;
-    }
-    .book-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at top right, rgba(212,168,32,.08) 0%, transparent 60%);
-      pointer-events: none;
-    }
-    .book-card-inner {
-      padding: 20px;
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-    }
-    .book-cover {
-      width: 80px;
-      height: 110px;
-      border-radius: 8px;
-      flex-shrink: 0;
-      background: linear-gradient(135deg, #f97316, #3b82f6, #06b6d4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 20px rgba(0,0,0,.4);
-      position: relative;
-      overflow: hidden;
-    }
-    .book-cover-text {
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: .55rem;
-      color: rgba(255,255,255,.9);
-      text-align: center;
-      padding: 6px;
-      line-height: 1.4;
-      position: relative;
-      z-index: 1;
-    }
-    .book-cover::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,.15) 0%, transparent 50%);
-    }
-    .book-info { flex: 1; min-width: 0; }
-    .book-tag {
-      font-family: var(--display);
-      font-size: .6rem;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 6px;
-    }
-    .book-title {
-      font-family: var(--display);
-      font-size: .88rem;
-      font-weight: 500;
-      color: var(--cream);
-      line-height: 1.3;
-      margin-bottom: 6px;
-    }
-    .book-author {
-      font-size: .75rem;
-      color: var(--cream-muted);
-      font-weight: 300;
-      margin-bottom: 8px;
-    }
-    .book-stars { color: var(--gold); font-size: .78rem; letter-spacing: 1px; margin-bottom: 8px; }
-    .book-desc {
-      font-size: .78rem;
-      color: var(--cream-muted);
-      font-weight: 300;
-      line-height: 1.6;
-      margin-bottom: 12px;
-    }
-    .book-features {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 14px;
-    }
-    .book-feature {
-      font-family: var(--display);
-      font-size: .58rem;
-      letter-spacing: .8px;
-      color: var(--turquoise);
-      background: rgba(68,214,214,.08);
-      border: 1px solid rgba(68,214,214,.15);
-      padding: 3px 8px;
-      border-radius: 50px;
-    }
-    .book-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 20px;
-      border-top: 1px solid rgba(212,168,32,.1);
-      background: rgba(5,6,8,.3);
-    }
-    .book-price {
-      font-family: var(--display);
-      font-size: 1.1rem;
-      font-weight: 500;
-      color: var(--gold);
-    }
-    .book-price-sub {
-      font-size: .68rem;
-      color: var(--cream-muted);
-      font-weight: 300;
-      margin-top: 1px;
-    }
-    .btn-amazon {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: linear-gradient(135deg, var(--gold), #B8920E);
-      color: #050608;
-      font-family: var(--display);
-      font-size: .7rem;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      padding: 10px 18px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      box-shadow: 0 4px 16px rgba(212,168,32,.3);
-      transition: transform .2s, box-shadow .2s;
-    }
-    .btn-amazon:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(212,168,32,.4); }
-
-    /* ─── KLÄNGE SCREEN ─── */
-    .klaenge-category-label {
-      font-family: var(--display);
-      font-size: .62rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--turquoise);
-      margin: 24px 0 12px;
-    }
-    .klaenge-category-label:first-child { margin-top: 4px; }
-
-    .media-card {
-      background: var(--card);
-      border: 1px solid rgba(212,168,32,.12);
-      border-radius: 18px;
-      overflow: hidden;
-      margin-bottom: 14px;
-      cursor: pointer;
-      transition: transform .2s, border-color .2s;
-      display: flex;
-      align-items: center;
-      gap: 0;
-    }
-    .media-card:hover { transform: translateY(-2px); border-color: rgba(212,168,32,.28); }
-    .media-card-thumb {
-      width: 88px;
-      height: 88px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.2rem;
-      position: relative;
-    }
-    .media-card-thumb.meditation { background: linear-gradient(135deg, rgba(123,45,158,.4), rgba(196,37,122,.25)); }
-    .media-card-thumb.frequenz   { background: linear-gradient(135deg, rgba(212,168,32,.2), rgba(63,184,155,.15)); }
-    .media-card-thumb .play-btn {
-      position: absolute;
-      bottom: 6px; right: 6px;
-      width: 26px; height: 26px;
-      border-radius: 50%;
-      background: rgba(212,168,32,.85);
-      display: flex; align-items: center; justify-content: center;
-      font-size: .7rem;
-      color: #050608;
-    }
-    .media-card-body { flex: 1; padding: 14px 16px 14px 14px; }
-    .media-card-tag {
-      font-family: var(--display);
-      font-size: .58rem;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--turquoise);
-      margin-bottom: 6px;
-    }
-    .media-card-title {
-      font-family: var(--display);
-      font-size: .82rem;
-      font-weight: 500;
-      color: var(--cream);
-      line-height: 1.3;
-      margin-bottom: 5px;
-    }
-    .media-card-desc {
-      font-size: .73rem;
-      color: var(--cream-muted);
-      font-weight: 300;
-      line-height: 1.5;
-    }
-    .media-card-hz {
-      display: inline-block;
-      margin-top: 6px;
-      font-family: var(--display);
-      font-size: .58rem;
-      letter-spacing: 1px;
-      color: var(--gold);
-      background: rgba(212,168,32,.1);
-      border: 1px solid rgba(212,168,32,.2);
-      padding: 2px 8px;
-      border-radius: 50px;
-    }
-
     /* ─── MEDIA PLAYER MODAL ─── */
     .player-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 400;
-      display: none;
-      flex-direction: column;
-      background: var(--bg);
+      position: fixed; inset: 0; z-index: 400;
+      display: none; flex-direction: column; background: var(--bg);
     }
     .player-modal.open { display: flex; }
-
     .player-modal-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 16px 20px;
-      border-bottom: 1px solid rgba(212,168,32,.08);
-      flex-shrink: 0;
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 20px; border-bottom: 1px solid rgba(212,168,32,.08); flex-shrink: 0;
     }
     .player-body {
-      flex: 1;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 28px 20px 32px;
-      -webkit-overflow-scrolling: touch;
+      flex: 1; overflow-y: auto;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 28px 20px 32px; -webkit-overflow-scrolling: touch;
     }
-
-    /* video player */
     .video-wrap {
-      width: 100%;
-      max-width: 560px;
-      border-radius: 16px;
-      overflow: hidden;
-      background: #000;
-      margin-bottom: 28px;
-      box-shadow: 0 0 40px rgba(123,45,158,.25);
+      width: 100%; max-width: 560px; border-radius: 16px; overflow: hidden;
+      background: #000; margin-bottom: 28px; box-shadow: 0 0 40px rgba(123,45,158,.25);
     }
-    .video-wrap video {
-      width: 100%;
-      display: block;
-    }
-
-    /* audio player */
+    .video-wrap video { width: 100%; display: block; }
     .audio-visual {
-      width: 180px; height: 180px;
-      border-radius: 50%;
+      width: 180px; height: 180px; border-radius: 50%;
       background: radial-gradient(circle, rgba(212,168,32,.2) 0%, rgba(123,45,158,.15) 50%, transparent 75%);
       border: 1px solid rgba(212,168,32,.2);
       display: flex; align-items: center; justify-content: center;
-      font-size: 4rem;
-      margin-bottom: 28px;
+      font-size: 4rem; margin-bottom: 28px;
       animation: breathe 6s ease-in-out infinite;
       box-shadow: 0 0 60px rgba(123,45,158,.15);
     }
-    .audio-wrap {
-      width: 100%;
-      max-width: 440px;
-      margin-bottom: 20px;
-    }
-    audio {
-      width: 100%;
-      border-radius: 50px;
-      outline: none;
-    }
-    audio::-webkit-media-controls-panel {
-      background: rgba(123,45,158,.15);
-      border-radius: 50px;
-    }
-
+    .audio-wrap { width: 100%; max-width: 440px; margin-bottom: 20px; }
+    audio { width: 100%; border-radius: 50px; outline: none; }
+    audio::-webkit-media-controls-panel { background: rgba(123,45,158,.15); border-radius: 50px; }
     .player-title {
-      font-family: var(--display);
-      font-size: 1.1rem;
-      font-weight: 500;
-      letter-spacing: .5px;
-      color: var(--cream);
-      text-align: center;
-      margin-bottom: 8px;
-      max-width: 400px;
+      font-family: var(--display); font-size: 1.1rem; font-weight: 500; letter-spacing: .5px;
+      color: var(--cream); text-align: center; margin-bottom: 8px; max-width: 400px;
     }
     .player-subtitle {
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: .95rem;
-      color: var(--cream-muted);
-      text-align: center;
-      margin-bottom: 24px;
-      font-weight: 300;
-      max-width: 360px;
-      line-height: 1.65;
+      font-family: var(--serif); font-style: italic; font-size: .95rem;
+      color: var(--cream-muted); text-align: center; margin-bottom: 24px;
+      font-weight: 300; max-width: 360px; line-height: 1.65;
     }
-    .player-hz-badges {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
+    .player-hz-badges { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
     .hz-badge {
-      font-family: var(--display);
-      font-size: .62rem;
-      letter-spacing: 1px;
-      color: var(--gold);
-      background: rgba(212,168,32,.1);
-      border: 1px solid rgba(212,168,32,.2);
-      padding: 4px 12px;
-      border-radius: 50px;
+      font-family: var(--display); font-size: .62rem; letter-spacing: 1px;
+      color: var(--gold); background: rgba(212,168,32,.1);
+      border: 1px solid rgba(212,168,32,.2); padding: 4px 12px; border-radius: 50px;
+    }
+
+    /* ─── CARD (shared) ─── */
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(212,168,32,.1);
+      border-radius: 18px;
+      padding: 20px;
     }
   </style>
 </head>
 <body>
 
-<!-- ══════════ HOME ══════════ -->
-<div id="home" class="screen active">
-  <div class="home-top">
-    <div class="home-greeting">Guten Morgen ✦</div>
-    <h1 class="home-title">Wie geht es<br /><span>dir heute?</span></h1>
+<!-- ══════════ HEADER ══════════ -->
+<header>
+  <div>
+    <div class="logo-name">Sonisanantes</div>
+    <div class="logo-sub">Energetic Toolbox</div>
+  </div>
+</header>
 
-    <div class="impulse-card">
-      <div class="impulse-label">✦ Tagesimpuls</div>
-      <p class="impulse-text" id="daily-impulse">„Was in dir wartet, wartet nicht auf die perfekte Zeit. Es wartet auf deine Bereitschaft."</p>
+<main>
+
+  <!-- ── Greeting + Tagesimpuls ── -->
+  <div id="greeting-bar" class="greeting-bar" style="display:none;"></div>
+  <div class="impulse-card">
+    <div class="impulse-label">✦ Tagesimpuls</div>
+    <p class="impulse-text" id="daily-impulse">„Was in dir wartet, wartet nicht auf die perfekte Zeit. Es wartet auf deine Bereitschaft."</p>
+  </div>
+
+  <!-- ── Tools ── -->
+  <div class="section-label">Deine Werkzeuge</div>
+
+  <div class="tools-category">
+    <div class="tools-category-heading">Transformation</div>
+    <div class="tool-item" onclick="openTool('blockaden')">
+      <div class="tool-item-icon" style="background:rgba(123,45,158,.15);">🔓</div>
+      <div class="tool-item-body">
+        <div class="tool-item-name">Blockaden lösen</div>
+        <div class="tool-item-desc">Multidimensionaler geführter Prozess</div>
+      </div>
+      <span class="tool-item-arrow">›</span>
+    </div>
+    <div class="tool-item" onclick="openTool('wunder')">
+      <div class="tool-item-icon" style="background:rgba(123,45,158,.1);">🪄</div>
+      <div class="tool-item-body">
+        <div class="tool-item-name">Die 4 Schritte für Wunder</div>
+        <div class="tool-item-desc">Wahrnehmen · Annehmen · Transformieren · Neu ausrichten</div>
+      </div>
+      <span class="tool-item-arrow">›</span>
     </div>
   </div>
 
-  <div class="scrollable">
-    <div class="card feeling-card">
-      <h3>Wie fühlst du dich gerade?</h3>
-      <div class="feeling-grid">
-        <button class="feeling-btn" onclick="selectFeeling(this)"><span class="emoji">😌</span><span>Ruhig</span></button>
-        <button class="feeling-btn" onclick="selectFeeling(this)"><span class="emoji">😔</span><span>Schwer</span></button>
-        <button class="feeling-btn" onclick="selectFeeling(this)"><span class="emoji">😤</span><span>Angespannt</span></button>
-        <button class="feeling-btn" onclick="selectFeeling(this)"><span class="emoji">😢</span><span>Traurig</span></button>
-        <button class="feeling-btn" onclick="selectFeeling(this)"><span class="emoji">😟</span><span>Ängstlich</span></button>
-        <button class="feeling-btn" onclick="selectFeeling(this)"><span class="emoji">😊</span><span>Offen</span></button>
-        <button class="feeling-btn" onclick="selectFeeling(this)"><span class="emoji">🌀</span><span>Unruhig</span></button>
-        <button class="feeling-btn" onclick="selectFeeling(this)"><span class="emoji">✨</span><span>Klar</span></button>
+  <div class="tools-category">
+    <div class="tools-category-heading">Intuition & Körper</div>
+    <div class="tool-item" onclick="openTool('koerper')">
+      <div class="tool-item-icon" style="background:rgba(196,37,122,.1);">🫀</div>
+      <div class="tool-item-body">
+        <div class="tool-item-name">Körperkommunikation</div>
+        <div class="tool-item-desc">Fragen an den Körper – intuitive Antworten</div>
       </div>
+      <span class="tool-item-arrow">›</span>
     </div>
-
-    <div style="margin-bottom:10px;">
-      <div style="font-family:var(--display);font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--turquoise);margin-bottom:12px;">Schnellzugriff</div>
-      <div class="quick-grid">
-        <div class="quick-card violet" onclick="openTool('blockaden')">
-          <span class="q-icon">🔓</span>
-          <span class="q-title">Blockaden lösen</span>
-          <span class="q-sub">Geführter Prozess</span>
-        </div>
-        <div class="quick-card magenta" onclick="openTool('koerper')">
-          <span class="q-icon">🫀</span>
-          <span class="q-title">Körper fragen</span>
-          <span class="q-sub">Intuitive Antworten</span>
-        </div>
-        <div class="quick-card gold" onclick="openTool('wunsch')">
-          <span class="q-icon">📖</span>
-          <span class="q-title">Wunschbuch</span>
-          <span class="q-sub">Manifestation</span>
-        </div>
-        <div class="quick-card teal" onclick="openTool('schutz')">
-          <span class="q-icon">🛡️</span>
-          <span class="q-title">Back to Sender</span>
-          <span class="q-sub">Energieschutz</span>
-        </div>
+    <div class="tool-item" onclick="openTool('fragen')">
+      <div class="tool-item-icon" style="background:rgba(212,168,32,.08);">🖊️</div>
+      <div class="tool-item-body">
+        <div class="tool-item-name">Lösungsorientierte Fragen</div>
+        <div class="tool-item-desc">Perspektivwechsel durch kraftvolle Impulse</div>
       </div>
-    </div>
-
-    <div class="card" style="display:flex;align-items:center;gap:16px;">
-      <div style="font-size:1.8rem;">🔥</div>
-      <div>
-        <div style="font-family:var(--display);font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--turquoise);">Deine Streak</div>
-        <div style="font-family:var(--display);font-size:.92rem;font-weight:500;margin-top:4px;color:var(--cream);">3 Tage in Folge <span style="color:var(--gold)">✦</span></div>
-        <div style="font-size:.75rem;color:var(--cream-muted);margin-top:3px;font-weight:300;">Weiter so – du bist auf dem richtigen Weg</div>
-      </div>
+      <span class="tool-item-arrow">›</span>
     </div>
   </div>
-</div>
 
-<!-- ══════════ TOOLS ══════════ -->
-<div id="tools-screen" class="screen">
-  <div class="page-header" style="padding-bottom:16px;">
-    <div class="greeting">Deine Werkzeuge</div>
-    <h1>Toolbox</h1>
-  </div>
-  <div class="tools-list">
-    <div class="tools-category">
-      <h3>Transformation</h3>
-      <div class="tool-item" onclick="openTool('blockaden')">
-        <div class="tool-item-icon" style="background:rgba(123,45,158,.15);">🔓</div>
-        <div class="tool-item-body">
-          <div class="tool-item-name">Blockaden lösen</div>
-          <div class="tool-item-desc">Multidimensionaler geführter Prozess</div>
-        </div>
-        <span class="tool-item-badge" style="background:rgba(68,214,214,.1);color:var(--turquoise);">Pro</span>
-        <span class="tool-item-arrow">›</span>
+  <div class="tools-category">
+    <div class="tools-category-heading">Energie & Schutz</div>
+    <div class="tool-item" onclick="openTool('schutz')">
+      <div class="tool-item-icon" style="background:rgba(68,214,214,.08);">🛡️</div>
+      <div class="tool-item-body">
+        <div class="tool-item-name">Back to Sender</div>
+        <div class="tool-item-desc">Fremde Energien erkennen & zurückgeben</div>
       </div>
-      <div class="tool-item" onclick="openTool('wunder')">
-        <div class="tool-item-icon" style="background:rgba(123,45,158,.1);">🪄</div>
-        <div class="tool-item-body">
-          <div class="tool-item-name">Die 4 Schritte für Wunder</div>
-          <div class="tool-item-desc">Wahrnehmen · Annehmen · Transformieren · Neu ausrichten</div>
-        </div>
-        <span class="tool-item-arrow">›</span>
-      </div>
+      <span class="tool-item-arrow">›</span>
     </div>
-    <div class="tools-category">
-      <h3>Intuition & Körper</h3>
-      <div class="tool-item" onclick="openTool('koerper')">
-        <div class="tool-item-icon" style="background:rgba(196,37,122,.1);">🫀</div>
-        <div class="tool-item-body">
-          <div class="tool-item-name">Körperkommunikation</div>
-          <div class="tool-item-desc">Fragen an den Körper – intuitive Antworten</div>
-        </div>
-        <span class="tool-item-arrow">›</span>
+    <div class="tool-item" onclick="openTool('felder')">
+      <div class="tool-item-icon" style="background:rgba(68,214,214,.08);">🌀</div>
+      <div class="tool-item-body">
+        <div class="tool-item-name">Energiefelder anlegen</div>
+        <div class="tool-item-desc">Schutz-, Heil- und Manifestationsfelder</div>
       </div>
-      <div class="tool-item" onclick="openTool('fragen')">
-        <div class="tool-item-icon" style="background:rgba(212,168,32,.08);">🖊️</div>
-        <div class="tool-item-body">
-          <div class="tool-item-name">Lösungsorientierte Fragen</div>
-          <div class="tool-item-desc">Perspektivwechsel durch kraftvolle Impulse</div>
-        </div>
-        <span class="tool-item-arrow">›</span>
-      </div>
-    </div>
-    <div class="tools-category">
-      <h3>Energie & Schutz</h3>
-      <div class="tool-item" onclick="openTool('schutz')">
-        <div class="tool-item-icon" style="background:rgba(68,214,214,.08);">🛡️</div>
-        <div class="tool-item-body">
-          <div class="tool-item-name">Back to Sender</div>
-          <div class="tool-item-desc">Fremde Energien erkennen & zurückgeben</div>
-        </div>
-        <span class="tool-item-arrow">›</span>
-      </div>
-      <div class="tool-item" onclick="openTool('felder')">
-        <div class="tool-item-icon" style="background:rgba(68,214,214,.08);">🌀</div>
-        <div class="tool-item-body">
-          <div class="tool-item-name">Energiefelder anlegen</div>
-          <div class="tool-item-desc">Schutz-, Heil- und Manifestationsfelder</div>
-        </div>
-        <span class="tool-item-badge" style="background:rgba(68,214,214,.1);color:var(--turquoise);">Pro</span>
-        <span class="tool-item-arrow">›</span>
-      </div>
-    </div>
-    <div class="tools-category">
-      <h3>Manifestation</h3>
-      <div class="tool-item" onclick="openTool('wunsch')">
-        <div class="tool-item-icon" style="background:rgba(212,168,32,.08);">📖</div>
-        <div class="tool-item-body">
-          <div class="tool-item-name">Wunschbucharbeit</div>
-          <div class="tool-item-desc">Wünsche formulieren & Frequenz aktivieren</div>
-        </div>
-        <span class="tool-item-arrow">›</span>
-      </div>
-      <div class="tool-item" onclick="openTool('strich')">
-        <div class="tool-item-icon" style="background:rgba(196,37,122,.08);">👤</div>
-        <div class="tool-item-body">
-          <div class="tool-item-name">Strichmännchentechnik</div>
-          <div class="tool-item-desc">Energetische Verbindungen zu Personen</div>
-        </div>
-        <span class="tool-item-badge" style="background:rgba(68,214,214,.1);color:var(--turquoise);">Pro</span>
-        <span class="tool-item-arrow">›</span>
-      </div>
+      <span class="tool-item-arrow">›</span>
     </div>
   </div>
-</div>
 
-<!-- ══════════ JOURNAL ══════════ -->
-<div id="journal" class="screen">
-  <div class="page-header">
-    <div class="greeting">Deine Erkenntnisse</div>
-    <h1>Journal</h1>
-  </div>
-  <div class="scrollable">
-    <div class="journal-stats">
-      <div class="stat-box"><div class="stat-num" id="stat-sessions">0</div><div class="stat-label">Sessions</div></div>
-      <div class="stat-box"><div class="stat-num" id="stat-days">3</div><div class="stat-label">Tage aktiv</div></div>
-      <div class="stat-box"><div class="stat-num" id="stat-tools">0</div><div class="stat-label">Tools</div></div>
+  <div class="tools-category">
+    <div class="tools-category-heading">Manifestation</div>
+    <div class="tool-item" onclick="openTool('wunsch')">
+      <div class="tool-item-icon" style="background:rgba(212,168,32,.08);">📖</div>
+      <div class="tool-item-body">
+        <div class="tool-item-name">Wunschbucharbeit</div>
+        <div class="tool-item-desc">Wünsche formulieren & Frequenz aktivieren</div>
+      </div>
+      <span class="tool-item-arrow">›</span>
     </div>
-    <!-- Buchempfehlung -->
-    <div class="book-card">
-      <div class="book-card-inner">
-        <div class="book-cover">
-          <div class="book-cover-text">Your<br/>positive<br/>Victory</div>
-        </div>
-        <div class="book-info">
-          <div class="book-tag">✦ Von Yvonne Stark</div>
-          <div class="book-title">Your positive Victory –<br/>Dein Erfolgstagebuch</div>
-          <div class="book-author">von Yvonne Stark · Taschenbuch</div>
-          <div class="book-stars">★★★★★</div>
-          <div class="book-desc">Dein täglicher Erfolgsbooster – inspiriert, energetisch zu wachsen, Dankbarkeit zu spüren und Deine Erfolge bewusst zu feiern.</div>
-          <div class="book-features">
-            <span class="book-feature">Wunschenergie</span>
-            <span class="book-feature">Wertschätzung</span>
-            <span class="book-feature">Dankbarkeit</span>
-            <span class="book-feature">Erfolge</span>
-          </div>
-        </div>
+    <div class="tool-item" onclick="openTool('strich')">
+      <div class="tool-item-icon" style="background:rgba(196,37,122,.08);">👤</div>
+      <div class="tool-item-body">
+        <div class="tool-item-name">Strichmännchentechnik</div>
+        <div class="tool-item-desc">Energetische Verbindungen zu Personen</div>
       </div>
-      <div class="book-footer">
-        <div>
-          <div class="book-price">16,68 €</div>
-          <div class="book-price-sub">auf Amazon.de</div>
-        </div>
-        <a href="https://amzn.eu/d/090lTFzq" target="_blank" class="btn-amazon">
-          📖 Jetzt kaufen
-        </a>
-      </div>
-    </div>
-
-    <div style="font-family:var(--display);font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--turquoise);margin:24px 0 12px;">Deine Einträge</div>
-    <div id="journal-entries">
-      <div class="journal-empty">
-        <div class="icon">📖</div>
-        <p>Dein Journal ist noch leer.<br />Starte dein erstes Tool und<br />halte deine Erkenntnisse fest.</p>
-      </div>
+      <span class="tool-item-arrow">›</span>
     </div>
   </div>
-</div>
 
-<!-- ══════════ PROFIL ══════════ -->
-<div id="profil" class="screen">
-  <div class="profile-avatar">🌸</div>
-  <div class="profile-name" id="profile-name">Herzlich willkommen</div>
-  <div style="text-align:center;margin-top:6px;font-size:.75rem;color:var(--cream-muted);font-weight:300;" id="profile-email"></div>
-  <div class="profile-plan"><span>✦ Energetic Pro</span></div>
-  <div class="scrollable" style="margin-top:20px;">
-    <div class="profile-menu">
-      <div class="profile-menu-item"><div class="pmi-icon">✨</div><span class="pmi-label">Mein Abo</span><span class="pmi-arrow">›</span></div>
-      <div class="profile-menu-item"><div class="pmi-icon">🔔</div><span class="pmi-label">Erinnerungen</span><span class="pmi-arrow">›</span></div>
-      <div class="profile-menu-item"><div class="pmi-icon">🎨</div><span class="pmi-label">Erscheinungsbild</span><span class="pmi-arrow">›</span></div>
-      <div class="profile-menu-item"><div class="pmi-icon">🔒</div><span class="pmi-label">Datenschutz</span><span class="pmi-arrow">›</span></div>
-      <div class="profile-menu-item"><div class="pmi-icon">❓</div><span class="pmi-label">Hilfe & Support</span><span class="pmi-arrow">›</span></div>
-      <div class="profile-menu-item" onclick="handleLogout()" style="border-top:1px solid rgba(196,37,122,.12);margin-top:8px;">
-        <div class="pmi-icon" style="background:rgba(196,37,122,.1);">🚪</div>
-        <span class="pmi-label" style="color:#F0A0C0;">Abmelden</span>
-        <span class="pmi-arrow">›</span>
-      </div>
-    </div>
-    <div style="text-align:center;padding:24px 0;color:var(--cream-muted);font-size:.75rem;font-weight:300;">Version 1.0.0 · Energetic Toolbox · Sonisanantes</div>
-  </div>
-</div>
+  <!-- ── Klang & Meditation ── -->
+  <div class="section-label">🎵 Klang & Meditation</div>
+  <div class="media-section">
 
-<!-- ══════════ KLÄNGE ══════════ -->
-<div id="klaenge" class="screen">
-  <div class="page-header">
-    <div class="greeting">Von Yvonne Stark</div>
-    <h1>Klang & Meditation</h1>
-  </div>
-  <div class="scrollable">
-
-    <div class="klaenge-category-label">🌊 Geführte Meditationen</div>
+    <div class="media-category-label">🌊 Geführte Meditationen</div>
 
     <div class="media-card" onclick="openPlayer('traenen')">
       <div class="media-card-thumb meditation">
@@ -1282,7 +579,7 @@
       </div>
     </div>
 
-    <div class="klaenge-category-label">✧ Frequenzreisen</div>
+    <div class="media-category-label">✧ Frequenzreisen</div>
 
     <div class="media-card" onclick="openPlayer('urklang')">
       <div class="media-card-thumb frequenz">
@@ -1297,8 +594,9 @@
       </div>
     </div>
 
-  </div>
-</div>
+  </div><!-- /media-section -->
+
+</main>
 
 <!-- ══════════ MEDIA PLAYER MODAL ══════════ -->
 <div class="player-modal" id="player-modal">
@@ -1306,37 +604,10 @@
     <button class="modal-back" onclick="closePlayer()">←</button>
     <div class="modal-title" id="player-modal-title">Meditation</div>
   </div>
-  <div class="player-body" id="player-body">
-    <!-- wird per JS befüllt -->
-  </div>
+  <div class="player-body" id="player-body"></div>
 </div>
 
-<!-- ══════════ BOTTOM NAV ══════════ -->
-<nav class="bottom-nav">
-  <button class="nav-item active" onclick="showScreen('home',this)">
-    <span class="nav-icon">🏠</span>
-    <span class="nav-label">Home</span>
-  </button>
-  <button class="nav-item" onclick="showScreen('tools-screen',this)">
-    <span class="nav-icon">🧰</span>
-    <span class="nav-label">Tools</span>
-  </button>
-  <button class="nav-item" onclick="showScreen('journal',this)">
-    <span class="nav-icon">📖</span>
-    <span class="nav-label">Journal</span>
-  </button>
-  <button class="nav-item" onclick="showScreen('klaenge',this)">
-    <span class="nav-icon">🎵</span>
-    <span class="nav-label">Klänge</span>
-  </button>
-  <button class="nav-item" onclick="showScreen('profil',this)">
-    <span class="nav-icon">🌸</span>
-    <span class="nav-label">Profil</span>
-  </button>
-</nav>
-
-<!-- ══════════ TOOL MODAL: BLOCKADEN LÖSEN ══════════ -->
-<!-- ══════════ KÖRPERKOMMUNIKATION MODAL ══════════ -->
+<!-- ══════════ TOOL MODAL: KÖRPERKOMMUNIKATION ══════════ -->
 <div class="tool-modal" id="modal-koerper">
   <div class="tool-modal-header">
     <button class="modal-back" onclick="closeModal('modal-koerper')">←</button>
@@ -1345,7 +616,6 @@
   </div>
   <div class="tool-modal-body" style="overflow-y:auto;padding:20px 16px 100px;">
 
-    <!-- INTRO -->
     <div style="text-align:center;margin-bottom:28px;">
       <div style="font-size:2.5rem;margin-bottom:12px;">🫀</div>
       <h2 style="font-family:var(--display);font-size:1.3rem;color:var(--cream);margin-bottom:10px;">Was ist Körperkommunikation?</h2>
@@ -1357,7 +627,6 @@
       </p>
     </div>
 
-    <!-- WAS IST ES -->
     <div style="background:rgba(123,45,158,.08);border:1px solid rgba(123,45,158,.2);border-radius:18px;padding:20px;margin-bottom:16px;">
       <div style="font-family:var(--display);font-size:.65rem;letter-spacing:2px;color:var(--turquoise);margin-bottom:14px;">WAS IST ES</div>
       <div style="display:flex;flex-direction:column;gap:12px;">
@@ -1385,7 +654,6 @@
       </div>
     </div>
 
-    <!-- WIE GEHT ES -->
     <div style="background:rgba(212,168,32,.06);border:1px solid rgba(212,168,32,.15);border-radius:18px;padding:20px;margin-bottom:16px;">
       <div style="font-family:var(--display);font-size:.65rem;letter-spacing:2px;color:var(--gold);margin-bottom:14px;">SO GEHT ES</div>
       <p style="font-size:.85rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.7;margin-bottom:16px;">
@@ -1411,7 +679,6 @@
       </div>
     </div>
 
-    <!-- MÖGLICHKEITEN / METHODEN -->
     <div style="background:rgba(68,214,214,.05);border:1px solid rgba(68,214,214,.15);border-radius:18px;padding:20px;margin-bottom:16px;">
       <div style="font-family:var(--display);font-size:.65rem;letter-spacing:2px;color:var(--turquoise);margin-bottom:14px;">TESTMETHODEN</div>
       <div style="display:flex;flex-direction:column;gap:14px;">
@@ -1476,46 +743,31 @@
       </div>
     </div>
 
-    <!-- TIPPS -->
     <div style="background:rgba(63,184,155,.05);border:1px solid rgba(63,184,155,.15);border-radius:18px;padding:20px;">
       <div style="font-family:var(--display);font-size:.65rem;letter-spacing:2px;color:var(--emerald);margin-bottom:14px;">WICHTIGE HINWEISE</div>
       <div style="display:flex;flex-direction:column;gap:8px;">
-        <div style="display:flex;gap:10px;align-items:flex-start;">
-          <span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span>
-          <span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Übe täglich – auch mit kleinen Fragen (Lebensmittel, Entscheidungen).</span>
-        </div>
-        <div style="display:flex;gap:10px;align-items:flex-start;">
-          <span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span>
-          <span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Teste nie unter Stress, Druck oder mit starkem Erwartungswunsch.</span>
-        </div>
-        <div style="display:flex;gap:10px;align-items:flex-start;">
-          <span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span>
-          <span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Starte mit Fragen, deren Antwort du kennst – um deinen Körper-Code zu kalibrieren.</span>
-        </div>
-        <div style="display:flex;gap:10px;align-items:flex-start;">
-          <span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span>
-          <span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Energetische Blockaden können das Testergebnis beeinflussen – löse sie zuerst.</span>
-        </div>
-        <div style="display:flex;gap:10px;align-items:flex-start;">
-          <span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span>
-          <span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Vertraue dem ersten Impuls. Der Verstand redet danach oft dazwischen.</span>
-        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span><span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Übe täglich – auch mit kleinen Fragen (Lebensmittel, Entscheidungen).</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span><span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Teste nie unter Stress, Druck oder mit starkem Erwartungswunsch.</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span><span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Starte mit Fragen, deren Antwort du kennst – um deinen Körper-Code zu kalibrieren.</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span><span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Energetische Blockaden können das Testergebnis beeinflussen – löse sie zuerst.</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span><span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Vertraue dem ersten Impuls. Der Verstand redet danach oft dazwischen.</span></div>
       </div>
     </div>
 
   </div>
 </div>
 
+<!-- ══════════ TOOL MODAL: BLOCKADEN LÖSEN ══════════ -->
 <div class="tool-modal" id="modal-blockaden">
   <div class="tool-modal-header">
     <button class="modal-back" onclick="closeTool('blockaden')">←</button>
     <div>
       <div class="modal-title">Blockaden lösen</div>
     </div>
-    <div class="modal-step-indicator" id="bl-step-ind">Schritt 1 von 9</div>
+    <div class="modal-step-indicator" id="bl-step-ind">Schritt 1 von 7</div>
   </div>
   <div class="progress-bar-wrap">
-    <div class="progress-bar" id="bl-progress" style="width:11%"></div>
+    <div class="progress-bar" id="bl-progress" style="width:14%"></div>
   </div>
   <div class="tool-modal-body" id="bl-body"></div>
   <div class="modal-footer">
@@ -1572,32 +824,16 @@
 // ─── INIT: Name aus URL-Param (von WordPress übergeben) ───
 window.addEventListener('DOMContentLoaded', () => {
   const p = new URLSearchParams(window.location.search);
-  const name  = p.get('name')  || '';
-  const email = p.get('email') || '';
-  document.getElementById('profile-name').textContent  = name  || 'Herzlich willkommen';
-  document.getElementById('profile-email').textContent = email;
-  const greet = name ? `Hallo, ${name.split(' ')[0]} ✦` : 'Guten Morgen ✦';
-  document.querySelector('.home-greeting').textContent = greet;
+  const name = p.get('name') || '';
+  if (name) {
+    const bar = document.getElementById('greeting-bar');
+    if (bar) { bar.textContent = `Hallo, ${name.split(' ')[0]} ✦`; bar.style.display = ''; }
+  }
 });
 
 function handleLogout() {
-  // Elternfenster (WordPress) zur Abmeldeseite schicken
   const target = window.parent !== window ? window.parent : window;
   target.location.href = '/wp-login.php?action=logout&_wpnonce=' + (window._wpLogoutNonce || '');
-}
-
-// ─── NAVIGATION ───
-function showScreen(id, btn) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
-}
-
-// ─── FEELING ───
-function selectFeeling(btn) {
-  document.querySelectorAll('.feeling-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
 }
 
 // ─── TAGESIMPULSE ───
@@ -1613,11 +849,11 @@ document.getElementById('daily-impulse').textContent = impulses[new Date().getDa
 
 // ─── OPEN / CLOSE TOOLS ───
 const comingSoon = {
-  wunsch:  { name: 'Wunschbucharbeit',    icon: '📖', desc: 'Formuliere deine Wünsche und aktiviere die energetische Frequenz der Manifestation.' },
-  schutz:  { name: 'Back to Sender',      icon: '🛡️', desc: 'Erkenne und gib fremde Energien liebevoll zurück – für mehr Schutz und Klarheit.' },
-  felder:  { name: 'Energiefelder anlegen', icon: '🌀', desc: 'Erschaffe kraftvolle Schutz- und Heilfelder für dich und andere.' },
-  fragen:  { name: 'Lösungsorientierte Fragen', icon: '🖊️', desc: 'Öffne neue Perspektiven durch kraftvolle innere Fragen.' },
-  wunder:  { name: 'Die 4 Schritte für Wunder', icon: '🪄', desc: 'Ein vollständiger Prozess: Wahrnehmen · Annehmen · Transformieren · Neu ausrichten.' },
+  wunsch:  { name: 'Wunschbucharbeit',           icon: '📖', desc: 'Formuliere deine Wünsche und aktiviere die energetische Frequenz der Manifestation.' },
+  schutz:  { name: 'Back to Sender',             icon: '🛡️', desc: 'Erkenne und gib fremde Energien liebevoll zurück – für mehr Schutz und Klarheit.' },
+  felder:  { name: 'Energiefelder anlegen',       icon: '🌀', desc: 'Erschaffe kraftvolle Schutz- und Heilfelder für dich und andere.' },
+  fragen:  { name: 'Lösungsorientierte Fragen',  icon: '🖊️', desc: 'Öffne neue Perspektiven durch kraftvolle innere Fragen.' },
+  wunder:  { name: 'Die 4 Schritte für Wunder',  icon: '🪄', desc: 'Ein vollständiger Prozess: Wahrnehmen · Annehmen · Transformieren · Neu ausrichten.' },
 };
 
 function openTool(id) {
@@ -1635,16 +871,16 @@ function openTool(id) {
   } else if (comingSoon[id]) {
     const d = comingSoon[id];
     document.getElementById('soon-title').textContent = d.name;
-    document.getElementById('soon-icon').textContent = d.icon;
-    document.getElementById('soon-name').textContent = d.name;
-    document.getElementById('soon-desc').textContent = d.desc;
+    document.getElementById('soon-icon').textContent  = d.icon;
+    document.getElementById('soon-name').textContent  = d.name;
+    document.getElementById('soon-desc').textContent  = d.desc;
     document.getElementById('modal-soon').classList.add('open');
   }
 }
 function closeTool(id)  { document.getElementById('modal-' + id).classList.remove('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-// ─── BLOCKADEN KOMPASS – Yvonnes echte Methode ───
+// ─── BLOCKADEN KOMPASS ───
 const BL_THEMES = {
   1:"Angst / Starre", 2:"Trauer / Verlust", 3:"Frustration / Unzufriedenheit",
   4:"Ärger / Wut", 5:"Unsicherheit / Zweifel", 6:"Scham / Schuld",
@@ -1716,8 +952,7 @@ const blSteps = [
           <button onclick="blChooseNum(${n})" style="
             padding:16px 8px;border-radius:14px;border:1px solid ${blData.num===n?'rgba(212,168,32,.5)':'rgba(212,168,32,.1)'};
             background:${blData.num===n?'rgba(123,45,158,.2)':'rgba(5,6,8,.4)'};
-            font-family:var(--display);font-size:1.1rem;color:var(--cream);cursor:pointer;
-            transition:.2s;">
+            font-family:var(--display);font-size:1.1rem;color:var(--cream);cursor:pointer;transition:.2s;">
             ${n}
           </button>`).join('')}
       </div>
@@ -1733,13 +968,12 @@ const blSteps = [
       <div class="step-icon-large">📋</div>
       <h2 class="step-title">Teste: Spalte A, B oder C?</h2>
       <p class="step-desc">Frage deinen Körper: <em style="font-family:var(--serif);">„Ist es Spalte A, B oder C?"</em></p>
-      <div class="pillrow" style="margin-top:16px;gap:12px;">
+      <div style="display:flex;gap:12px;margin-top:16px;">
         ${['A','B','C'].map(c => `
           <button onclick="blChooseCol('${c}')" style="
             flex:1;padding:20px;border-radius:50px;border:1px solid ${blData.col===c?'rgba(212,168,32,.5)':'rgba(212,168,32,.1)'};
             background:${blData.col===c?'linear-gradient(135deg,var(--violet),var(--magenta))':'rgba(5,6,8,.4)'};
-            font-family:var(--display);font-size:1.3rem;color:var(--cream);cursor:pointer;letter-spacing:2px;
-            transition:.2s;">${c}</button>`).join('')}
+            font-family:var(--display);font-size:1.3rem;color:var(--cream);cursor:pointer;letter-spacing:2px;transition:.2s;">${c}</button>`).join('')}
       </div>
       ${blData.col ? `<div style="margin-top:16px;padding:10px 16px;background:rgba(212,168,32,.06);border:1px solid rgba(212,168,32,.15);border-radius:12px;text-align:center;">
         <div style="font-family:var(--display);font-size:.62rem;letter-spacing:1.5px;color:var(--turquoise);">SPALTE ${blData.col} GEWÄHLT ✦</div>
@@ -1789,14 +1023,14 @@ const blSteps = [
     </div>`;
   },
 
-  // 6 – ABSCHLUSS + JOURNAL
+  // 6 – ABSCHLUSS
   () => `
     <div class="step-content" style="text-align:center;">
       <div class="completion-glow">✓</div>
       <h2 class="step-title">Danke, dass du dir Zeit für dich genommen hast.</h2>
       <p class="step-desc" style="text-align:center;font-family:var(--serif);font-style:italic;">Ich danke mir, dass ich mir diese Zeit für mich genommen habe.</p>
       <div class="card" style="text-align:left;margin-top:20px;">
-        <div style="font-family:var(--display);font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--turquoise);margin-bottom:10px;">Erkenntnis für dein Journal</div>
+        <div style="font-family:var(--display);font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--turquoise);margin-bottom:10px;">Erkenntnis festhalten</div>
         <textarea class="step-input" id="bl-journal-text" rows="4" placeholder="Was hat sich gezeigt? Was darf du mitnehmen?"></textarea>
       </div>
     </div>`,
@@ -1814,19 +1048,16 @@ function blRender() {
   document.getElementById('bl-progress').style.width = pct + '%';
   document.getElementById('bl-step-ind').textContent = `Schritt ${blStep + 1} von ${BL_TOTAL}`;
   const isLast = blStep === BL_TOTAL - 1;
-  document.getElementById('bl-next').textContent = blStep === 0 ? 'Ich bin bereit ✦' : isLast ? 'Im Journal speichern ✦' : 'Weiter';
+  document.getElementById('bl-next').textContent = blStep === 0 ? 'Ich bin bereit ✦' : isLast ? 'Abschließen ✦' : 'Weiter';
   document.getElementById('bl-skip').style.display = (blStep === 0 || isLast) ? 'none' : 'block';
 }
 
 function blNext() {
   if (blStep === BL_TOTAL - 1) {
-    blData.journalText = document.getElementById('bl-journal-text')?.value;
-    saveJournalEntry();
     closeModal('modal-blockaden');
-    showToast('Im Journal gespeichert ✦');
+    showToast('Prozess abgeschlossen ✦');
     return;
   }
-  // Validierung: Auswahl nötig?
   if (blStep === 1 && !blData.pos)  { showToast('Bitte OBEN oder UNTEN wählen'); return; }
   if (blStep === 2 && !blData.num)  { showToast('Bitte eine Zahl testen'); return; }
   if (blStep === 3 && !blData.col)  { showToast('Bitte Spalte A, B oder C testen'); return; }
@@ -1839,131 +1070,47 @@ function blSkip() {
   if (blStep < BL_TOTAL - 1) { blStep++; blRender(); }
 }
 
-function blChoosePos(pos) {
-  blData.pos = pos;
-  blData.num = null; blData.col = null; blData.idx = null;
-  blRender();
-}
-function blChooseNum(n) {
-  blData.num = n;
-  blData.col = null; blData.idx = null;
-  blRender();
-}
-function blChooseCol(col) {
-  blData.col = col;
-  blData.idx = null;
-  blRender();
-}
-function blChooseIndex(i) {
-  blData.idx = i;
-  blRender();
-}
-
-// ─── JOURNAL ───
-let journalEntries = [];
-let sessionCount = 0;
-let uniqueTools = new Set();
-
-function saveJournalEntry() {
-  sessionCount++;
-  uniqueTools.add('blockaden');
-  const entry = {
-    tool: 'Blockaden lösen',
-    date: new Date().toLocaleDateString('de-DE', {day:'2-digit', month:'short', year:'numeric'}),
-    text: blData.journalText || blData.erkenntnis || 'Prozess abgeschlossen.',
-    before: blData.intensitaet || 5,
-    after: parseInt(blData.afterInt) || 5,
-  };
-  journalEntries.unshift(entry);
-  renderJournal();
-}
-
-function renderJournal() {
-  document.getElementById('stat-sessions').textContent = sessionCount;
-  document.getElementById('stat-tools').textContent = uniqueTools.size;
-  const container = document.getElementById('journal-entries');
-  if (journalEntries.length === 0) return;
-  container.innerHTML = journalEntries.map(e => {
-    const diff = e.before - e.after;
-    const badge = diff > 0
-      ? `<span class="je-badge">↓ Intensität von ${e.before} auf ${e.after} gesunken</span>`
-      : `<span class="je-badge" style="color:var(--cream-muted)">Prozess läuft weiter nach</span>`;
-    return `
-      <div class="journal-entry">
-        <div class="je-header">
-          <span class="je-tool">${e.tool}</span>
-          <span class="je-date">${e.date}</span>
-        </div>
-        <p class="je-text">${e.text || 'Kein Eintrag hinterlassen.'}</p>
-        ${badge}
-      </div>`;
-  }).join('');
-}
+function blChoosePos(pos) { blData.pos = pos; blData.num = null; blData.col = null; blData.idx = null; blRender(); }
+function blChooseNum(n)   { blData.num = n; blData.col = null; blData.idx = null; blRender(); }
+function blChooseCol(col) { blData.col = col; blData.idx = null; blRender(); }
+function blChooseIndex(i) { blData.idx = i; blRender(); }
 
 // ─── MEDIA PLAYER ───
 const mediaItems = {
   traenen: {
     title: 'Wenn Tränen Heilen',
     subtitle: 'Eine einfühlsame Reise durch den Schmerz – hin zu tiefer Heilung und innerem Frieden.',
-    type: 'video',
-    src: 'media/wenn-traenen-heilen.mp4',
-    hz: [],
+    type: 'video', src: 'media/wenn-traenen-heilen.mp4', hz: [],
   },
   vollmond: {
     title: 'Vollmond – Loslassen, Aufladen & Fülle empfangen',
     subtitle: 'Die Kraft des Vollmonds nutzen: loslassen, was nicht mehr dient, und Fülle einladen.',
-    type: 'video',
-    src: 'media/vollmond-meditation.mp4',
-    hz: [],
+    type: 'video', src: 'media/vollmond-meditation.mp4', hz: [],
   },
   urklang: {
     title: 'Urklang des Herzens',
     subtitle: 'Heilende Herzfrequenzen für tiefe Verbindung, Mitgefühl und innere Harmonie.',
-    type: 'audio',
-    src: 'media/urklang-des-herzens.mp3',
-    hz: ['432 Hz', '639 Hz'],
-    icon: '💛',
+    type: 'audio', src: 'media/urklang-des-herzens.mp3', hz: ['432 Hz', '639 Hz'], icon: '💛',
   },
 };
 
 function openPlayer(id) {
   const item = mediaItems[id];
   document.getElementById('player-modal-title').textContent = item.title;
-
   let mediaHtml = '';
   if (item.type === 'video') {
-    mediaHtml = `
-      <div class="video-wrap">
-        <video controls playsinline preload="metadata">
-          <source src="${item.src}" type="video/mp4" />
-        </video>
-      </div>`;
+    mediaHtml = `<div class="video-wrap"><video controls playsinline preload="metadata"><source src="${item.src}" type="video/mp4" /></video></div>`;
   } else {
-    mediaHtml = `
-      <div class="audio-visual">${item.icon || '🎵'}</div>
-      <div class="audio-wrap">
-        <audio controls preload="metadata">
-          <source src="${item.src}" type="audio/mpeg" />
-        </audio>
-      </div>`;
+    mediaHtml = `<div class="audio-visual">${item.icon || '🎵'}</div><div class="audio-wrap"><audio controls preload="metadata"><source src="${item.src}" type="audio/mpeg" /></audio></div>`;
   }
-
   const hzHtml = item.hz.length
     ? `<div class="player-hz-badges">${item.hz.map(h => `<span class="hz-badge">✧ ${h}</span>`).join('')}</div>`
     : '';
-
-  document.getElementById('player-body').innerHTML = `
-    ${mediaHtml}
-    <div class="player-title">${item.title}</div>
-    <div class="player-subtitle">${item.subtitle}</div>
-    ${hzHtml}
-  `;
-
+  document.getElementById('player-body').innerHTML = `${mediaHtml}<div class="player-title">${item.title}</div><div class="player-subtitle">${item.subtitle}</div>${hzHtml}`;
   document.getElementById('player-modal').classList.add('open');
 }
 
 function closePlayer() {
-  // Medien stoppen bevor Modal schließt
   const video = document.querySelector('#player-modal video');
   const audio = document.querySelector('#player-modal audio');
   if (video) video.pause();
@@ -2095,7 +1242,7 @@ function smDrawConnLine(c1,c2,idx,alpha,isCut,cutProg) {
   smCtx.strokeStyle=grad; smCtx.lineWidth=2; smCtx.lineCap='round'; smCtx.shadowColor=SM_CHAKRA_COLORS[idx]; smCtx.shadowBlur=7;
   if(!isCut){
     smCtx.beginPath(); smCtx.moveTo(x1,y1); smCtx.lineTo(x2,y2); smCtx.stroke();
-  }else{
+  } else {
     const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy),nx=dx/len,ny=dy/len,midX=(x1+x2)/2,midY=(y1+y2)/2,gap=Math.min(cutProg*28,22);
     smCtx.globalAlpha=alpha*Math.max(0,1-cutProg*.85);
     smCtx.beginPath(); smCtx.moveTo(x1,y1); smCtx.lineTo(midX-nx*gap,midY-ny*gap); smCtx.stroke();
@@ -2342,7 +1489,7 @@ function closeStrich() {
 function showToast(msg) {
   const t = document.createElement('div');
   t.textContent = msg;
-  t.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--violet);color:var(--cream);padding:12px 24px;border-radius:50px;font-family:var(--display);font-size:.7rem;letter-spacing:1px;z-index:999;animation:fadeUp .3s ease;white-space:nowrap;box-shadow:0 8px 24px rgba(123,45,158,.4)';
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--violet);color:var(--cream);padding:12px 24px;border-radius:50px;font-family:var(--display);font-size:.7rem;letter-spacing:1px;z-index:999;animation:fadeUp .3s ease;white-space:nowrap;box-shadow:0 8px 24px rgba(123,45,158,.4)';
   document.body.appendChild(t);
   setTimeout(() => t.remove(), 3000);
 }
