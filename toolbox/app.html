@@ -547,6 +547,66 @@
       font-family: var(--serif); font-style: italic;
       font-size: .95rem; color: rgba(255,255,255,.88); line-height: 1.8;
     }
+
+    /* ─── ENERGIEFELDER ANLEGEN ─── */
+    .efv-btn-primary {
+      display: block; width: 100%; max-width: 280px; margin: 0 auto;
+      padding: 15px 24px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(68,214,214,.18), rgba(68,214,214,.1));
+      border: 1px solid rgba(68,214,214,.32);
+      color: var(--cream); font-family: var(--display);
+      font-size: .78rem; letter-spacing: 1.5px; text-transform: uppercase;
+      cursor: pointer; transition: transform .2s;
+    }
+    .efv-btn-primary:hover { transform: scale(1.02); }
+    .efv-chip {
+      padding: 9px 18px; border-radius: 50px;
+      border: 1px solid rgba(68,214,214,.2);
+      background: rgba(68,214,214,.05); color: var(--cream-muted);
+      font-family: var(--sans); font-size: .78rem; font-weight: 300;
+      cursor: pointer; transition: all .18s; user-select: none;
+    }
+    .efv-chip.active { background: rgba(68,214,214,.16); border-color: rgba(68,214,214,.5); color: var(--cream); }
+    .efv-conn-btn {
+      padding: 9px 22px; border-radius: 50px;
+      border: 1px solid rgba(68,214,214,.22);
+      background: rgba(68,214,214,.05); color: var(--cream-muted);
+      font-family: var(--display); font-size: .8rem; letter-spacing: 1px;
+      cursor: pointer; transition: all .18s;
+    }
+    .efv-conn-btn.active { background: rgba(68,214,214,.18); border-color: rgba(68,214,214,.55); color: var(--cream); }
+    .efv-impulse-card {
+      padding: 13px 16px; border-radius: 12px;
+      border: 1px solid rgba(68,214,214,.1);
+      background: rgba(68,214,214,.04);
+      font-family: var(--sans); font-size: .84rem; font-weight: 300;
+      color: var(--cream-muted); cursor: pointer; transition: all .18s; line-height: 1.55;
+    }
+    .efv-impulse-card:hover { background: rgba(68,214,214,.1); border-color: rgba(68,214,214,.28); color: var(--cream); }
+    .efv-impulse-card.active { background: rgba(68,214,214,.16); border-color: rgba(68,214,214,.5); color: var(--cream); }
+    .efv-conn-label {
+      font-family: var(--display); font-size: .68rem; letter-spacing: 1.5px;
+      color: var(--turquoise); margin-right: 6px;
+    }
+    .efv-spontan-btn {
+      display: block; width: 100%; padding: 13px 20px; border-radius: 50px;
+      border: 1px solid rgba(185,130,255,.28);
+      background: rgba(185,130,255,.07);
+      color: rgba(185,130,255,.85); font-family: var(--display);
+      font-size: .75rem; letter-spacing: 2px; text-transform: uppercase;
+      cursor: pointer; transition: all .2s;
+    }
+    .efv-spontan-btn:hover { background: rgba(185,130,255,.15); border-color: rgba(185,130,255,.5); box-shadow: 0 0 24px rgba(185,130,255,.12); }
+    .efv-send-btn {
+      display: block; width: 100%; max-width: 280px; margin: 0 auto;
+      padding: 16px 24px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(68,214,214,.22), rgba(185,130,255,.14));
+      border: 1px solid rgba(68,214,214,.38);
+      color: var(--cream); font-family: var(--display);
+      font-size: .8rem; letter-spacing: 2.5px; text-transform: uppercase;
+      cursor: pointer; transition: transform .2s, box-shadow .2s;
+    }
+    .efv-send-btn:hover { transform: scale(1.02); box-shadow: 0 0 28px rgba(68,214,214,.18); }
   </style>
 </head>
 <body>
@@ -961,6 +1021,16 @@
   </div>
 </div>
 
+<!-- ══════════ MODAL: ENERGIEFELDER ANLEGEN ══════════ -->
+<div class="tool-modal" id="modal-felder">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="efvClose()">←</button>
+    <div class="modal-title">Energiefelder anlegen</div>
+    <div id="efv-step-indicator" style="font-family:var(--display);font-size:.58rem;color:var(--turquoise);letter-spacing:1.5px;"></div>
+  </div>
+  <div class="tool-modal-body" id="efv-body" style="overflow-y:auto;-webkit-overflow-scrolling:touch;"></div>
+</div>
+
 <!-- ══════════ MODAL: WUNSCHBUCHARBEIT ══════════ -->
 <div class="tool-modal" id="modal-wunsch">
   <div class="tool-modal-header">
@@ -1064,7 +1134,6 @@ document.getElementById('daily-impulse').textContent = impulses[new Date().getDa
 
 // ─── OPEN / CLOSE TOOLS ───
 const comingSoon = {
-  felder:  { name: 'Energiefelder anlegen',       icon: '🌀', desc: 'Erschaffe kraftvolle Schutz- und Heilfelder für dich und andere.' },
   fragen:  { name: 'Lösungsorientierte Fragen',  icon: '🖊️', desc: 'Öffne neue Perspektiven durch kraftvolle innere Fragen.' },
   wunder:  { name: 'Die 4 Schritte für Wunder',  icon: '🪄', desc: 'Ein vollständiger Prozess: Wahrnehmen · Annehmen · Transformieren · Neu ausrichten.' },
 };
@@ -1085,6 +1154,8 @@ function openTool(id) {
     btsOpen();
   } else if (id === 'wunsch') {
     wbwOpen();
+  } else if (id === 'felder') {
+    efvOpen();
   } else if (comingSoon[id]) {
     const d = comingSoon[id];
     document.getElementById('soon-title').textContent = d.name;
@@ -1704,6 +1775,303 @@ function closeStrich() {
 }
 
 // ─── TOAST ───
+// ─── ENERGIEFELDER ANLEGEN ───
+let efvStep = 0, efvAusrichtung = '', efvConnector = '', efvFormulation = '';
+
+const EFV_BEREICHE = ['Für mich selbst','Für eine Person','Für einen Raum','Für eine Situation','Für einen Prozess'];
+
+const EFV_IMPULSES = {
+  'Für mich selbst': {
+    'um':   ['…um in meiner Mitte zu bleiben','…um meine Energie zu schützen und zu stärken','…um Klarheit und innere Führung zu empfangen','…um tiefen Frieden in mir zu verankern','…um meine Schöpferkraft vollständig zu aktivieren'],
+    'dass': ['…dass ich mich leicht und frei fühle','…dass Heilung auf allen Ebenen in mir geschehen kann','…dass Blockaden sich sanft und vollständig auflösen','…dass ich meiner inneren Weisheit vertraue'],
+    'für':  ['…für mein Wohlbefinden auf allen Ebenen','…für meinen nächsten Schritt auf meinem Weg','…für tiefe Regeneration und Erneuerung'],
+  },
+  'Für eine Person': {
+    'um':   ['…um sie in ihrer Kraft zu halten','…um ihr Heilung und Unterstützung zu ermöglichen','…um sie auf ihrem Weg zu begleiten'],
+    'dass': ['…dass sie Frieden und Geborgenheit findet','…dass sie auf ihrem Weg geführt wird','…dass sie sich sicher, stark und geliebt fühlt'],
+    'für':  ['…für ihre Heilung auf allen Ebenen','…für das Beste in ihr und für sie','…für ihren Weg und ihre Entfaltung'],
+  },
+  'Für einen Raum': {
+    'um':   ['…um ihn energetisch zu reinigen und aufzuladen','…um Harmonie und Frieden in ihm zu verankern','…um ihn mit heilsamer Energie zu füllen'],
+    'dass': ['…dass er zu einem Ort der Kraft und Stille wird','…dass Heilung in diesem Raum geschehen kann','…dass alle, die ihn betreten, sich wohl und willkommen fühlen'],
+    'für':  ['…für Schutz, Geborgenheit und reine Energie','…für positive und heilsame Schwingung','…für Frieden, Klarheit und Licht'],
+  },
+  'Für eine Situation': {
+    'um':   ['…um sie in Harmonie aufzulösen','…um Klarheit und Frieden hineinzubringen','…um das Beste für alle Beteiligten zu ermöglichen'],
+    'dass': ['…dass sich das Beste für alle entfalten kann','…dass Frieden und echtes Verständnis entstehen','…dass eine Lösung sichtbar und spürbar wird'],
+    'für':  ['…für das höchste Wohl aller Beteiligten','…für eine friedvolle und klärende Auflösung','…für den bestmöglichen Ausgang auf allen Ebenen'],
+  },
+  'Für einen Prozess': {
+    'um':   ['…um ihm die richtige Energie und Führung zu geben','…um Hindernisse sanft zu lösen und den Weg zu öffnen','…um ihn mit Leichtigkeit zu begleiten'],
+    'dass': ['…dass er sich mit Leichtigkeit und Klarheit entfaltet','…dass das Richtige zur richtigen Zeit geschieht','…dass ich auf allen Ebenen geführt werde'],
+    'für':  ['…für sein Gelingen und seinen bestmöglichen Verlauf','…für Unterstützung und Führung auf allen Ebenen','…für Leichtigkeit, Klarheit und Erfolg'],
+  },
+};
+
+function efvAllImpulses() {
+  const all = [];
+  Object.values(EFV_IMPULSES).forEach(c => Object.values(c).forEach(a => a.forEach(i => all.push(i))));
+  return all;
+}
+
+function efvOpen() {
+  efvStep = 0; efvAusrichtung = ''; efvConnector = ''; efvFormulation = '';
+  document.getElementById('modal-felder').classList.add('open');
+  efvRender();
+}
+
+function efvClose() { document.getElementById('modal-felder').classList.remove('open'); }
+
+function efvNext() {
+  if (efvStep === 1 && !efvAusrichtung) { showToast('Wähle eine Ausrichtung aus.'); return; }
+  if (efvStep === 2 && !efvFormulation) { showToast('Wähle einen Impuls oder nutze den Spontan-Impuls.'); return; }
+  efvStep++;
+  efvRender();
+}
+
+function efvSelectBereich(el, val) {
+  document.querySelectorAll('.efv-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  efvAusrichtung = val;
+  efvFormulation = ''; efvConnector = '';
+}
+
+function efvSelectConnector(btn, conn) {
+  efvConnector = conn; efvFormulation = '';
+  document.querySelectorAll('.efv-conn-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  efvUpdateImpulses();
+  const sr = document.getElementById('efv-spontan-result');
+  if (sr) { sr.style.display = 'none'; }
+}
+
+function efvUpdateImpulses() {
+  const container = document.getElementById('efv-impulse-container');
+  if (!container) return;
+  container.innerHTML = '';
+  if (!efvConnector || !efvAusrichtung) return;
+  const list = (EFV_IMPULSES[efvAusrichtung] || {})[efvConnector] || [];
+  list.forEach(text => {
+    const div = document.createElement('div');
+    div.className = 'efv-impulse-card';
+    const lbl = document.createElement('span');
+    lbl.className = 'efv-conn-label';
+    lbl.textContent = efvConnector;
+    div.appendChild(lbl);
+    div.appendChild(document.createTextNode(' ' + text.replace('…','')));
+    div.addEventListener('click', () => {
+      document.querySelectorAll('.efv-impulse-card').forEach(c => c.classList.remove('active'));
+      div.classList.add('active');
+      efvFormulation = text;
+      const sr = document.getElementById('efv-spontan-result');
+      if (sr) sr.style.display = 'none';
+    });
+    container.appendChild(div);
+  });
+}
+
+function efvSpontanImpuls() {
+  const all = efvAllImpulses();
+  const pick = all[Math.floor(Math.random() * all.length)];
+  efvFormulation = pick;
+  document.querySelectorAll('.efv-impulse-card').forEach(c => c.classList.remove('active'));
+  const sr = document.getElementById('efv-spontan-result');
+  if (sr) {
+    sr.style.opacity = '0'; sr.style.display = '';
+    sr.textContent = 'Welche Energiefelder kann ich anlegen ' + pick;
+    setTimeout(() => { sr.style.opacity = '1'; }, 30);
+  }
+}
+
+function efvRender() {
+  const body = document.getElementById('efv-body');
+  const ind  = document.getElementById('efv-step-indicator');
+  body.scrollTop = 0;
+
+  if (efvStep === 0) {
+    ind.textContent = '';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:44px 24px 36px;text-align:center;">
+        <svg width="84" height="84" viewBox="0 0 22 22" fill="none" style="margin-bottom:28px;">
+          <circle cx="11" cy="11" r="2.2" stroke="rgba(68,214,214,.9)" stroke-width="1.4"/>
+          <circle cx="11" cy="11" r="5.3" stroke="rgba(68,214,214,.55)" stroke-width="1.1"/>
+          <circle cx="11" cy="11" r="8.5" stroke="rgba(68,214,214,.25)" stroke-width="1"/>
+        </svg>
+        <h2 style="font-family:var(--display);font-size:1.4rem;font-weight:500;letter-spacing:.5px;color:var(--cream);margin-bottom:20px;">Energiefelder anlegen</h2>
+        <p style="font-family:var(--sans);font-size:.9rem;color:var(--cream-muted);line-height:1.8;font-weight:300;max-width:300px;margin-bottom:14px;">
+          Du sendest deine Energie, deine Seele, dein Feld los — mit einer klaren Frage und einer bewussten Intention.
+        </p>
+        <p style="font-family:var(--sans);font-size:.9rem;color:var(--cream-muted);line-height:1.8;font-weight:300;max-width:300px;margin-bottom:12px;">Die Formel ist immer dieselbe:</p>
+        <div style="background:rgba(68,214,214,.06);border:1px solid rgba(68,214,214,.18);border-radius:14px;padding:14px 20px;margin-bottom:40px;">
+          <span style="font-family:var(--serif);font-style:italic;font-size:1rem;color:rgba(68,214,214,.9);">„Welche Energiefelder kann ich anlegen…"</span>
+        </div>
+        <button class="efv-btn-primary" onclick="efvNext()">Starten</button>
+      </div>`;
+
+  } else if (efvStep === 1) {
+    ind.textContent = 'SCHRITT 1 / 3';
+    body.innerHTML = `
+      <div style="padding:32px 20px 36px;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--turquoise);text-transform:uppercase;margin-bottom:14px;text-align:center;">Ausrichtung</div>
+        <h2 style="font-family:var(--display);font-size:1.15rem;font-weight:500;color:var(--cream);text-align:center;margin-bottom:8px;text-wrap:balance;">Für wen oder was möchtest du ein Feld anlegen?</h2>
+        <p style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);text-align:center;font-weight:300;margin-bottom:24px;">Wähle deinen Fokus für dieses Feld.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:36px;">
+          ${EFV_BEREICHE.map(b => `<div class="efv-chip" onclick="efvSelectBereich(this,this.textContent)">${b}</div>`).join('')}
+        </div>
+        <button class="efv-btn-primary" onclick="efvNext()">Weiter</button>
+      </div>`;
+
+  } else if (efvStep === 2) {
+    ind.textContent = 'SCHRITT 2 / 3';
+    body.innerHTML = `
+      <div style="padding:32px 20px 36px;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--turquoise);text-transform:uppercase;margin-bottom:16px;text-align:center;">Formulierung</div>
+        <div style="background:rgba(68,214,214,.06);border:1px solid rgba(68,214,214,.18);border-radius:14px;padding:14px 18px;margin-bottom:20px;text-align:center;">
+          <span style="font-family:var(--serif);font-style:italic;font-size:1rem;color:rgba(68,214,214,.9);line-height:1.7;">Welche Energiefelder kann ich anlegen…</span>
+        </div>
+        <p style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);text-align:center;font-weight:300;margin-bottom:12px;">Wähle deinen Anschluss:</p>
+        <div style="display:flex;gap:8px;justify-content:center;margin-bottom:18px;">
+          <button class="efv-conn-btn" onclick="efvSelectConnector(this,'um')">um</button>
+          <button class="efv-conn-btn" onclick="efvSelectConnector(this,'dass')">dass</button>
+          <button class="efv-conn-btn" onclick="efvSelectConnector(this,'für')">für</button>
+        </div>
+        <div id="efv-impulse-container" style="display:flex;flex-direction:column;gap:8px;min-height:8px;margin-bottom:4px;"></div>
+        <div style="display:flex;align-items:center;gap:12px;margin:22px 0 16px;">
+          <div style="flex:1;height:1px;background:rgba(255,255,255,.05);"></div>
+          <span style="font-family:var(--display);font-size:.58rem;letter-spacing:1.5px;color:rgba(255,255,255,.25);">ODER</span>
+          <div style="flex:1;height:1px;background:rgba(255,255,255,.05);"></div>
+        </div>
+        <button class="efv-spontan-btn" onclick="efvSpontanImpuls()">✦ Spontan-Impuls</button>
+        <div id="efv-spontan-result" style="display:none;margin-top:14px;background:rgba(185,130,255,.07);border:1px solid rgba(185,130,255,.22);border-radius:12px;padding:14px 18px;font-family:var(--serif);font-style:italic;font-size:.95rem;color:rgba(255,255,255,.88);line-height:1.75;text-align:center;transition:opacity .4s;opacity:0;"></div>
+        <div style="margin-top:28px;">
+          <button class="efv-btn-primary" onclick="efvNext()">Weiter</button>
+        </div>
+      </div>`;
+
+  } else if (efvStep === 3) {
+    ind.textContent = 'SCHRITT 3 / 3';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:32px 24px 36px;text-align:center;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--turquoise);text-transform:uppercase;margin-bottom:18px;">Aussenden</div>
+        <div style="position:relative;width:220px;height:220px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;">
+          <canvas id="efv-canvas" width="220" height="220" style="position:absolute;inset:0;"></canvas>
+          <div id="efv-sent-label" style="position:relative;z-index:2;font-family:var(--display);font-size:.9rem;letter-spacing:3.5px;color:rgba(68,214,214,.9);opacity:0;transition:opacity .9s;">AUSGESANDT</div>
+        </div>
+        <div style="background:rgba(68,214,214,.05);border:1px solid rgba(68,214,214,.14);border-radius:14px;padding:16px 20px;max-width:310px;margin-bottom:12px;">
+          <div style="font-family:var(--display);font-size:.58rem;letter-spacing:1.5px;color:var(--turquoise);opacity:.65;margin-bottom:8px;">DEIN FELD</div>
+          <p style="font-family:var(--serif);font-style:italic;font-size:.98rem;color:rgba(255,255,255,.9);line-height:1.8;margin:0;">Welche Energiefelder kann ich anlegen ${efvFormulation}</p>
+        </div>
+        <p style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);font-weight:300;margin-bottom:28px;">Schließ kurz die Augen. Spüre dein Feld. Dann sende.</p>
+        <button id="efv-send-btn" class="efv-send-btn" onclick="efvSend()">Feld jetzt aussenden</button>
+        <div style="height:10px;"></div>
+        <button id="efv-weiter-btn" class="efv-btn-primary" onclick="efvNext()" style="display:none;">Weiter</button>
+      </div>`;
+    efvDrawIdle();
+
+  } else if (efvStep === 4) {
+    ind.textContent = '';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:52px 24px 44px;text-align:center;">
+        <canvas id="efv-done-canvas" width="160" height="160" style="margin-bottom:28px;"></canvas>
+        <h2 style="font-family:var(--display);font-size:1.3rem;font-weight:500;color:var(--cream);margin-bottom:12px;">Dein Feld ist unterwegs.</h2>
+        <p style="font-family:var(--sans);font-size:.86rem;color:var(--cream-muted);font-weight:300;margin-bottom:32px;">Lass los. Vertraue. Das Feld wirkt.</p>
+        <div style="background:rgba(68,214,214,.05);border:1px solid rgba(68,214,214,.14);border-radius:16px;padding:22px;max-width:300px;margin-bottom:44px;">
+          <p style="font-family:var(--serif);font-style:italic;font-size:.98rem;color:rgba(255,255,255,.88);line-height:1.85;margin:0;">„Ich sende mein Feld mit Vertrauen. Es erfüllt seinen Zweck — vollständig, liebevoll und perfekt."</p>
+        </div>
+        <button class="efv-btn-primary" onclick="efvClose()">Zur Toolbox</button>
+      </div>`;
+    efvAnimateDone();
+  }
+}
+
+function efvDrawIdle() {
+  const c = document.getElementById('efv-canvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const cx = 110, cy = 110;
+  let t = 0;
+  window._efvSending = false;
+  function loop() {
+    if (window._efvSending || !document.getElementById('efv-canvas')) return;
+    t++;
+    ctx.clearRect(0, 0, 220, 220);
+    [32, 54, 80].forEach((r, i) => {
+      const p = Math.sin(t * 0.03 + i * 1.3) * 3;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r + p, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(68,214,214,${0.18 - i * 0.04})`;
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+    });
+    requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+function efvSend() {
+  window._efvSending = true;
+  const btn = document.getElementById('efv-send-btn');
+  if (btn) { btn.disabled = true; btn.style.opacity = '.3'; }
+  const c = document.getElementById('efv-canvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const cx = 110, cy = 110;
+  let rings = [], tick = 0;
+  function frame() {
+    ctx.clearRect(0, 0, 220, 220);
+    if (tick % 7 === 0 && tick < 84) {
+      rings.push({ r: 8, a: 0.88, violet: tick % 21 === 0 });
+    }
+    rings = rings.filter(r => r.a > 0.02);
+    rings.forEach(r => {
+      r.r += 3; r.a *= 0.953;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r.r, 0, Math.PI * 2);
+      ctx.strokeStyle = r.violet ? `rgba(185,130,255,${r.a})` : `rgba(68,214,214,${r.a})`;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    });
+    tick++;
+    if (tick < 120 || rings.length > 0) {
+      requestAnimationFrame(frame);
+    } else {
+      const lbl = document.getElementById('efv-sent-label');
+      if (lbl) lbl.style.opacity = '1';
+      setTimeout(() => {
+        const wb = document.getElementById('efv-weiter-btn');
+        if (wb) wb.style.display = '';
+        if (btn) btn.style.display = 'none';
+      }, 900);
+    }
+  }
+  frame();
+}
+
+function efvAnimateDone() {
+  const c = document.getElementById('efv-done-canvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const cx = 80, cy = 80;
+  let a = 0, t = 0;
+  function draw() {
+    a = Math.min(a + 0.022, 1); t++;
+    ctx.clearRect(0, 0, 160, 160);
+    [18, 32, 48, 64].forEach((r, i) => {
+      ctx.beginPath();
+      ctx.arc(cx, cy, r + Math.sin(t * 0.04 + i) * 1.5, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(68,214,214,${(0.5 - i * 0.09) * a})`;
+      ctx.lineWidth = 1.1 - i * 0.12;
+      ctx.stroke();
+    });
+    ctx.beginPath();
+    ctx.arc(cx, cy, 4.5, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(185,130,255,${0.85 * a})`;
+    ctx.fill();
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
 // ─── BACK TO SENDER ───
 let btsStep = 0;
 
