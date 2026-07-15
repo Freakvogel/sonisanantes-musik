@@ -660,13 +660,13 @@
     .loq-next-btn {
       display: block; width: 100%; max-width: 280px; margin: 0 auto;
       padding: 15px 24px; border-radius: 14px;
-      background: linear-gradient(135deg, rgba(212,168,32,.2), rgba(212,168,32,.1));
-      border: 1px solid rgba(212,168,32,.35);
-      color: var(--cream); font-family: var(--display);
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.8); font-family: var(--display);
       font-size: .78rem; letter-spacing: 1.5px; text-transform: uppercase;
-      cursor: pointer; transition: transform .2s;
+      cursor: pointer; transition: transform .2s, border-color .18s;
     }
-    .loq-next-btn:hover { transform: scale(1.02); }
+    .loq-next-btn:hover { transform: scale(1.02); border-color: rgba(255,255,255,.28); }
     .loq-back-link {
       background: none; border: none; color: rgba(212,168,32,.5);
       font-family: var(--display); font-size: .62rem; letter-spacing: 1.5px;
@@ -681,13 +681,13 @@
     .loq-send-btn {
       display: block; width: 100%; max-width: 280px; margin: 0 auto;
       padding: 16px 24px; border-radius: 14px;
-      background: linear-gradient(135deg, rgba(212,168,32,.2), rgba(245,236,208,.06));
-      border: 1px solid rgba(212,168,32,.4);
-      color: var(--cream); font-family: var(--display);
+      background: linear-gradient(135deg, rgba(212,168,32,.28), rgba(212,168,32,.14));
+      border: 1px solid rgba(212,168,32,.55);
+      color: #fff; font-family: var(--display);
       font-size: .78rem; letter-spacing: 2px; text-transform: uppercase;
       cursor: pointer; transition: transform .2s, box-shadow .2s;
     }
-    .loq-send-btn:hover { transform: scale(1.02); box-shadow: 0 0 28px rgba(212,168,32,.2); }
+    .loq-send-btn:hover { transform: scale(1.02); box-shadow: 0 0 28px rgba(212,168,32,.22); }
     .loq-own-wrap {
       background: rgba(212,168,32,.04); border: 1px solid rgba(212,168,32,.18);
       border-radius: 16px; padding: 16px;
@@ -2901,20 +2901,14 @@ function loqRenderCard() {
           „${q}"
         </p>
       </div>
+      <div class="loq-own-wrap">
+        <textarea class="loq-own-textarea" id="loq-own-input" placeholder="Eigene Frage eingeben – oder die angezeigte abgeben …" rows="2"></textarea>
+      </div>
       <div style="display:flex;flex-direction:column;gap:10px;align-items:center;">
-        <button class="loq-send-btn" onclick="loqSendQuestion(loqPendingQ)">✦ &nbsp;Ins Universum abgeben</button>
+        <button class="loq-send-btn" onclick="loqSendCurrent()">✦ &nbsp;Ins Universum abgeben</button>
         <button class="loq-next-btn" onclick="loqAdvance()">
           ${isLast ? 'Abschließen' : 'Nächste Frage'}
         </button>
-      </div>
-      <div style="border-top:1px solid rgba(212,168,32,.1);padding-top:20px;">
-        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2px;color:rgba(212,168,32,.55);margin-bottom:10px;">EIGENE FRAGE ABGEBEN</div>
-        <div class="loq-own-wrap">
-          <textarea class="loq-own-textarea" id="loq-own-input" placeholder="Schreibe deine Frage ans Universum …" rows="3"></textarea>
-        </div>
-        <div style="margin-top:10px;">
-          <button class="loq-send-btn" onclick="loqSendOwn()">✦ &nbsp;Ins Universum abgeben</button>
-        </div>
       </div>
       <button class="loq-back-link" onclick="loqRenderIntro()">← Kategorien</button>
     </div>
@@ -2932,6 +2926,12 @@ function loqSendOwn() {
   const q = input.value.trim();
   if (!q) return;
   loqSendQuestion(q);
+}
+
+function loqSendCurrent() {
+  const input = document.getElementById('loq-own-input');
+  const own = input ? input.value.trim() : '';
+  loqSendQuestion(own || loqPendingQ);
 }
 
 function loqSendQuestion(q) {
