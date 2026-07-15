@@ -622,6 +622,62 @@
       font-family: var(--serif); font-style: italic;
       font-size: .88rem; color: rgba(68,214,214,.65); white-space: nowrap; flex-shrink: 0;
     }
+
+    /* ─── LÖSUNGSORIENTIERTE FRAGEN ─── */
+    .loq-cat-btn {
+      display: flex; align-items: center; gap: 14px; width: 100%;
+      padding: 14px 16px; border-radius: 14px;
+      border: 1px solid rgba(212,168,32,.12);
+      background: rgba(212,168,32,.04); color: var(--cream-muted);
+      font-family: var(--sans); font-size: .88rem; font-weight: 300;
+      cursor: pointer; transition: all .18s; text-align: left;
+    }
+    .loq-cat-btn:hover { background: rgba(212,168,32,.1); border-color: rgba(212,168,32,.3); color: var(--cream); }
+    .loq-cat-icon { font-size: 1.25rem; flex-shrink: 0; width: 32px; text-align: center; }
+    .loq-cat-name { flex: 1; line-height: 1.4; }
+    .loq-cat-count {
+      font-size: .65rem; color: rgba(212,168,32,.45);
+      font-family: var(--display); letter-spacing: 1px; flex-shrink: 0;
+    }
+    .loq-random-btn {
+      display: block; width: 100%; padding: 16px 24px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(123,45,158,.18), rgba(196,37,122,.1));
+      border: 1px solid rgba(185,130,255,.28);
+      color: rgba(185,130,255,.9); font-family: var(--display);
+      font-size: .78rem; letter-spacing: 2px; text-transform: uppercase;
+      cursor: pointer; transition: all .2s; margin-top: 8px;
+    }
+    .loq-random-btn:hover {
+      background: linear-gradient(135deg, rgba(123,45,158,.28), rgba(196,37,122,.18));
+      border-color: rgba(185,130,255,.5); box-shadow: 0 0 28px rgba(123,45,158,.2);
+    }
+    .loq-card {
+      background: rgba(212,168,32,.04); border: 1px solid rgba(212,168,32,.2);
+      border-radius: 22px; padding: 38px 26px;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 190px; transition: opacity .35s, transform .35s;
+    }
+    .loq-next-btn {
+      display: block; width: 100%; max-width: 280px; margin: 0 auto;
+      padding: 15px 24px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(212,168,32,.2), rgba(212,168,32,.1));
+      border: 1px solid rgba(212,168,32,.35);
+      color: var(--cream); font-family: var(--display);
+      font-size: .78rem; letter-spacing: 1.5px; text-transform: uppercase;
+      cursor: pointer; transition: transform .2s;
+    }
+    .loq-next-btn:hover { transform: scale(1.02); }
+    .loq-back-link {
+      background: none; border: none; color: rgba(212,168,32,.5);
+      font-family: var(--display); font-size: .62rem; letter-spacing: 1.5px;
+      text-transform: uppercase; cursor: pointer; padding: 8px;
+      display: block; text-align: center; margin: 0 auto; transition: color .15s;
+    }
+    .loq-back-link:hover { color: var(--gold); }
+    .loq-cat-label {
+      font-family: var(--display); font-size: .6rem; letter-spacing: 2px;
+      text-transform: uppercase; color: rgba(212,168,32,.55); text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -1066,6 +1122,16 @@
   <div class="tool-modal-body" id="bts-body" style="overflow-y:auto;-webkit-overflow-scrolling:touch;"></div>
 </div>
 
+<!-- ══════════ MODAL: LÖSUNGSORIENTIERTE FRAGEN ══════════ -->
+<div class="tool-modal" id="modal-fragen">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="loqClose()">←</button>
+    <div class="modal-title">Lösungsorientierte Fragen</div>
+    <div id="loq-step-indicator" style="font-family:var(--display);font-size:.58rem;color:var(--gold);letter-spacing:1.5px;"></div>
+  </div>
+  <div class="tool-modal-body" id="loq-body" style="overflow-y:auto;-webkit-overflow-scrolling:touch;"></div>
+</div>
+
 <!-- ══════════ MODAL: GEFÜHRTE MEDITATIONEN ══════════ -->
 <div class="tool-modal" id="modal-meditationen">
   <div class="tool-modal-header">
@@ -1149,7 +1215,6 @@ document.getElementById('daily-impulse').textContent = impulses[new Date().getDa
 
 // ─── OPEN / CLOSE TOOLS ───
 const comingSoon = {
-  fragen:  { name: 'Lösungsorientierte Fragen',  icon: '🖊️', desc: 'Öffne neue Perspektiven durch kraftvolle innere Fragen.' },
   wunder:  { name: 'Die 4 Schritte für Wunder',  icon: '🪄', desc: 'Ein vollständiger Prozess: Wahrnehmen · Annehmen · Transformieren · Neu ausrichten.' },
 };
 
@@ -1171,6 +1236,8 @@ function openTool(id) {
     wbwOpen();
   } else if (id === 'felder') {
     efvOpen();
+  } else if (id === 'fragen') {
+    loqOpen();
   } else if (comingSoon[id]) {
     const d = comingSoon[id];
     document.getElementById('soon-title').textContent = d.name;
@@ -2600,6 +2667,250 @@ function wbwAnimateActivation() {
     requestAnimationFrame(draw);
   }
   draw();
+}
+
+// ─── LÖSUNGSORIENTIERTE FRAGEN ───
+
+const LOQ_DATA = [
+  {
+    icon: '🌟',
+    name: 'Möglichkeiten & neue Perspektiven',
+    questions: [
+      'Was ist hier noch möglich, das ich bisher nicht gesehen habe?',
+      'Welche andere Perspektive darf ich einnehmen?',
+      'Welche Tür möchte sich gerade für mich öffnen?',
+      'Was entsteht, wenn ich aufhöre, gegen diese Situation anzukämpfen?',
+      'Welche Möglichkeit wartet darauf, von mir erkannt zu werden?',
+      'Wenn alles zu meinem höchsten Wohl geschieht – was könnte der tiefere Sinn sein?',
+      'Was wäre möglich, wenn alles leichter sein dürfte?',
+      'Welche neue Sichtweise verändert gerade alles?',
+    ]
+  },
+  {
+    icon: '🌿',
+    name: 'Vertrauen & Hingabe',
+    questions: [
+      'Was darf ich jetzt loslassen, damit etwas Neues entstehen kann?',
+      'Wo darf ich mehr vertrauen?',
+      'Was möchte das Leben gerade durch mich erfahren?',
+      'Wenn ich dem Fluss des Lebens vertrauen würde – welcher Schritt wäre jetzt leicht?',
+      'Was geschieht, wenn ich nicht kontrollieren muss?',
+      'Welche Last darf ich heute abgeben?',
+      'Was möchte sich entfalten, wenn ich einen Schritt zurücktrete?',
+    ]
+  },
+  {
+    icon: '💫',
+    name: 'Innere Weisheit & Intuition',
+    questions: [
+      'Was weiß meine Seele bereits, das mein Verstand noch nicht versteht?',
+      'Welche Antwort trägt mein Herz bereits in sich?',
+      'Welche Wahrheit möchte sich mir jetzt zeigen?',
+      'Wenn ich meiner Intuition vollkommen vertrauen würde – was würde ich tun?',
+      'Welche innere Stimme möchte heute gehört werden?',
+      'Welche Botschaft liegt hinter dieser Situation?',
+      'Was würde mein höheres Selbst mir jetzt raten?',
+    ]
+  },
+  {
+    icon: '🔮',
+    name: 'Zukunft & Manifestation',
+    questions: [
+      'Wie sieht die beste Version dieser Situation aus?',
+      'Welche Energie darf ich heute verkörpern, um das Gewünschte anzuziehen?',
+      'Was darf ich wählen, um eine neue Realität zu erschaffen?',
+      'Wer darf ich werden, damit sich mein Wunsch erfüllen kann?',
+      'Welche Entscheidung bringt mich näher an mein wahres Sein?',
+      'Was wäre mein nächster liebevoller Schritt?',
+      'Welche Möglichkeit darf ich heute empfangen?',
+    ]
+  },
+  {
+    icon: '🌙',
+    name: 'Selbstermächtigung',
+    questions: [
+      'Welche Kraft in mir möchte jetzt aktiviert werden?',
+      'Was wäre möglich, wenn ich mich nicht mehr kleinhalten würde?',
+      'Wie würde ich handeln, wenn ich mir selbst vollkommen vertrauen würde?',
+      'Welche Größe in mir möchte gelebt werden?',
+      'Was würde die mutigste Version von mir jetzt wählen?',
+      'Welche Stärke habe ich bisher unterschätzt?',
+      'Welche Entscheidung dient meinem höchsten Wohl?',
+    ]
+  },
+  {
+    icon: '🌸',
+    name: 'Heilung & Transformation',
+    questions: [
+      'Was möchte in mir gesehen und angenommen werden?',
+      'Welcher Teil von mir ruft nach Liebe?',
+      'Welche alte Geschichte darf jetzt enden?',
+      'Was darf heilen, damit ich freier werde?',
+      'Welche neue Wahrheit darf ich über mich selbst annehmen?',
+      'Welche Emotion möchte heute gefühlt werden?',
+      'Was darf ich mir selbst vergeben?',
+    ]
+  },
+  {
+    icon: '✨',
+    name: 'Magie & Bewusstsein',
+    questions: [
+      'Welche Energie, welcher Raum und welches Bewusstsein kann ich heute sein, um mehr zu empfangen, als ich mir bisher vorstellen konnte?',
+      'Wenn alles bereits für mich arbeitet – was darf ich erkennen?',
+      'Welche Magie möchte sich durch mich entfalten?',
+      'Welche Wunder sind bereits auf dem Weg zu mir?',
+      'Welche Version meines Lebens wartet darauf, von mir gewählt zu werden?',
+      'Was darf ich heute empfangen, statt dafür kämpfen zu müssen?',
+      'Wenn mein zukünftiges Ich mir jetzt einen Rat geben könnte – welcher wäre das?',
+      'Welche Frequenz möchte ich heute verkörpern?',
+      'Wenn ich nichts reparieren müsste – was würde ich stattdessen erschaffen?',
+      'Was ist jetzt möglich, das ich bisher noch nicht in Betracht gezogen habe?',
+      'Wenn alles bereits in mir vorhanden ist – welcher nächste Schritt zeigt sich mir jetzt?',
+    ]
+  },
+];
+
+let loqMode = null;
+let loqCatIdx = null;
+let loqQIdx = 0;
+let loqCurrentQ = null;
+
+function loqOpen() {
+  loqMode = null; loqCatIdx = null; loqQIdx = 0; loqCurrentQ = null;
+  document.getElementById('modal-fragen').classList.add('open');
+  loqRenderIntro();
+}
+
+function loqClose() {
+  document.getElementById('modal-fragen').classList.remove('open');
+}
+
+function loqRenderIntro() {
+  document.getElementById('loq-step-indicator').textContent = '';
+  const body = document.getElementById('loq-body');
+  body.innerHTML = `
+    <div style="padding:24px 16px 100px;">
+      <div style="text-align:center;margin-bottom:30px;">
+        <div style="width:66px;height:66px;border-radius:50%;background:rgba(212,168,32,.08);border:1px solid rgba(212,168,32,.22);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+          <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" width="30" height="30">
+            <path d="M11 2L20 11L11 20L2 11Z" stroke="rgba(212,168,32,.9)" stroke-width="1.3" stroke-linejoin="round"/>
+            <path d="M9.5 9a1.8 1.8 0 0 1 3.2 1.1c0 1.3-1.7 1.6-1.7 2.9" stroke="rgba(212,168,32,.9)" stroke-width="1.3" stroke-linecap="round"/>
+            <circle cx="11" cy="15" r=".7" fill="rgba(212,168,32,.9)"/>
+          </svg>
+        </div>
+        <p style="font-family:var(--serif);font-style:italic;font-size:.98rem;color:rgba(255,255,255,.72);line-height:1.85;max-width:290px;margin:0 auto;">
+          Kraftvolle Fragen öffnen Räume, die Antworten noch nicht gefunden haben.
+        </p>
+      </div>
+
+      <div style="font-family:var(--display);font-size:.6rem;letter-spacing:2px;color:var(--gold);margin-bottom:12px;padding-left:2px;">WÄHLE EIN THEMA</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
+        ${LOQ_DATA.map((cat, i) => `
+          <button class="loq-cat-btn" onclick="loqSelectCategory(${i})">
+            <span class="loq-cat-icon">${cat.icon}</span>
+            <span class="loq-cat-name">${cat.name}</span>
+            <span class="loq-cat-count">${cat.questions.length}</span>
+          </button>
+        `).join('')}
+      </div>
+
+      <button class="loq-random-btn" onclick="loqSelectRandom()">✦ &nbsp;Zufälliger Impuls</button>
+    </div>
+  `;
+}
+
+function loqSelectCategory(idx) {
+  loqMode = 'category';
+  loqCatIdx = idx;
+  loqQIdx = 0;
+  loqRenderCard();
+}
+
+function loqSelectRandom() {
+  loqMode = 'random';
+  const all = LOQ_DATA.flatMap(cat => cat.questions.map(q => ({ q, icon: cat.icon, name: cat.name })));
+  loqCurrentQ = all[Math.floor(Math.random() * all.length)];
+  loqRenderCard();
+}
+
+function loqAdvance() {
+  const body = document.getElementById('loq-body');
+  const card = body.querySelector('.loq-card');
+  function doNext() {
+    if (loqMode === 'random') {
+      const all = LOQ_DATA.flatMap(cat => cat.questions.map(q => ({ q, icon: cat.icon, name: cat.name })));
+      loqCurrentQ = all[Math.floor(Math.random() * all.length)];
+      loqRenderCard();
+    } else {
+      loqQIdx++;
+      if (loqQIdx >= LOQ_DATA[loqCatIdx].questions.length) {
+        loqRenderDone();
+      } else {
+        loqRenderCard();
+      }
+    }
+  }
+  if (card) {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(-12px)';
+    setTimeout(doNext, 300);
+  } else {
+    doNext();
+  }
+}
+
+function loqRenderCard() {
+  const isCategory = loqMode === 'category';
+  const q    = isCategory ? LOQ_DATA[loqCatIdx].questions[loqQIdx] : loqCurrentQ.q;
+  const icon = isCategory ? LOQ_DATA[loqCatIdx].icon : loqCurrentQ.icon;
+  const name = isCategory ? LOQ_DATA[loqCatIdx].name : loqCurrentQ.name;
+  const total = isCategory ? LOQ_DATA[loqCatIdx].questions.length : 0;
+  const isLast = isCategory && (loqQIdx + 1 >= total);
+
+  document.getElementById('loq-step-indicator').textContent = isCategory ? `${loqQIdx + 1} / ${total}` : '';
+
+  const body = document.getElementById('loq-body');
+  body.innerHTML = `
+    <div style="padding:24px 16px 100px;display:flex;flex-direction:column;gap:18px;">
+      <div class="loq-cat-label">${icon}&nbsp; ${name}</div>
+      <div class="loq-card" style="opacity:0;transform:translateY(16px);">
+        <p style="font-family:var(--serif);font-style:italic;font-size:1.08rem;line-height:1.85;color:var(--cream);text-align:center;">
+          „${q}"
+        </p>
+      </div>
+      <div style="text-align:center;">
+        <button class="loq-next-btn" onclick="loqAdvance()">
+          ${isLast ? 'Abschließen' : 'Nächste Frage'}
+        </button>
+      </div>
+      <button class="loq-back-link" onclick="loqRenderIntro()">← Kategorien</button>
+    </div>
+  `;
+
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const card = body.querySelector('.loq-card');
+    if (card) { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }
+  }));
+}
+
+function loqRenderDone() {
+  document.getElementById('loq-step-indicator').textContent = '';
+  const cat = LOQ_DATA[loqCatIdx];
+  const body = document.getElementById('loq-body');
+  body.innerHTML = `
+    <div style="padding:48px 20px 100px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:22px;">
+      <div style="font-size:2.4rem;">${cat.icon}</div>
+      <p style="font-family:var(--serif);font-style:italic;font-size:1.05rem;color:rgba(255,255,255,.78);line-height:1.85;max-width:270px;">
+        Du hast alle Fragen dieser Kategorie empfangen. Lass sie wirken.
+      </p>
+      <div style="background:rgba(212,168,32,.05);border:1px solid rgba(212,168,32,.14);border-radius:16px;padding:18px 22px;max-width:300px;">
+        <p style="font-family:var(--sans);font-weight:300;font-size:.85rem;color:rgba(255,255,255,.6);line-height:1.75;">
+          Welche Frage hat dich am meisten berührt? Schreibe sie auf und gib ihr Raum.
+        </p>
+      </div>
+      <button class="loq-next-btn" style="margin-top:4px;" onclick="loqRenderIntro()">Zurück zu den Themen</button>
+    </div>
+  `;
 }
 
 function showToast(msg) {
