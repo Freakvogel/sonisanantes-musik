@@ -678,6 +678,27 @@
       font-family: var(--display); font-size: .6rem; letter-spacing: 2px;
       text-transform: uppercase; color: rgba(212,168,32,.55); text-align: center;
     }
+    .loq-send-btn {
+      display: block; width: 100%; max-width: 280px; margin: 0 auto;
+      padding: 16px 24px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(212,168,32,.2), rgba(245,236,208,.06));
+      border: 1px solid rgba(212,168,32,.4);
+      color: var(--cream); font-family: var(--display);
+      font-size: .78rem; letter-spacing: 2px; text-transform: uppercase;
+      cursor: pointer; transition: transform .2s, box-shadow .2s;
+    }
+    .loq-send-btn:hover { transform: scale(1.02); box-shadow: 0 0 28px rgba(212,168,32,.2); }
+    .loq-own-wrap {
+      background: rgba(212,168,32,.04); border: 1px solid rgba(212,168,32,.18);
+      border-radius: 16px; padding: 16px;
+    }
+    .loq-own-textarea {
+      width: 100%; background: none; border: none; outline: none;
+      font-family: var(--serif); font-style: italic; font-size: 1rem;
+      color: var(--cream); line-height: 1.75; resize: none;
+      caret-color: var(--gold); min-height: 76px;
+    }
+    .loq-own-textarea::placeholder { color: rgba(255,255,255,.2); }
   </style>
 </head>
 <body>
@@ -2774,6 +2795,7 @@ let loqMode = null;
 let loqCatIdx = null;
 let loqQIdx = 0;
 let loqCurrentQ = null;
+let loqPendingQ = null;
 
 function loqOpen() {
   loqMode = null; loqCatIdx = null; loqQIdx = 0; loqCurrentQ = null;
@@ -2815,6 +2837,16 @@ function loqRenderIntro() {
       </div>
 
       <button class="loq-random-btn" onclick="loqSelectRandom()">✦ &nbsp;Zufälliger Impuls</button>
+
+      <div style="margin-top:28px;">
+        <div style="font-family:var(--display);font-size:.6rem;letter-spacing:2px;color:var(--gold);margin-bottom:10px;padding-left:2px;">EIGENE FRAGE</div>
+        <div class="loq-own-wrap">
+          <textarea class="loq-own-textarea" id="loq-own-input" placeholder="Schreibe deine Frage ans Universum …" rows="3"></textarea>
+        </div>
+        <div style="margin-top:12px;">
+          <button class="loq-send-btn" onclick="loqSendOwn()">✦ &nbsp;Ins Universum abgeben</button>
+        </div>
+      </div>
     </div>
   `;
 }
@@ -2866,6 +2898,7 @@ function loqRenderCard() {
   const name = isCategory ? LOQ_DATA[loqCatIdx].name : loqCurrentQ.name;
   const total = isCategory ? LOQ_DATA[loqCatIdx].questions.length : 0;
   const isLast = isCategory && (loqQIdx + 1 >= total);
+  loqPendingQ = q;
 
   document.getElementById('loq-step-indicator').textContent = isCategory ? `${loqQIdx + 1} / ${total}` : '';
 
@@ -2878,7 +2911,8 @@ function loqRenderCard() {
           „${q}"
         </p>
       </div>
-      <div style="text-align:center;">
+      <div style="display:flex;flex-direction:column;gap:10px;align-items:center;">
+        <button class="loq-send-btn" onclick="loqSendQuestion(loqPendingQ)">✦ &nbsp;Ins Universum abgeben</button>
         <button class="loq-next-btn" onclick="loqAdvance()">
           ${isLast ? 'Abschließen' : 'Nächste Frage'}
         </button>
@@ -2891,6 +2925,98 @@ function loqRenderCard() {
     const card = body.querySelector('.loq-card');
     if (card) { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }
   }));
+}
+
+function loqSendOwn() {
+  const input = document.getElementById('loq-own-input');
+  if (!input) return;
+  const q = input.value.trim();
+  if (!q) return;
+  loqSendQuestion(q);
+}
+
+function loqSendQuestion(q) {
+  if (!q) return;
+  document.getElementById('loq-step-indicator').textContent = '';
+  const body = document.getElementById('loq-body');
+  body.innerHTML = `
+    <div style="padding:36px 16px 100px;display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center;">
+      <p style="font-family:var(--serif);font-style:italic;font-size:1.05rem;color:rgba(255,255,255,.82);line-height:1.85;max-width:280px;">
+        „${q}"
+      </p>
+      <canvas id="loq-send-canvas" width="200" height="200" style="width:200px;height:200px;transition:opacity .4s;"></canvas>
+      <div id="loq-sent-msg" style="display:none;flex-direction:column;align-items:center;gap:14px;">
+        <div style="font-family:var(--display);font-size:.7rem;letter-spacing:3px;color:rgba(212,168,32,.9);">ABGEGEBEN</div>
+        <p style="font-family:var(--serif);font-style:italic;font-size:.92rem;color:rgba(255,255,255,.55);line-height:1.8;max-width:250px;">
+          Deine Frage ist auf dem Weg. Das Universum hat gehört.
+        </p>
+        <button class="loq-next-btn" onclick="loqRenderIntro()">Neue Frage</button>
+      </div>
+    </div>
+  `;
+  requestAnimationFrame(() => loqAnimateSend());
+}
+
+function loqAnimateSend() {
+  const canvas = document.getElementById('loq-send-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = 200, H = 200, cx = 100, cy = 100;
+  let t = 0;
+  const RAYS = 18;
+
+  function draw() {
+    if (!document.getElementById('loq-send-canvas')) return;
+    t++;
+    ctx.clearRect(0, 0, W, H);
+
+    const fade = Math.max(0, 1 - Math.max(0, t - 85) / 15);
+
+    for (let i = 0; i < RAYS; i++) {
+      const angle = (i / RAYS) * Math.PI * 2 + t * 0.01;
+      const progress = Math.min(t / 80, 1);
+      const len = 18 + progress * 72 + Math.sin(t * 0.07 + i * 1.1) * 5;
+      const warm = i % 2 === 0;
+      const alpha = (warm ? 0.75 : 0.45) * fade;
+
+      const grd = ctx.createLinearGradient(cx, cy, cx + Math.cos(angle) * len, cy + Math.sin(angle) * len);
+      grd.addColorStop(0, warm ? `rgba(255,238,130,${alpha})` : `rgba(212,168,32,${alpha})`);
+      grd.addColorStop(1, 'rgba(212,168,32,0)');
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(angle) * len, cy + Math.sin(angle) * len);
+      ctx.strokeStyle = grd;
+      ctx.lineWidth = warm ? 2.5 : 1.4;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    }
+
+    // Central glow
+    const glowR = 10 + Math.sin(t * 0.09) * 3;
+    const glowA = Math.min(1, t / 16) * fade;
+    const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowR * 3);
+    glow.addColorStop(0, `rgba(255,242,150,${glowA})`);
+    glow.addColorStop(1, 'rgba(212,168,32,0)');
+    ctx.beginPath();
+    ctx.arc(cx, cy, glowR * 3, 0, Math.PI * 2);
+    ctx.fillStyle = glow;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,242,150,${glowA})`;
+    ctx.fill();
+
+    if (t < 100) {
+      requestAnimationFrame(draw);
+    } else {
+      if (canvas) canvas.style.opacity = '0';
+      const msg = document.getElementById('loq-sent-msg');
+      if (msg) { msg.style.display = 'flex'; }
+    }
+  }
+  draw();
 }
 
 function loqRenderDone() {
