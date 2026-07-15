@@ -2837,16 +2837,6 @@ function loqRenderIntro() {
       </div>
 
       <button class="loq-random-btn" onclick="loqSelectRandom()">✦ &nbsp;Zufälliger Impuls</button>
-
-      <div style="margin-top:28px;">
-        <div style="font-family:var(--display);font-size:.6rem;letter-spacing:2px;color:var(--gold);margin-bottom:10px;padding-left:2px;">EIGENE FRAGE</div>
-        <div class="loq-own-wrap">
-          <textarea class="loq-own-textarea" id="loq-own-input" placeholder="Schreibe deine Frage ans Universum …" rows="3"></textarea>
-        </div>
-        <div style="margin-top:12px;">
-          <button class="loq-send-btn" onclick="loqSendOwn()">✦ &nbsp;Ins Universum abgeben</button>
-        </div>
-      </div>
     </div>
   `;
 }
@@ -2916,6 +2906,15 @@ function loqRenderCard() {
         <button class="loq-next-btn" onclick="loqAdvance()">
           ${isLast ? 'Abschließen' : 'Nächste Frage'}
         </button>
+      </div>
+      <div style="border-top:1px solid rgba(212,168,32,.1);padding-top:20px;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2px;color:rgba(212,168,32,.55);margin-bottom:10px;">EIGENE FRAGE ABGEBEN</div>
+        <div class="loq-own-wrap">
+          <textarea class="loq-own-textarea" id="loq-own-input" placeholder="Schreibe deine Frage ans Universum …" rows="3"></textarea>
+        </div>
+        <div style="margin-top:10px;">
+          <button class="loq-send-btn" onclick="loqSendOwn()">✦ &nbsp;Ins Universum abgeben</button>
+        </div>
       </div>
       <button class="loq-back-link" onclick="loqRenderIntro()">← Kategorien</button>
     </div>
