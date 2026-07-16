@@ -1560,33 +1560,22 @@ const blSteps = [
         <button onclick="blNext()" style="padding:16px 32px;border-radius:14px;background:linear-gradient(135deg,rgba(123,45,158,.35),rgba(185,130,255,.15));border:1.5px solid rgba(185,130,255,.42);color:var(--cream);font-family:var(--display);font-size:.75rem;letter-spacing:2px;cursor:pointer;">Zum Abschluss ✦</button>
       </div>`;
 
-    // mehr-ja: detaillierter Leitfaden aus der Anleitung
+    // mehr-ja: 1:1 Buchung / Kontakt
     return `
-      <div class="step-content">
-        <div class="step-icon-large">🔎</div>
-        <h2 class="step-title">Mehr erfahren</h2>
-        <div style="text-align:center;">${badge}</div>
-        <div class="guided-box">
-          <div style="font-family:var(--display);font-size:.6rem;letter-spacing:1.5px;color:var(--gold);margin-bottom:14px;">SCHRITT FÜR SCHRITT BEFRAGEN</div>
-          <div class="guided-step"><div class="gs-num">1</div><div class="gs-text">Ist diese Blockade <em>meine eigene</em> – oder habe ich sie <em>übernommen</em>?</div></div>
-          <div class="guided-step"><div class="gs-num">2</div><div class="gs-text">Wann ist sie aufgetreten?<br><span style="color:rgba(255,255,255,.4);font-size:.8rem;">Vor der Geburt · Bei der Geburt · Nach der Geburt</span></div></div>
-          <div style="margin:6px 0 12px 36px;display:flex;flex-direction:column;gap:6px;">
-            <div style="font-size:.77rem;color:rgba(255,255,255,.55);line-height:1.55;padding:9px 12px;background:rgba(255,255,255,.04);border-radius:9px;border-left:2px solid rgba(212,168,32,.4);">
-              <strong style="color:rgba(212,168,32,.8);">Vor der Geburt:</strong> War es in einem vorherigen Leben? (aktuelles Leben = 0, erstes davor = −1, fünftes davor = −5 ...)
-            </div>
-            <div style="font-size:.77rem;color:rgba(255,255,255,.55);line-height:1.55;padding:9px 12px;background:rgba(255,255,255,.04);border-radius:9px;border-left:2px solid rgba(68,214,214,.3);">
-              <strong style="color:rgba(68,214,214,.8);">Bei der Geburt:</strong> Von der Familie? Vom Krankenhauspersonal?
-            </div>
-            <div style="font-size:.77rem;color:rgba(255,255,255,.55);line-height:1.55;padding:9px 12px;background:rgba(255,255,255,.04);border-radius:9px;border-left:2px solid rgba(185,130,255,.35);">
-              <strong style="color:rgba(185,130,255,.8);">Nach der Geburt:</strong> In 10-er Schritten abfragen – unter 10 J., unter 20 J., unter 30 J. ...
-            </div>
-          </div>
-          <div class="guided-step"><div class="gs-num">3</div><div class="gs-text">Bei <em>übernommen</em>: Von wem?<br><span style="color:rgba(255,255,255,.4);font-size:.8rem;">Familie · Freunde · Bekannte · Tier · Generation der Eltern / Großeltern / Urgroßeltern ...</span></div></div>
-          <div class="guided-step"><div class="gs-num">4</div><div class="gs-text">Betrifft es: <em>Gesundheit · Beziehungen · Berufliches Umfeld?</em></div></div>
-          <div class="guided-step"><div class="gs-num">5</div><div class="gs-text">Wenn eine Person: Ist es jemand, den ich <em>mochte</em> – oder <em>nicht mochte</em>?</div></div>
+      <div class="step-content" style="text-align:center;">
+        <div class="step-icon-large">🤝</div>
+        <h2 class="step-title">Lass uns gemeinsam tiefer gehen</h2>
+        <div style="text-align:center;margin-bottom:20px;">${badge}</div>
+        <div style="background:linear-gradient(135deg,rgba(123,45,158,.2),rgba(196,37,122,.1));border:1px solid rgba(185,130,255,.3);border-radius:20px;padding:24px 20px;margin-bottom:20px;">
+          <p style="font-family:var(--serif);font-style:italic;font-size:1rem;color:rgba(255,255,255,.82);line-height:1.75;margin-bottom:20px;">
+            Diese Blockade möchte noch tiefer begleitet werden. In einem persönlichen 1:1 arbeiten wir gemeinsam daran – Schritt für Schritt, bis sie vollständig gelöst ist.
+          </p>
+          <a href="https://wa.me/4915115603352" target="_blank" rel="noopener"
+            style="display:inline-block;width:100%;padding:17px 24px;border-radius:14px;background:linear-gradient(135deg,rgba(123,45,158,.38),rgba(196,37,122,.22));border:1.5px solid rgba(185,130,255,.45);color:var(--cream);font-family:var(--display);font-size:.78rem;letter-spacing:2px;text-transform:uppercase;text-decoration:none;box-sizing:border-box;">
+            ✦ 1:1 mit Yvonne buchen
+          </a>
         </div>
-        <p style="font-size:.78rem;color:rgba(255,255,255,.38);font-style:italic;text-align:center;margin:16px 0 18px;line-height:1.6;">Wenn du alle Informationen erhalten hast,<br>starte die Ablösung erneut.</p>
-        <button onclick="blData.abloesung=null;blRender();" style="width:100%;padding:15px;border-radius:14px;background:rgba(123,45,158,.18);border:1.5px solid rgba(185,130,255,.32);color:var(--cream);font-family:var(--display);font-size:.75rem;letter-spacing:2px;cursor:pointer;">✦ Ablösung wiederholen</button>
+        <button onclick="blData.abloesung=null;blRender();" style="width:100%;padding:14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5);font-family:var(--display);font-size:.72rem;letter-spacing:1.5px;cursor:pointer;">Ablösung erneut versuchen</button>
       </div>`;
   },
 
