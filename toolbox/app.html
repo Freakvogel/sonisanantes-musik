@@ -1071,7 +1071,6 @@
   <div class="tool-modal-body" id="bl-body"></div>
   <div class="modal-footer">
     <button class="btn-next" id="bl-next" onclick="blNext()">Weiter</button>
-    <button class="btn-skip" id="bl-skip" onclick="blSkip()">Überspringen</button>
   </div>
 </div>
 
@@ -1593,7 +1592,6 @@ function blRenderPreCheck() {
   document.getElementById('bl-progress').style.width = '0%';
   document.getElementById('bl-step-ind').textContent = '';
   document.getElementById('bl-next').style.display = 'none';
-  document.getElementById('bl-skip').style.display = 'none';
 }
 
 function blConfirmExperience(hasExp) {
@@ -1629,7 +1627,6 @@ function blRender() {
   document.getElementById('bl-step-ind').textContent = `Schritt ${blStep + 1} von ${BL_TOTAL}`;
   const isLast = blStep === BL_TOTAL - 1;
   document.getElementById('bl-next').textContent = blStep === 0 ? 'Ich bin bereit ✦' : isLast ? 'Abschließen ✦' : 'Weiter';
-  document.getElementById('bl-skip').style.display = (blStep === 0 || isLast) ? 'none' : 'block';
 }
 
 function blNext() {
@@ -1646,14 +1643,10 @@ function blNext() {
   blRender();
 }
 
-function blSkip() {
-  if (blStep < BL_TOTAL - 1) { blStep++; blRender(); }
-}
-
-function blChoosePos(pos) { blData.pos = pos; blData.num = null; blData.col = null; blData.idx = null; blRender(); }
-function blChooseNum(n)   { blData.num = n; blData.col = null; blData.idx = null; blRender(); }
-function blChooseCol(col) { blData.col = col; blData.idx = null; blRender(); }
-function blChooseIndex(i) { blData.idx = i; blRender(); }
+function blChoosePos(pos) { blData.pos = pos; blData.num = null; blData.col = null; blData.idx = null; blRender(); setTimeout(blNext, 200); }
+function blChooseNum(n)   { blData.num = n; blData.col = null; blData.idx = null; blRender(); setTimeout(blNext, 200); }
+function blChooseCol(col) { blData.col = col; blData.idx = null; blRender(); setTimeout(blNext, 200); }
+function blChooseIndex(i) { blData.idx = i; blRender(); setTimeout(blNext, 200); }
 
 // ─── MEDIA PLAYER ───
 const mediaItems = {
