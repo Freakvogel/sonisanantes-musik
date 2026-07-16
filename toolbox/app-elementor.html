@@ -1509,36 +1509,79 @@ const blSteps = [
     </div>`;
   },
 
-  // 5 – ERGEBNIS + ABLÖSUNG
+  // 5 – ERGEBNIS + ABLÖSUNG (interaktiver Sub-Flow)
   () => {
     const blockade = blGetTriplet(blData.num, blData.col)[blData.idx - 1] || '—';
-    return `
-    <div class="step-content">
-      <div class="step-icon-large">✦</div>
-      <h2 class="step-title">Deine Blockade</h2>
-      <div style="text-align:center;margin:16px 0 24px;">
-        <div style="font-family:var(--display);font-size:.65rem;letter-spacing:2px;color:var(--turquoise);margin-bottom:8px;">${BL_THEMES[blData.num]} · Spalte ${blData.col} · ${blData.idx}</div>
-        <div style="font-family:var(--display);font-size:1.6rem;font-weight:500;color:var(--cream);letter-spacing:1px;margin-bottom:4px;">${blockade}</div>
-        <div style="font-family:var(--serif);font-style:italic;font-size:.95rem;color:var(--cream-muted);font-weight:300;">OBEN/UNTEN: ${blData.pos?.toUpperCase()} · Zahl ${blData.num}</div>
-      </div>
-      <div class="guided-box">
-        <div style="font-family:var(--display);font-size:.65rem;letter-spacing:1.5px;color:var(--gold);margin-bottom:14px;">ABLÖSUNG</div>
-        <div class="guided-step"><div class="gs-num">1</div><div class="gs-text">Frage deinen Körper: <em>„Darf ich diese Blockade – ${blockade} – jetzt ablösen?"</em></div></div>
-        <div class="guided-step"><div class="gs-num">2</div><div class="gs-text">Wenn JA: Klopfe sanft auf Schlüsselbein oder Scheitel – bewusst und verbunden.</div></div>
-        <div class="guided-step"><div class="gs-num">3</div><div class="gs-text">Nachtesten: <em>„Ist ${blockade} jetzt abgelöst?"</em></div></div>
-        <div class="guided-step"><div class="gs-num">4</div><div class="gs-text">Wenn NEIN: Frage deinen Körper: <em>„Muss ich mehr wissen?"</em></div></div>
-        <div style="display:flex;gap:10px;margin-top:6px;">
-          <div style="flex:1;background:rgba(212,168,32,.07);border:1px solid rgba(212,168,32,.22);border-radius:12px;padding:12px;">
-            <div style="font-family:var(--display);font-size:.6rem;letter-spacing:1.5px;color:var(--gold);margin-bottom:6px;">JA</div>
-            <div style="font-size:.8rem;color:rgba(255,255,255,.7);font-weight:300;line-height:1.55;">Starte den Kompass erneut von Schritt 1 – es gibt eine weitere Schicht, die sich zeigen möchte.</div>
-          </div>
-          <div style="flex:1;background:rgba(63,184,155,.06);border:1px solid rgba(63,184,155,.2);border-radius:12px;padding:12px;">
-            <div style="font-family:var(--display);font-size:.6rem;letter-spacing:1.5px;color:var(--emerald);margin-bottom:6px;">NEIN</div>
-            <div style="font-size:.8rem;color:rgba(255,255,255,.7);font-weight:300;line-height:1.55;">Die Blockade ist vollständig gelöst. Du kannst zum Abschluss weitergehen.</div>
-          </div>
+    const sub = blData.abloesung || 'start';
+    const badge = `<div style="font-family:var(--display);font-size:.6rem;letter-spacing:2px;color:var(--turquoise);margin-bottom:6px;">${BL_THEMES[blData.num]} · Spalte ${blData.col} · ${blData.idx}</div>
+      <div style="font-family:var(--display);font-size:1.35rem;font-weight:500;color:var(--cream);letter-spacing:.5px;margin-bottom:20px;">${blockade}</div>`;
+    const btnStyle = (clr) => `flex:1;padding:17px 10px;border-radius:14px;font-family:var(--display);font-size:.85rem;letter-spacing:2px;cursor:pointer;border:1.5px solid ${clr};`;
+
+    if (sub === 'start') return `
+      <div class="step-content">
+        <div class="step-icon-large">✦</div>
+        <h2 class="step-title">Ablösung</h2>
+        <div style="text-align:center;">${badge}</div>
+        <div class="guided-box">
+          <div class="guided-step"><div class="gs-num">1</div><div class="gs-text">Frage deinen Körper: <em>„Darf ich <strong style="font-style:normal;color:var(--cream);">${blockade}</strong> jetzt ablösen?"</em></div></div>
+          <div class="guided-step"><div class="gs-num">2</div><div class="gs-text">Wenn JA: 10× sanft auf die Schlüsselbeine oder den Scheitel klopfen – bewusst und verbunden.</div></div>
+          <div class="guided-step"><div class="gs-num">3</div><div class="gs-text">Nachtesten:</div></div>
         </div>
-      </div>
-    </div>`;
+        <p style="font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--cream-muted);text-align:center;margin:18px 0 14px;line-height:1.65;">Ist <strong style="color:var(--cream);font-style:normal;">${blockade}</strong><br>jetzt abgelöst?</p>
+        <div style="display:flex;gap:10px;">
+          <button onclick="blAbloesung('ja')" style="${btnStyle('rgba(63,184,155,.55)')}background:linear-gradient(135deg,rgba(63,184,155,.22),rgba(63,184,155,.08));color:var(--emerald);">JA</button>
+          <button onclick="blAbloesung('nein')" style="${btnStyle('rgba(255,255,255,.2)')}background:rgba(255,255,255,.04);color:rgba(255,255,255,.6);">NEIN</button>
+        </div>
+      </div>`;
+
+    if (sub === 'nein') return `
+      <div class="step-content">
+        <div class="step-icon-large">🔍</div>
+        <h2 class="step-title">Noch nicht gelöst</h2>
+        <div style="text-align:center;">${badge}</div>
+        <p style="font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--cream-muted);text-align:center;margin:4px 0 18px;line-height:1.65;">Frage deinen Körper:<br><strong style="color:var(--cream);font-style:normal;">„Muss ich mehr wissen?"</strong></p>
+        <div style="display:flex;gap:10px;">
+          <button onclick="blMehrWissen('ja')" style="${btnStyle('rgba(212,168,32,.45)')}background:linear-gradient(135deg,rgba(212,168,32,.18),rgba(212,168,32,.06));color:var(--gold);">JA</button>
+          <button onclick="blMehrWissen('nein')" style="${btnStyle('rgba(255,255,255,.2)')}background:rgba(255,255,255,.04);color:rgba(255,255,255,.6);">NEIN</button>
+        </div>
+      </div>`;
+
+    if (sub === 'mehr-nein') return `
+      <div class="step-content" style="text-align:center;">
+        <div class="completion-glow">✓</div>
+        <h2 class="step-title">Blockade ist vollständig gelöst</h2>
+        <p style="font-family:var(--serif);font-style:italic;font-size:1rem;color:rgba(255,255,255,.72);line-height:1.75;margin:12px 0 28px;">Dein Körper bestätigt:<br><em style="color:var(--cream);">${blockade}</em><br>ist vollständig abgelöst.</p>
+        <button onclick="blNext()" style="padding:16px 32px;border-radius:14px;background:linear-gradient(135deg,rgba(123,45,158,.35),rgba(185,130,255,.15));border:1.5px solid rgba(185,130,255,.42);color:var(--cream);font-family:var(--display);font-size:.75rem;letter-spacing:2px;cursor:pointer;">Zum Abschluss ✦</button>
+      </div>`;
+
+    // mehr-ja: detaillierter Leitfaden aus der Anleitung
+    return `
+      <div class="step-content">
+        <div class="step-icon-large">🔎</div>
+        <h2 class="step-title">Mehr erfahren</h2>
+        <div style="text-align:center;">${badge}</div>
+        <div class="guided-box">
+          <div style="font-family:var(--display);font-size:.6rem;letter-spacing:1.5px;color:var(--gold);margin-bottom:14px;">SCHRITT FÜR SCHRITT BEFRAGEN</div>
+          <div class="guided-step"><div class="gs-num">1</div><div class="gs-text">Ist diese Blockade <em>meine eigene</em> – oder habe ich sie <em>übernommen</em>?</div></div>
+          <div class="guided-step"><div class="gs-num">2</div><div class="gs-text">Wann ist sie aufgetreten?<br><span style="color:rgba(255,255,255,.4);font-size:.8rem;">Vor der Geburt · Bei der Geburt · Nach der Geburt</span></div></div>
+          <div style="margin:6px 0 12px 36px;display:flex;flex-direction:column;gap:6px;">
+            <div style="font-size:.77rem;color:rgba(255,255,255,.55);line-height:1.55;padding:9px 12px;background:rgba(255,255,255,.04);border-radius:9px;border-left:2px solid rgba(212,168,32,.4);">
+              <strong style="color:rgba(212,168,32,.8);">Vor der Geburt:</strong> War es in einem vorherigen Leben? (aktuelles Leben = 0, erstes davor = −1, fünftes davor = −5 ...)
+            </div>
+            <div style="font-size:.77rem;color:rgba(255,255,255,.55);line-height:1.55;padding:9px 12px;background:rgba(255,255,255,.04);border-radius:9px;border-left:2px solid rgba(68,214,214,.3);">
+              <strong style="color:rgba(68,214,214,.8);">Bei der Geburt:</strong> Von der Familie? Vom Krankenhauspersonal?
+            </div>
+            <div style="font-size:.77rem;color:rgba(255,255,255,.55);line-height:1.55;padding:9px 12px;background:rgba(255,255,255,.04);border-radius:9px;border-left:2px solid rgba(185,130,255,.35);">
+              <strong style="color:rgba(185,130,255,.8);">Nach der Geburt:</strong> In 10-er Schritten abfragen – unter 10 J., unter 20 J., unter 30 J. ...
+            </div>
+          </div>
+          <div class="guided-step"><div class="gs-num">3</div><div class="gs-text">Bei <em>übernommen</em>: Von wem?<br><span style="color:rgba(255,255,255,.4);font-size:.8rem;">Familie · Freunde · Bekannte · Tier · Generation der Eltern / Großeltern / Urgroßeltern ...</span></div></div>
+          <div class="guided-step"><div class="gs-num">4</div><div class="gs-text">Betrifft es: <em>Gesundheit · Beziehungen · Berufliches Umfeld?</em></div></div>
+          <div class="guided-step"><div class="gs-num">5</div><div class="gs-text">Wenn eine Person: Ist es jemand, den ich <em>mochte</em> – oder <em>nicht mochte</em>?</div></div>
+        </div>
+        <p style="font-size:.78rem;color:rgba(255,255,255,.38);font-style:italic;text-align:center;margin:16px 0 18px;line-height:1.6;">Wenn du alle Informationen erhalten hast,<br>starte die Ablösung erneut.</p>
+        <button onclick="blData.abloesung=null;blRender();" style="width:100%;padding:15px;border-radius:14px;background:rgba(123,45,158,.18);border:1.5px solid rgba(185,130,255,.32);color:var(--cream);font-family:var(--display);font-size:.75rem;letter-spacing:2px;cursor:pointer;">✦ Ablösung wiederholen</button>
+      </div>`;
   },
 
   // 6 – ABSCHLUSS
@@ -1620,6 +1663,8 @@ function blRender() {
   document.getElementById('bl-progress').style.width = pct + '%';
   document.getElementById('bl-step-ind').textContent = `Schritt ${blStep + 1} von ${BL_TOTAL}`;
   const isLast = blStep === BL_TOTAL - 1;
+  // Ablösung step (5) uses inline buttons — hide footer Weiter
+  document.getElementById('bl-next').style.display = blStep === 5 ? 'none' : '';
   document.getElementById('bl-next').textContent = blStep === 0 ? 'Ich bin bereit ✦' : isLast ? 'Abschließen ✦' : 'Weiter';
 }
 
@@ -1634,6 +1679,17 @@ function blNext() {
   if (blStep === 3 && !blData.col)  { showToast('Bitte Spalte A, B oder C testen'); return; }
   if (blStep === 4 && !blData.idx)  { showToast('Bitte 1, 2 oder 3 testen'); return; }
   blStep++;
+  blRender();
+}
+
+function blAbloesung(result) {
+  if (result === 'ja') { blNext(); return; }
+  blData.abloesung = result;
+  blRender();
+}
+function blMehrWissen(result) {
+  blData.abloesung = result === 'ja' ? 'mehr-ja' : 'mehr-nein';
+  if (result === 'nein') { blRender(); return; }
   blRender();
 }
 
