@@ -181,7 +181,7 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      padding: 0 16px 96px;
+      padding: 0 16px 8px;
     }
     .tool-row {
       display: flex;
@@ -220,44 +220,35 @@
     }
     .tool-row-arrow { color: rgba(255,255,255,.25); font-size: 1.1rem; flex-shrink: 0; }
 
-    /* ─── BOTTOM NAV ─── */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      z-index: 200;
-      background: rgba(18,10,30,.97);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(123,45,158,.3);
-      padding: 10px 0 max(10px, env(safe-area-inset-bottom));
-      display: flex;
-    }
-    .nav-tab {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 4px 0;
-      cursor: pointer;
-      transition: color .18s;
-      border: none;
-      background: none;
-      color: rgba(255,255,255,.32);
-    }
-    .nav-tab.active { color: #A855E8; }
-    .nav-tab svg { width: 22px; height: 22px; }
-    .nav-tab-label {
-      font-family: 'Cinzel', serif;
-      font-size: .5rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-    }
-
     /* ─── MAIN ─── */
     main {
       padding: 0;
       background: radial-gradient(ellipse 80% 30% at 50% 0%, rgba(100,30,150,.2) 0%, transparent 60%);
+    }
+
+    /* ─── FOOTER ─── */
+    .app-footer {
+      margin: 8px 16px 32px;
+      padding: 20px 18px;
+      border-top: 1px solid rgba(123,45,158,.25);
+      text-align: center;
+    }
+    .footer-brand {
+      font-family: 'Cinzel', serif;
+      font-size: .65rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(212,168,32,.6);
+      margin-bottom: 12px;
+    }
+    .footer-legal {
+      font-family: 'Inter', sans-serif;
+      font-size: .68rem;
+      font-weight: 300;
+      color: rgba(255,255,255,.28);
+      line-height: 1.7;
+      max-width: 340px;
+      margin: 0 auto;
     }
 
     /* ─── MEDIA CARDS (used in sub-modals) ─── */
@@ -895,37 +886,16 @@
   <div class="section-label" id="all-tools-label">Alle Tools</div>
   <div class="tools-list" id="tools-list"></div>
 
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-brand">© Sonisanantes &nbsp;•&nbsp; Yvonne Stark</div>
+    <p class="footer-legal">
+      Die Inhalte dieser Anwendung dienen ausschließlich der persönlichen Inspiration und energetischen Unterstützung. Sie ersetzen keine medizinische oder psychologische Beratung, Diagnose oder Behandlung und stellen kein Heilversprechen dar. Bei gesundheitlichen oder psychischen Beschwerden wende dich bitte an eine Ärztin, einen Arzt oder eine therapeutische Fachkraft.
+    </p>
+  </footer>
+
 </main>
 
-<!-- ══════════ BOTTOM NAV ══════════ -->
-<nav class="bottom-nav">
-  <button class="nav-tab active" id="nav-start" onclick="navGo('start')">
-    <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M3 9.5L11 3l8 6.5V19a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M8 20v-7h6v7"/>
-    </svg>
-    <span class="nav-tab-label">Start</span>
-  </button>
-  <button class="nav-tab" id="nav-favoriten" onclick="navGo('favoriten')">
-    <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M11 18.5L4.5 12.5A4.5 4.5 0 0 1 11 6a4.5 4.5 0 0 1 6.5 6.5z"/>
-    </svg>
-    <span class="nav-tab-label">Favoriten</span>
-  </button>
-  <button class="nav-tab" id="nav-bibliothek" onclick="navGo('bibliothek')">
-    <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-      <rect x="3" y="3" width="7" height="16" rx="1"/><rect x="12" y="3" width="7" height="16" rx="1"/>
-    </svg>
-    <span class="nav-tab-label">Bibliothek</span>
-  </button>
-  <button class="nav-tab" id="nav-profil" onclick="navGo('profil')">
-    <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-      <circle cx="11" cy="8" r="3.5"/><path d="M4 19c0-3.5 3.1-6 7-6s7 2.5 7 6"/>
-    </svg>
-    <span class="nav-tab-label">Profil</span>
-  </button>
-</nav>
-
-<!-- ══════════ (legacy anchor kept for compat) ══════════ -->
 <div style="display:none;" id="greeting-bar"></div>
 <!-- ══════════ MEDIA PLAYER MODAL ══════════ -->
 <div class="player-modal" id="player-modal">
