@@ -1,0 +1,3407 @@
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #050608;
+      --card: rgba(123,45,158,0.08);
+      --card2: rgba(123,45,158,0.14);
+      --violet: #7B2D9E;
+      --violet-light: #A040C8;
+      --magenta: #C4257A;
+      --gold: #D4A820;
+      --gold-light: #E8C840;
+      --turquoise: #44D6D6;
+      --emerald: #3FB89B;
+      --cream: #F5ECD0;
+      --cream-muted: rgba(255,255,255,0.78);
+      --display: 'Cinzel', Georgia, serif;
+      --sans: 'Inter', -apple-system, sans-serif;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--cream);
+      font-family: var(--sans);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* ─── APP SHELL ─── */
+    header { padding: 20px 20px 0; }
+    .header-inner {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .header-logo-wrap { display: flex; align-items: center; gap: 16px; }
+    .flower-logo { width: 72px; height: 72px; flex-shrink: 0; }
+    .header-title {
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      line-height: 1.08;
+      text-transform: uppercase;
+      background: linear-gradient(160deg, #D4A820 0%, #F5D860 45%, #D4A820 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .header-subtitle {
+      font-family: 'Cinzel', serif;
+      font-size: .56rem;
+      letter-spacing: .22em;
+      color: var(--turquoise);
+      margin-top: 5px;
+      text-transform: uppercase;
+    }
+    .flower-link { display: block; line-height: 0; }
+    .wa-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(0,0,0,.3);
+      border: 1.5px solid rgba(37,211,102,.5);
+      color: rgba(37,211,102,.85);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      text-decoration: none;
+      transition: border-color .2s, background .2s;
+    }
+    .wa-btn:hover { background: rgba(37,211,102,.1); border-color: rgba(37,211,102,.8); }
+    .wa-btn svg { width: 22px; height: 22px; }
+
+    /* ─── SEARCH BAR ─── */
+    .search-bar-wrap { padding: 16px 16px 0; }
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(123,45,158,.08);
+      border: 1px solid rgba(123,45,158,.45);
+      border-radius: 50px;
+      padding: 11px 18px;
+      transition: border-color .2s;
+    }
+    .search-bar:focus-within { border-color: rgba(185,130,255,.7); }
+    .search-bar input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      font-size: .88rem;
+      font-weight: 300;
+      color: rgba(255,255,255,.85);
+      caret-color: var(--gold);
+    }
+    .search-bar input::placeholder { color: rgba(255,255,255,.3); }
+
+    /* ─── SECTION LABEL ─── */
+    .section-label {
+      font-family: 'Cinzel', serif;
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(212,168,32,.85);
+      padding: 0 20px;
+      margin: 26px 0 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .section-label-arrow {
+      font-size: .85rem;
+      color: rgba(212,168,32,.5);
+    }
+
+    /* ─── RECENT SCROLL ─── */
+    .recent-scroll {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 0 16px 4px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .recent-scroll::-webkit-scrollbar { display: none; }
+    .recent-card {
+      flex-shrink: 0;
+      width: 155px;
+      background: rgba(123,45,158,.08);
+      border: 1px solid rgba(123,45,158,.45);
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .18s, border-color .18s;
+      position: relative;
+    }
+    .recent-card:active { transform: scale(.97); }
+    .recent-card-inner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 10px 12px 12px;
+    }
+    .recent-card-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .recent-card-icon svg { width: 22px; height: 22px; }
+    .recent-card-name {
+      flex: 1;
+      font-family: 'Cinzel', serif;
+      font-size: .66rem;
+      font-weight: 500;
+      color: rgba(255,255,255,.82);
+      line-height: 1.3;
+    }
+    .recent-card-star {
+      font-size: .8rem;
+      color: rgba(255,255,255,.3);
+      align-self: flex-start;
+    }
+    .recent-card-bar { height: 3px; width: 100%; }
+
+    /* ─── TOOLS LIST ─── */
+    .tools-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 0 16px 8px;
+    }
+    .tool-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 14px;
+      cursor: pointer;
+      transition: background .18s, border-color .18s;
+      background: rgba(123,45,158,.07);
+      border: 1px solid rgba(123,45,158,.38);
+      border-radius: 16px;
+    }
+    .tool-row:active { background: rgba(123,45,158,.18); border-color: rgba(123,45,158,.65); }
+    .tool-row-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .tool-row-icon svg { width: 24px; height: 24px; display: block; }
+    .tool-row-body { flex: 1; min-width: 0; }
+    .tool-row-name {
+      font-family: 'Cinzel', serif;
+      font-size: .8rem;
+      font-weight: 500;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      color: var(--cream);
+    }
+    .tool-row-desc {
+      font-size: .72rem;
+      color: rgba(255,255,255,.44);
+      font-weight: 300;
+      line-height: 1.4;
+    }
+    .tool-row-arrow { color: rgba(255,255,255,.25); font-size: 1.1rem; flex-shrink: 0; }
+
+    /* ─── MAIN ─── */
+    main {
+      padding: 0;
+      background: radial-gradient(ellipse 80% 30% at 50% 0%, rgba(100,30,150,.2) 0%, transparent 60%);
+    }
+
+    /* ─── FOOTER ─── */
+    .app-footer {
+      margin: 8px 16px 32px;
+      padding: 20px 18px;
+      border-top: 1px solid rgba(123,45,158,.25);
+      text-align: center;
+    }
+    .footer-brand {
+      font-family: 'Cinzel', serif;
+      font-size: .65rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(212,168,32,.6);
+      margin-bottom: 12px;
+    }
+    .footer-legal {
+      font-family: 'Inter', sans-serif;
+      font-size: .68rem;
+      font-weight: 300;
+      color: rgba(255,255,255,.28);
+      line-height: 1.7;
+      max-width: 340px;
+      margin: 0 auto;
+    }
+
+    /* ─── MEDIA CARDS (used in sub-modals) ─── */
+    .media-card {
+      background: var(--card);
+      border: 1px solid rgba(212,168,32,.12);
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      cursor: pointer;
+      transition: transform .2s, border-color .2s;
+      display: flex;
+      align-items: center;
+    }
+    .media-card:hover { transform: translateY(-2px); border-color: rgba(212,168,32,.28); }
+    .media-card-thumb {
+      width: 88px; height: 88px;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.2rem;
+      position: relative;
+    }
+    .media-card-thumb.meditation { background: linear-gradient(135deg, rgba(123,45,158,.4), rgba(196,37,122,.25)); }
+    .media-card-thumb.frequenz   { background: linear-gradient(135deg, rgba(212,168,32,.2), rgba(63,184,155,.15)); }
+    .media-card-thumb .play-btn {
+      position: absolute;
+      bottom: 6px; right: 6px;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: rgba(212,168,32,.85);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem;
+      color: #050608;
+    }
+    .media-card-body { flex: 1; padding: 14px 16px 14px 14px; }
+    .media-card-tag { font-family: var(--display); font-size: .58rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--turquoise); margin-bottom: 6px; }
+    .media-card-title { font-family: var(--display); font-size: .82rem; font-weight: 500; color: var(--cream); line-height: 1.3; margin-bottom: 5px; }
+    .media-card-desc { font-size: .75rem; color: rgba(255,255,255,.82); font-weight: 300; line-height: 1.5; }
+    .media-card-hz {
+      display: inline-block; margin-top: 6px;
+      font-family: var(--display); font-size: .58rem; letter-spacing: 1px;
+      color: var(--gold); background: rgba(212,168,32,.1);
+      border: 1px solid rgba(212,168,32,.2); padding: 2px 8px; border-radius: 50px;
+    }
+
+    /* ─── TOOL MODAL ─── */
+    .tool-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      display: none;
+      flex-direction: column;
+      background: var(--bg);
+    }
+    .tool-modal.open { display: flex; }
+
+    .tool-modal-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(212,168,32,.08);
+      flex-shrink: 0;
+    }
+    .modal-back {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: rgba(123,45,158,.12);
+      border: none;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      color: var(--cream-muted);
+      flex-shrink: 0;
+      transition: color .2s;
+    }
+    .modal-back:hover { color: var(--cream); }
+    .modal-title { font-family: var(--display); font-size: .85rem; font-weight: 500; letter-spacing: .5px; color: var(--cream); }
+    .modal-step-indicator {
+      margin-left: auto;
+      font-family: var(--display);
+      font-size: .62rem;
+      letter-spacing: 1px;
+      color: var(--cream-muted);
+      text-transform: uppercase;
+    }
+
+    .progress-bar-wrap { height: 2px; background: rgba(212,168,32,.08); flex-shrink: 0; }
+    .progress-bar { height: 100%; background: linear-gradient(90deg, var(--violet), var(--magenta)); transition: width .5s ease; }
+
+    .tool-modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 20px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* ─── STEP CONTENT ─── */
+    .step-content { animation: fadeUp .4s ease; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .step-icon-large { font-size: 2.8rem; margin-bottom: 20px; text-align: center; }
+    .step-title { font-family: var(--display); font-size: 1.3rem; font-weight: 500; letter-spacing: .5px; margin-bottom: 12px; line-height: 1.3; color: var(--cream); }
+    .step-desc { color: var(--cream-muted); font-size: .92rem; line-height: 1.75; margin-bottom: 24px; font-weight: 300; }
+
+    .step-input {
+      width: 100%;
+      background: rgba(5,6,8,.5);
+      border: 1px solid rgba(212,168,32,.15);
+      border-radius: 14px;
+      color: var(--cream);
+      font-family: var(--sans);
+      font-size: .9rem;
+      font-weight: 300;
+      padding: 16px;
+      resize: none;
+      outline: none;
+      transition: border-color .2s;
+      line-height: 1.65;
+    }
+    .step-input:focus { border-color: rgba(212,168,32,.35); }
+    .step-input::placeholder { color: rgba(245,236,208,.2); }
+
+    .connection-cards { display: flex; flex-direction: column; gap: 14px; }
+    .connection-card {
+      background: rgba(5,6,8,.4);
+      border: 1px solid rgba(212,168,32,.1);
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+    .connection-card:hover, .connection-card.sel { border-color: rgba(212,168,32,.3); background: rgba(123,45,158,.1); }
+    .cc-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .cc-icon { font-size: 1.5rem; }
+    .cc-title { font-family: var(--display); font-size: .85rem; font-weight: 500; letter-spacing: .3px; color: var(--cream); }
+    .cc-desc { font-size: .82rem; color: var(--cream-muted); line-height: 1.65; font-weight: 300; }
+
+    .breath-circle {
+      width: 150px; height: 150px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(123,45,158,.35) 0%, rgba(123,45,158,.04) 70%);
+      border: 1px solid rgba(212,168,32,.2);
+      display: flex; align-items: center; justify-content: center;
+      margin: 24px auto;
+      font-family: var(--display);
+      font-size: .75rem;
+      letter-spacing: 1px;
+      color: var(--turquoise);
+      text-align: center;
+      animation: breathe 8s ease-in-out infinite;
+    }
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(123,45,158,.15); }
+      50% { transform: scale(1.15); box-shadow: 0 0 40px 10px rgba(123,45,158,.1); }
+    }
+
+    .guided-box {
+      background: linear-gradient(135deg, rgba(123,45,158,.12), rgba(196,37,122,.06));
+      border: 1px solid rgba(212,168,32,.12);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .guided-step { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 18px; animation: fadeUp .4s ease; }
+    .guided-step:last-child { margin-bottom: 0; }
+    .gs-num {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--display); font-size: .68rem; color: var(--cream); flex-shrink: 0;
+    }
+    .gs-text { font-size: .85rem; color: var(--cream-muted); line-height: 1.7; font-weight: 300; }
+
+    .completion-glow {
+      width: 110px; height: 110px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(63,184,155,.25) 0%, transparent 70%);
+      border: 1px solid rgba(63,184,155,.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.8rem; margin: 0 auto 24px;
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(63,184,155,.15); }
+      50% { box-shadow: 0 0 0 20px rgba(63,184,155,0); }
+    }
+
+    /* ─── MODAL FOOTER ─── */
+    .modal-footer { padding: 16px 20px; border-top: 1px solid rgba(212,168,32,.08); flex-shrink: 0; }
+    .btn-next {
+      width: 100%; padding: 15px; border-radius: 50px;
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      color: var(--cream); font-family: var(--display); font-size: .75rem;
+      letter-spacing: 1.5px; text-transform: uppercase; border: none; cursor: pointer;
+      box-shadow: 0 8px 24px rgba(123,45,158,.3); transition: transform .2s, opacity .2s;
+    }
+    .btn-next:hover { transform: scale(1.02); }
+    .btn-next:disabled { opacity: .35; cursor: default; transform: none; }
+    .btn-skip {
+      display: block; text-align: center; margin-top: 10px;
+      font-size: .78rem; color: var(--cream-muted); cursor: pointer;
+      background: none; border: none; font-family: var(--sans); font-weight: 300;
+      width: 100%; padding: 6px; transition: color .2s;
+    }
+    .btn-skip:hover { color: var(--cream); }
+
+    /* ─── MEDIA PLAYER MODAL ─── */
+    .player-modal {
+      position: fixed; inset: 0; z-index: 400;
+      display: none; flex-direction: column; background: var(--bg);
+    }
+    .player-modal.open { display: flex; }
+    .player-modal-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 20px; border-bottom: 1px solid rgba(212,168,32,.08); flex-shrink: 0;
+    }
+    .player-body {
+      flex: 1; overflow-y: auto;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 28px 20px 32px; -webkit-overflow-scrolling: touch;
+    }
+    .video-wrap {
+      width: 100%; max-width: 560px; border-radius: 16px; overflow: hidden;
+      background: #000; margin-bottom: 28px; box-shadow: 0 0 40px rgba(123,45,158,.25);
+    }
+    .video-wrap video { width: 100%; display: block; }
+    .audio-visual {
+      width: 180px; height: 180px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,168,32,.2) 0%, rgba(123,45,158,.15) 50%, transparent 75%);
+      border: 1px solid rgba(212,168,32,.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem; margin-bottom: 28px;
+      animation: breathe 6s ease-in-out infinite;
+      box-shadow: 0 0 60px rgba(123,45,158,.15);
+    }
+    .audio-wrap { width: 100%; max-width: 440px; margin-bottom: 20px; }
+    audio { width: 100%; border-radius: 50px; outline: none; }
+    audio::-webkit-media-controls-panel { background: rgba(123,45,158,.15); border-radius: 50px; }
+    .player-title {
+      font-family: var(--display); font-size: 1.1rem; font-weight: 500; letter-spacing: .5px;
+      color: var(--cream); text-align: center; margin-bottom: 8px; max-width: 400px;
+    }
+    .player-subtitle {
+      font-family: var(--serif); font-style: italic; font-size: .95rem;
+      color: var(--cream-muted); text-align: center; margin-bottom: 24px;
+      font-weight: 300; max-width: 360px; line-height: 1.65;
+    }
+    .player-hz-badges { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+    .hz-badge {
+      font-family: var(--display); font-size: .62rem; letter-spacing: 1px;
+      color: var(--gold); background: rgba(212,168,32,.1);
+      border: 1px solid rgba(212,168,32,.2); padding: 4px 12px; border-radius: 50px;
+    }
+
+    /* ─── CARD (shared) ─── */
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(212,168,32,.1);
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    /* ─── BACK TO SENDER ─── */
+    @keyframes bts-breathe {
+      0%,100% { transform: scale(1); opacity: .55; }
+      50%      { transform: scale(1.2); opacity: 1; }
+    }
+    .bts-breathe-ring {
+      width: 112px; height: 112px; border-radius: 50%;
+      border: 2px solid rgba(68,214,214,.4);
+      box-shadow: 0 0 32px rgba(68,214,214,.1), 0 0 64px rgba(68,214,214,.05);
+      display: flex; align-items: center; justify-content: center;
+      animation: bts-breathe 4.5s ease-in-out infinite;
+    }
+    .bts-chip {
+      padding: 8px 16px; border-radius: 50px;
+      border: 1px solid rgba(68,214,214,.22);
+      background: rgba(68,214,214,.05); color: var(--cream-muted);
+      font-family: var(--sans); font-size: .78rem; font-weight: 300;
+      cursor: pointer; transition: background .16s, border-color .16s, color .16s;
+      user-select: none;
+    }
+    .bts-chip.active {
+      background: rgba(68,214,214,.16); border-color: rgba(68,214,214,.55);
+      color: var(--cream);
+    }
+    .bts-btn-primary {
+      display: block; width: 100%; max-width: 280px; margin: 0 auto;
+      padding: 15px 24px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(68,214,214,.18), rgba(68,214,214,.1));
+      border: 1px solid rgba(68,214,214,.32);
+      color: var(--cream); font-family: var(--display);
+      font-size: .78rem; letter-spacing: 1.5px; text-transform: uppercase;
+      cursor: pointer; transition: transform .2s;
+    }
+    .bts-btn-primary:hover { transform: scale(1.02); }
+    .bts-btn-send {
+      display: block; width: 100%; max-width: 280px; margin: 0 auto;
+      padding: 16px 24px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(212,168,32,.22), rgba(68,214,214,.16));
+      border: 1px solid rgba(212,168,32,.38);
+      color: var(--cream); font-family: var(--display);
+      font-size: .8rem; letter-spacing: 2.5px; text-transform: uppercase;
+      cursor: pointer; transition: transform .2s, box-shadow .2s;
+    }
+    .bts-btn-send:hover { transform: scale(1.02); box-shadow: 0 0 28px rgba(212,168,32,.18); }
+    .bts-affirmation {
+      background: rgba(68,214,214,.05); border: 1px solid rgba(68,214,214,.16);
+      border-radius: 18px; padding: 26px 22px;
+    }
+    .bts-affirmation p {
+      font-family: var(--serif); font-style: italic; font-size: .98rem;
+      color: rgba(255,255,255,.9); line-height: 1.9; margin-bottom: 16px;
+    }
+    .bts-affirmation p:last-child { margin-bottom: 0; }
+
+    /* ─── WUNSCHBUCHARBEIT ─── */
+    .wbw-btn-primary {
+      display: block; width: 100%; max-width: 280px; margin: 0 auto;
+      padding: 15px 24px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(212,168,32,.2), rgba(212,168,32,.1));
+      border: 1px solid rgba(212,168,32,.35);
+      color: var(--cream); font-family: var(--display);
+      font-size: .78rem; letter-spacing: 1.5px; text-transform: uppercase;
+      cursor: pointer; transition: transform .2s;
+    }
+    .wbw-btn-primary:hover { transform: scale(1.02); }
+    .wbw-chip {
+      padding: 9px 18px; border-radius: 50px;
+      border: 1px solid rgba(212,168,32,.22);
+      background: rgba(212,168,32,.05); color: var(--cream-muted);
+      font-family: var(--sans); font-size: .78rem; font-weight: 300;
+      cursor: pointer; transition: all .18s; user-select: none;
+    }
+    .wbw-chip.active {
+      background: rgba(212,168,32,.18); border-color: rgba(212,168,32,.55);
+      color: var(--cream);
+    }
+    .wbw-rule {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 15px 0; border-bottom: 1px solid rgba(212,168,32,.07);
+    }
+    .wbw-rule:last-child { border-bottom: none; padding-bottom: 0; }
+    .wbw-rule-num {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: rgba(212,168,32,.12); border: 1px solid rgba(212,168,32,.28);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      font-family: var(--display); font-size: .68rem; color: var(--gold); letter-spacing: 0;
+    }
+    .wbw-question-card {
+      background: rgba(212,168,32,.04); border: 1px solid rgba(212,168,32,.12);
+      border-radius: 14px; padding: 16px 18px; margin-bottom: 10px;
+      font-family: var(--serif); font-style: italic;
+      font-size: .95rem; color: rgba(255,255,255,.82); line-height: 1.7;
+    }
+    .wbw-example-box {
+      background: rgba(212,168,32,.06); border-left: 2px solid rgba(212,168,32,.5);
+      border-radius: 0 12px 12px 0; padding: 18px 18px 18px 20px; margin: 20px 0;
+      font-family: var(--serif); font-style: italic;
+      font-size: .95rem; color: rgba(255,255,255,.88); line-height: 1.8;
+    }
+
+    /* ─── ENERGIEFELDER ANLEGEN ─── */
+    .efv-btn-primary {
+      display: block; width: 100%; max-width: 280px; margin: 0 auto;
+      padding: 15px 24px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(68,214,214,.18), rgba(68,214,214,.1));
+      border: 1px solid rgba(68,214,214,.32);
+      color: var(--cream); font-family: var(--display);
+      font-size: .78rem; letter-spacing: 1.5px; text-transform: uppercase;
+      cursor: pointer; transition: transform .2s;
+    }
+    .efv-btn-primary:hover { transform: scale(1.02); }
+    .efv-chip {
+      padding: 9px 18px; border-radius: 50px;
+      border: 1px solid rgba(68,214,214,.2);
+      background: rgba(68,214,214,.05); color: var(--cream-muted);
+      font-family: var(--sans); font-size: .78rem; font-weight: 300;
+      cursor: pointer; transition: all .18s; user-select: none;
+    }
+    .efv-chip.active { background: rgba(68,214,214,.16); border-color: rgba(68,214,214,.5); color: var(--cream); }
+    .efv-conn-btn {
+      padding: 9px 22px; border-radius: 50px;
+      border: 1px solid rgba(68,214,214,.22);
+      background: rgba(68,214,214,.05); color: var(--cream-muted);
+      font-family: var(--display); font-size: .8rem; letter-spacing: 1px;
+      cursor: pointer; transition: all .18s;
+    }
+    .efv-conn-btn.active { background: rgba(68,214,214,.18); border-color: rgba(68,214,214,.55); color: var(--cream); }
+    .efv-impulse-card {
+      padding: 13px 16px; border-radius: 12px;
+      border: 1px solid rgba(68,214,214,.1);
+      background: rgba(68,214,214,.04);
+      font-family: var(--sans); font-size: .84rem; font-weight: 300;
+      color: var(--cream-muted); cursor: pointer; transition: all .18s; line-height: 1.55;
+    }
+    .efv-impulse-card:hover { background: rgba(68,214,214,.1); border-color: rgba(68,214,214,.28); color: var(--cream); }
+    .efv-impulse-card.active { background: rgba(68,214,214,.16); border-color: rgba(68,214,214,.5); color: var(--cream); }
+    .efv-conn-label {
+      font-family: var(--display); font-size: .68rem; letter-spacing: 1.5px;
+      color: var(--turquoise); margin-right: 6px;
+    }
+    .efv-spontan-btn {
+      display: block; width: 100%; padding: 13px 20px; border-radius: 50px;
+      border: 1px solid rgba(185,130,255,.28);
+      background: rgba(185,130,255,.07);
+      color: rgba(185,130,255,.85); font-family: var(--display);
+      font-size: .75rem; letter-spacing: 2px; text-transform: uppercase;
+      cursor: pointer; transition: all .2s;
+    }
+    .efv-spontan-btn:hover { background: rgba(185,130,255,.15); border-color: rgba(185,130,255,.5); box-shadow: 0 0 24px rgba(185,130,255,.12); }
+    .efv-send-btn {
+      display: block; width: 100%; max-width: 280px; margin: 0 auto;
+      padding: 16px 24px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(68,214,214,.22), rgba(185,130,255,.14));
+      border: 1px solid rgba(68,214,214,.38);
+      color: var(--cream); font-family: var(--display);
+      font-size: .8rem; letter-spacing: 2.5px; text-transform: uppercase;
+      cursor: pointer; transition: transform .2s, box-shadow .2s;
+    }
+    .efv-send-btn:hover { transform: scale(1.02); box-shadow: 0 0 28px rgba(68,214,214,.18); }
+    .efv-custom-wrap {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(68,214,214,.05); border: 1px solid rgba(68,214,214,.2);
+      border-radius: 12px; padding: 12px 16px;
+    }
+    .efv-custom-wrap input {
+      background: none; border: none; outline: none; width: 100%;
+      font-family: var(--sans); font-size: .88rem; color: var(--cream);
+      font-weight: 300; caret-color: var(--turquoise);
+    }
+    .efv-custom-wrap input::placeholder { color: rgba(255,255,255,.22); }
+    .efv-custom-prefix {
+      font-family: var(--serif); font-style: italic;
+      font-size: .88rem; color: rgba(68,214,214,.65); white-space: nowrap; flex-shrink: 0;
+    }
+
+    /* ─── LÖSUNGSORIENTIERTE FRAGEN ─── */
+    .loq-cat-btn {
+      display: flex; align-items: center; gap: 14px; width: 100%;
+      padding: 14px 16px; border-radius: 14px;
+      border: 1px solid rgba(212,168,32,.12);
+      background: rgba(212,168,32,.04); color: var(--cream-muted);
+      font-family: var(--sans); font-size: .88rem; font-weight: 300;
+      cursor: pointer; transition: all .18s; text-align: left;
+    }
+    .loq-cat-btn:hover { background: rgba(212,168,32,.1); border-color: rgba(212,168,32,.3); color: var(--cream); }
+    .loq-cat-icon { font-size: 1.25rem; flex-shrink: 0; width: 32px; text-align: center; }
+    .loq-cat-name { flex: 1; line-height: 1.4; }
+    .loq-cat-count {
+      font-size: .65rem; color: rgba(212,168,32,.45);
+      font-family: var(--display); letter-spacing: 1px; flex-shrink: 0;
+    }
+    .loq-random-btn {
+      display: block; width: 100%; padding: 16px 24px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(123,45,158,.18), rgba(196,37,122,.1));
+      border: 1px solid rgba(185,130,255,.28);
+      color: rgba(185,130,255,.9); font-family: var(--display);
+      font-size: .78rem; letter-spacing: 2px; text-transform: uppercase;
+      cursor: pointer; transition: all .2s; margin-top: 8px;
+    }
+    .loq-random-btn:hover {
+      background: linear-gradient(135deg, rgba(123,45,158,.28), rgba(196,37,122,.18));
+      border-color: rgba(185,130,255,.5); box-shadow: 0 0 28px rgba(123,45,158,.2);
+    }
+    .loq-card {
+      background: rgba(212,168,32,.04); border: 1px solid rgba(212,168,32,.2);
+      border-radius: 22px; padding: 38px 26px;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 190px; transition: opacity .35s, transform .35s;
+    }
+    .loq-next-btn {
+      display: block; width: 100%; max-width: 280px; margin: 0 auto;
+      padding: 15px 24px; border-radius: 14px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.8); font-family: var(--display);
+      font-size: .78rem; letter-spacing: 1.5px; text-transform: uppercase;
+      cursor: pointer; transition: transform .2s, border-color .18s;
+    }
+    .loq-next-btn:hover { transform: scale(1.02); border-color: rgba(255,255,255,.28); }
+    .loq-back-link {
+      background: none; border: none; color: rgba(212,168,32,.5);
+      font-family: var(--display); font-size: .62rem; letter-spacing: 1.5px;
+      text-transform: uppercase; cursor: pointer; padding: 8px;
+      display: block; text-align: center; margin: 0 auto; transition: color .15s;
+    }
+    .loq-back-link:hover { color: var(--gold); }
+    .loq-cat-label {
+      font-family: var(--display); font-size: .6rem; letter-spacing: 2px;
+      text-transform: uppercase; color: rgba(212,168,32,.55); text-align: center;
+    }
+    .loq-send-btn {
+      display: block; width: 100%; max-width: 280px; margin: 0 auto;
+      padding: 16px 24px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(212,168,32,.28), rgba(212,168,32,.14));
+      border: 1px solid rgba(212,168,32,.55);
+      color: #fff; font-family: var(--display);
+      font-size: .78rem; letter-spacing: 2px; text-transform: uppercase;
+      cursor: pointer; transition: transform .2s, box-shadow .2s;
+    }
+    .loq-send-btn:hover { transform: scale(1.02); box-shadow: 0 0 28px rgba(212,168,32,.22); }
+    .loq-own-wrap {
+      background: rgba(212,168,32,.04); border: 1px solid rgba(212,168,32,.18);
+      border-radius: 16px; padding: 16px;
+    }
+    .loq-own-textarea {
+      width: 100%; background: none; border: none; outline: none;
+      font-family: var(--serif); font-style: italic; font-size: 1rem;
+      color: var(--cream); line-height: 1.75; resize: none;
+      caret-color: var(--gold); min-height: 76px;
+    }
+    .loq-own-textarea::placeholder { color: rgba(255,255,255,.2); }
+
+    /* ─── DIE 4 SCHRITTE FÜR WUNDER ─── */
+    .wunder-btn-primary {
+      display: block; width: 100%; max-width: 280px; margin: 0 auto;
+      padding: 15px 24px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(123,45,158,.32), rgba(185,130,255,.16));
+      border: 1px solid rgba(185,130,255,.42);
+      color: #fff; font-family: var(--display);
+      font-size: .78rem; letter-spacing: 1.5px; text-transform: uppercase;
+      cursor: pointer; transition: transform .2s, box-shadow .2s;
+    }
+    .wunder-btn-primary:hover { transform: scale(1.02); box-shadow: 0 0 28px rgba(123,45,158,.28); }
+    .wunder-btn-gold {
+      display: block; width: 100%; max-width: 280px; margin: 0 auto;
+      padding: 16px 24px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(212,168,32,.28), rgba(212,168,32,.14));
+      border: 1px solid rgba(212,168,32,.55);
+      color: #fff; font-family: var(--display);
+      font-size: .82rem; letter-spacing: 2px; text-transform: uppercase;
+      cursor: pointer; transition: transform .2s, box-shadow .2s;
+    }
+    .wunder-btn-gold:hover { transform: scale(1.02); box-shadow: 0 0 28px rgba(212,168,32,.22); }
+    .wunder-textarea-wrap {
+      background: rgba(185,130,255,.04); border: 1px solid rgba(185,130,255,.18);
+      border-radius: 14px; padding: 14px 16px;
+    }
+    .wunder-textarea {
+      width: 100%; background: none; border: none; outline: none;
+      font-family: var(--serif); font-style: italic; font-size: .95rem;
+      color: var(--cream); line-height: 1.75; resize: none;
+      caret-color: rgba(185,130,255,.8);
+    }
+    .wunder-textarea::placeholder { color: rgba(255,255,255,.2); }
+    .wunder-step-badge {
+      width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--display); font-size: .8rem;
+      background: rgba(185,130,255,.14); border: 1px solid rgba(185,130,255,.35);
+      color: rgba(185,130,255,.9);
+    }
+    .wunder-info-box {
+      background: rgba(185,130,255,.05); border: 1px solid rgba(185,130,255,.12);
+      border-radius: 16px; padding: 18px 16px;
+    }
+    .wunder-affirm {
+      background: rgba(212,168,32,.04); border: 1px solid rgba(212,168,32,.12);
+      border-radius: 12px; padding: 14px 16px;
+      font-family: var(--serif); font-style: italic;
+      font-size: .92rem; color: rgba(255,255,255,.78); line-height: 1.65;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<header>
+  <div class="header-inner">
+    <div class="header-logo-wrap">
+      <a href="https://www.sonisanantes.com" target="_blank" rel="noopener" class="flower-link">
+      <svg class="flower-logo" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="flg" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="rgba(160,64,200,0.55)"/>
+            <stop offset="60%" stop-color="rgba(123,45,158,0.2)"/>
+            <stop offset="100%" stop-color="rgba(60,20,90,0.05)"/>
+          </radialGradient>
+          <filter id="flglow">
+            <feGaussianBlur stdDeviation="2.5" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+        <circle cx="36" cy="36" r="34" fill="url(#flg)"/>
+        <g filter="url(#flglow)" opacity="0.7">
+          <circle cx="36" cy="36" r="13" stroke="rgba(185,130,255,.8)" stroke-width="0.9" fill="none"/>
+          <circle cx="36" cy="23" r="13" stroke="rgba(185,130,255,.8)" stroke-width="0.9" fill="none"/>
+          <circle cx="47.26" cy="29.5" r="13" stroke="rgba(185,130,255,.8)" stroke-width="0.9" fill="none"/>
+          <circle cx="47.26" cy="42.5" r="13" stroke="rgba(185,130,255,.8)" stroke-width="0.9" fill="none"/>
+          <circle cx="36" cy="49" r="13" stroke="rgba(185,130,255,.8)" stroke-width="0.9" fill="none"/>
+          <circle cx="24.74" cy="42.5" r="13" stroke="rgba(185,130,255,.8)" stroke-width="0.9" fill="none"/>
+          <circle cx="24.74" cy="29.5" r="13" stroke="rgba(185,130,255,.8)" stroke-width="0.9" fill="none"/>
+        </g>
+        <circle cx="36" cy="36" r="34" stroke="rgba(185,130,255,.22)" stroke-width="0.8"/>
+        <circle cx="36" cy="36" r="2.2" fill="rgba(212,168,32,.95)"/>
+      </svg>
+      </a>
+      <div>
+        <div class="header-title">Energetik<br>Toolbox</div>
+        <div class="header-subtitle">Sonisanantes</div>
+      </div>
+    </div>
+    <a href="https://wa.me/4915115603352" target="_blank" rel="noopener" class="wa-btn" title="WhatsApp Kontakt">
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.978-1.406A9.954 9.954 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.94 7.94 0 0 1-4.073-1.116l-.291-.173-3.007.849.855-2.924-.19-.3A7.958 7.958 0 0 1 4 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8zm4.406-5.958c-.242-.121-1.43-.706-1.652-.786-.221-.08-.383-.12-.543.121-.16.241-.623.786-.764.947-.14.16-.281.18-.523.06-.242-.12-1.02-.376-1.942-1.198-.718-.64-1.203-1.431-1.344-1.672-.14-.241-.015-.372.106-.491.108-.108.242-.281.362-.422.121-.14.162-.24.242-.4.08-.161.04-.302-.02-.422-.06-.121-.543-1.31-.744-1.793-.196-.471-.395-.407-.543-.415l-.463-.008c-.16 0-.42.06-.64.3-.22.241-.84.821-.84 2.003 0 1.18.86 2.32.98 2.481.12.16 1.69 2.58 4.097 3.617.574.248 1.021.396 1.369.506.575.183 1.099.157 1.513.095.461-.068 1.43-.584 1.63-1.148.202-.563.202-1.045.142-1.148-.06-.1-.22-.16-.462-.28z"/>
+      </svg>
+    </a>
+  </div>
+  <p style="font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.2em;color:rgba(255,255,255,.3);text-align:center;padding-bottom:18px;">Finde das passende Tool</p>
+</header>
+
+<main>
+
+  <!-- Search -->
+  <div class="search-bar-wrap">
+    <div class="search-bar">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="7" cy="7" r="4.5" stroke="rgba(255,255,255,.45)" stroke-width="1.5"/>
+        <path d="M10.5 10.5L14 14" stroke="rgba(255,255,255,.45)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <input id="tools-search" type="text" placeholder="Suche nach Tools..." oninput="filterTools(this.value)">
+    </div>
+  </div>
+
+  <!-- Recently used -->
+  <div id="recent-section" style="display:none;">
+    <div class="section-label">Zuletzt Verwendet <span class="section-label-arrow">›</span></div>
+    <div class="recent-scroll" id="recent-scroll"></div>
+  </div>
+
+  <!-- All tools -->
+  <div class="section-label" id="all-tools-label">Alle Tools</div>
+  <div class="tools-list" id="tools-list"></div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-brand">© Sonisanantes &nbsp;•&nbsp; Yvonne Stark</div>
+    <p class="footer-legal">
+      Die Inhalte dieser Anwendung dienen ausschließlich der persönlichen Inspiration und energetischen Unterstützung. Sie ersetzen keine medizinische oder psychologische Beratung, Diagnose oder Behandlung und stellen kein Heilversprechen dar. Bei gesundheitlichen oder psychischen Beschwerden wende dich bitte an eine Ärztin, einen Arzt oder eine therapeutische Fachkraft.
+    </p>
+  </footer>
+
+</main>
+
+<div style="display:none;" id="greeting-bar"></div>
+<!-- ══════════ MEDIA PLAYER MODAL ══════════ -->
+<div class="player-modal" id="player-modal">
+  <div class="player-modal-header">
+    <button class="modal-back" onclick="closePlayer()">←</button>
+    <div class="modal-title" id="player-modal-title">Meditation</div>
+  </div>
+  <div class="player-body" id="player-body"></div>
+</div>
+
+<!-- ══════════ TOOL MODAL: KÖRPERKOMMUNIKATION ══════════ -->
+<div class="tool-modal" id="modal-koerper">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="closeModal('modal-koerper')">←</button>
+    <div><div class="modal-title">Körperkommunikation</div></div>
+    <div></div>
+  </div>
+  <div class="tool-modal-body" style="overflow-y:auto;padding:20px 16px 100px;">
+
+    <div style="text-align:center;margin-bottom:28px;">
+      <div style="font-size:2.5rem;margin-bottom:12px;">🫀</div>
+      <h2 style="font-family:var(--display);font-size:1.3rem;color:var(--cream);margin-bottom:10px;">Was ist Körperkommunikation?</h2>
+      <p style="font-family:var(--sans);font-weight:300;font-size:.9rem;color:rgba(245,236,208,.7);line-height:1.7;">
+        Dein Körper weiß mehr als dein Verstand. Er trägt das Wissen deiner Seele, deiner Ahnen und deiner energetischen Realität – und antwortet, wenn du lernst, ihm die richtigen Fragen zu stellen.
+      </p>
+      <p style="font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--gold);margin-top:12px;line-height:1.6;">
+        „Dein Körper lügt nie."
+      </p>
+    </div>
+
+    <div style="background:rgba(123,45,158,.08);border:1px solid rgba(123,45,158,.2);border-radius:18px;padding:20px;margin-bottom:16px;">
+      <div style="font-family:var(--display);font-size:.65rem;letter-spacing:2px;color:var(--turquoise);margin-bottom:14px;">WAS IST ES</div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--magenta));display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;">✦</div>
+          <div>
+            <div style="font-family:var(--display);font-size:.82rem;color:var(--cream);margin-bottom:4px;">Direkte Verbindung zur Körperintelligenz</div>
+            <div style="font-size:.82rem;color:rgba(245,236,208,.65);font-weight:300;line-height:1.6;">Körperkommunikation ist die Fähigkeit, deinen Körper als Informationsquelle zu nutzen – jenseits von Logik und Analyse.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--magenta));display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;">✦</div>
+          <div>
+            <div style="font-family:var(--display);font-size:.82rem;color:var(--cream);margin-bottom:4px;">Ja / Nein – so einfach ist es</div>
+            <div style="font-size:.82rem;color:rgba(245,236,208,.65);font-weight:300;line-height:1.6;">Der Körper antwortet mit zwei klaren Signalen: Stärke (JA) oder Schwäche (NEIN). Alles, was resoniert, stärkt – alles, was nicht stimmt, schwächt.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--magenta));display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;">✦</div>
+          <div>
+            <div style="font-family:var(--display);font-size:.82rem;color:var(--cream);margin-bottom:4px;">Basis vieler energetischer Methoden</div>
+            <div style="font-size:.82rem;color:rgba(245,236,208,.65);font-weight:300;line-height:1.6;">Kinesiologen, Energetikerinnen und spirituelle Heilerinnen nutzen sie weltweit – für Blockadenlösung, Ernährung, Beziehungen, Entscheidungen.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:rgba(212,168,32,.06);border:1px solid rgba(212,168,32,.15);border-radius:18px;padding:20px;margin-bottom:16px;">
+      <div style="font-family:var(--display);font-size:.65rem;letter-spacing:2px;color:var(--gold);margin-bottom:14px;">SO GEHT ES</div>
+      <p style="font-size:.85rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.7;margin-bottom:16px;">
+        Bevor du testest: Kalibriere deinen Körper. Sage laut oder innerlich eine wahre Aussage (<em style="font-family:var(--serif);">„Mein Name ist [dein Name]"</em>) – spüre die Stärke. Dann eine falsche (<em style="font-family:var(--serif);">„Mein Name ist [falscher Name]"</em>) – spüre den Unterschied.
+      </p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(212,168,32,.2);border:1px solid rgba(212,168,32,.3);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:.75rem;color:var(--gold);flex-shrink:0;">1</div>
+          <div style="font-size:.84rem;color:rgba(245,236,208,.75);font-weight:300;line-height:1.6;padding-top:4px;">Stelle eine klare Ja/Nein-Frage – im Präsens, positiv formuliert.</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(212,168,32,.2);border:1px solid rgba(212,168,32,.3);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:.75rem;color:var(--gold);flex-shrink:0;">2</div>
+          <div style="font-size:.84rem;color:rgba(245,236,208,.75);font-weight:300;line-height:1.6;padding-top:4px;">Führe die Testmethode aus (z.B. O-Ring, Standfestigkeit, Finger-Test).</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(212,168,32,.2);border:1px solid rgba(212,168,32,.3);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:.75rem;color:var(--gold);flex-shrink:0;">3</div>
+          <div style="font-size:.84rem;color:rgba(245,236,208,.75);font-weight:300;line-height:1.6;padding-top:4px;">Stärke = JA · Schwäche oder Unsicherheit = NEIN.</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(212,168,32,.2);border:1px solid rgba(212,168,32,.3);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:.75rem;color:var(--gold);flex-shrink:0;">4</div>
+          <div style="font-size:.84rem;color:rgba(245,236,208,.75);font-weight:300;line-height:1.6;padding-top:4px;">Teste immer nüchtern, geerdet und ohne Erwartungsdruck.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:rgba(68,214,214,.05);border:1px solid rgba(68,214,214,.15);border-radius:18px;padding:20px;margin-bottom:16px;">
+      <div style="font-family:var(--display);font-size:.65rem;letter-spacing:2px;color:var(--turquoise);margin-bottom:14px;">TESTMETHODEN</div>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+
+        <div style="border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:14px;">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
+            <span style="font-size:1.1rem;">☕</span>
+            <div style="font-family:var(--display);font-size:.85rem;color:var(--cream);">Tasse Leeren <span style="font-size:.65rem;color:var(--gold);letter-spacing:1px;margin-left:6px;">VORBEREITUNG</span></div>
+          </div>
+          <div style="font-size:.82rem;color:rgba(245,236,208,.65);font-weight:300;line-height:1.7;">
+            <p style="margin-bottom:8px;">Alles, was der Kopf, die Angst oder sonstiges gerade erzählt – Gedanken, Zweifel, Sorgen – packen wir in eine imaginäre Tasse.</p>
+            <p style="margin-bottom:8px;">Dann machen wir die Handbewegung dazu: <em style="font-family:var(--serif);">als würden wir eine Tasse oder ein Glas ausleeren</em> – und lassen damit all das los, was uns beim klaren Testen im Weg stehen könnte.</p>
+            <p><em style="font-family:var(--serif);">Leere Tasse = freier Kopf = klares Testergebnis.</em></p>
+          </div>
+        </div>
+
+        <div style="border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:14px;">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
+            <span style="font-size:1.1rem;">🧍</span>
+            <div style="font-family:var(--display);font-size:.85rem;color:var(--cream);">Standfestigkeitstest</div>
+          </div>
+          <div style="font-size:.82rem;color:rgba(245,236,208,.65);font-weight:300;line-height:1.6;">Stehe aufrecht, Augen geschlossen. Stelle die Frage. <em style="font-family:var(--serif);">Neigung nach vorne = JA · Neigung nach hinten = NEIN.</em> Sehr intuitiv, gut für tiefe Entscheidungen.</div>
+        </div>
+
+        <div style="border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:14px;">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
+            <span style="font-size:1.1rem;">👌</span>
+            <div style="font-family:var(--display);font-size:.85rem;color:var(--cream);">O-Ring-Test</div>
+          </div>
+          <div style="font-size:.82rem;color:rgba(245,236,208,.65);font-weight:300;line-height:1.6;">Bilde einen Kreis aus Daumen und Zeigefinger. Versuche ihn mit dem anderen Zeigefinger zu öffnen. <em style="font-family:var(--serif);">Hält er = JA · Öffnet er sich = NEIN.</em> Ideal für den Alltag und das Alleine-Testen.</div>
+        </div>
+
+        <div style="border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:14px;">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
+            <span style="font-size:1.1rem;">👆</span>
+            <div style="font-family:var(--display);font-size:.85rem;color:var(--cream);">Fingertest – Die Kussübung <span style="font-size:.65rem;color:var(--turquoise);letter-spacing:1px;margin-left:6px;">nach Uwe Albrecht</span></div>
+          </div>
+          <div style="font-size:.82rem;color:rgba(245,236,208,.65);font-weight:300;line-height:1.7;">
+            <p style="margin-bottom:10px;">Daumen und Zeigefinger begegnen sich. Stelle deine Frage – und beobachte, was passiert.</p>
+            <p style="margin-bottom:10px;"><em style="font-family:var(--serif);">JA:</em> Beide Finger finden sich an der Spitze. Sie kommen sich entgegen – der Daumen streckt sich, der Zeigefinger bewegt sich leicht nach unten – und treffen sich präzise auf Augenhöhe.</p>
+            <p style="margin-bottom:10px;"><em style="font-family:var(--serif);">NEIN:</em> Der Zeigefinger blockiert. Er hält inne, bewegt sich nicht vollständig mit – der Daumen trifft ihn deshalb nicht an der Spitze, sondern weiter unten am Finger.</p>
+            <p>Funktioniert es mit dem Zeigefinger nicht gut, probiere es mit Mittelfinger, Ringfinger oder kleinem Finger. Jeder Körper findet seinen eigenen klaren Kanal.</p>
+          </div>
+        </div>
+
+        <div style="border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:14px;">
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
+            <span style="font-size:1.1rem;">💫</span>
+            <div style="font-family:var(--display);font-size:.85rem;color:var(--cream);">Pendel</div>
+          </div>
+          <div style="font-size:.82rem;color:rgba(245,236,208,.65);font-weight:300;line-height:1.6;">Halte ein Pendel ruhig. Kalibriere zuerst: Frage nach JA und NEIN um die Pendelbewegung zu erkennen. Danach stelle deine Fragen. Das Pendel verstärkt feine Körpersignale.</div>
+        </div>
+
+        <div>
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
+            <span style="font-size:1.1rem;">🫁</span>
+            <div style="font-family:var(--display);font-size:.85rem;color:var(--cream);">Inneres Spüren / Bauchgefühl</div>
+          </div>
+          <div style="font-size:.82rem;color:rgba(245,236,208,.65);font-weight:300;line-height:1.6;">Die subtilste Form. Stelle die Frage, atme tief ein, leg deine Hand auf dein Herz und spüre: <em style="font-family:var(--serif);">Weitet sich etwas oder fühlt sich weich, leicht an = JA · Zieht sich etwas zusammen oder fühlt es sich schwer, eng an = NEIN.</em> Wird mit der Zeit zur verlässlichsten Methode.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="background:rgba(63,184,155,.05);border:1px solid rgba(63,184,155,.15);border-radius:18px;padding:20px;">
+      <div style="font-family:var(--display);font-size:.65rem;letter-spacing:2px;color:var(--emerald);margin-bottom:14px;">WICHTIGE HINWEISE</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span><span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Übe täglich – auch mit kleinen Fragen (Lebensmittel, Entscheidungen).</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span><span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Teste nie unter Stress, Druck oder mit starkem Erwartungswunsch.</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span><span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Starte mit Fragen, deren Antwort du kennst – um deinen Körper-Code zu kalibrieren.</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span><span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Energetische Blockaden können das Testergebnis beeinflussen – löse sie zuerst.</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--emerald);font-size:.9rem;flex-shrink:0;">✓</span><span style="font-size:.82rem;color:rgba(245,236,208,.7);font-weight:300;line-height:1.6;">Vertraue dem ersten Impuls. Der Verstand redet danach oft dazwischen.</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════ TOOL MODAL: BLOCKADEN LÖSEN ══════════ -->
+<div class="tool-modal" id="modal-blockaden">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="closeTool('blockaden')">←</button>
+    <div>
+      <div class="modal-title">Blockaden lösen</div>
+    </div>
+    <div class="modal-step-indicator" id="bl-step-ind">Schritt 1 von 7</div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar" id="bl-progress" style="width:14%"></div>
+  </div>
+  <div class="tool-modal-body" id="bl-body"></div>
+  <div class="modal-footer">
+    <button class="btn-next" id="bl-next" onclick="blNext()">Weiter</button>
+    <button class="btn-skip" id="bl-skip" onclick="blSkip()">Überspringen</button>
+  </div>
+</div>
+
+<!-- ══════════ TOOL MODAL: STRICHMÄNNCHENTECHNIK ══════════ -->
+<div class="tool-modal" id="modal-strich">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="closeStrich()">←</button>
+    <div>
+      <div class="modal-title">Strichmännchentechnik</div>
+    </div>
+    <div class="modal-step-indicator" id="sm-step-ind">1 / 7</div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar" id="sm-progress" style="width:14%"></div>
+  </div>
+  <div class="tool-modal-body" style="padding:14px 14px 28px;">
+    <div id="sm-canvas-wrap" style="width:100%;border-radius:14px;overflow:hidden;border:1px solid rgba(123,45,158,.25);background:rgba(4,2,10,.7);position:relative;margin-bottom:14px;">
+      <canvas id="sm-canvas" style="display:block;width:100%;touch-action:none;"></canvas>
+      <div id="sm-tap-hint" style="display:none;position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:11px;color:rgba(212,168,32,.55);letter-spacing:.12em;pointer-events:none;animation:pulse 2s ease-in-out infinite;">
+        Tippe auf eine Verbindungslinie
+      </div>
+      <div style="padding:8px 16px 14px;text-align:center;">
+        <div style="color:var(--gold);font-size:11px;margin-bottom:4px;">✦</div>
+        <div id="sm-canvas-instr" style="font-family:var(--display);font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:rgba(212,168,32,.75);line-height:1.7;"></div>
+      </div>
+    </div>
+    <div id="sm-step-content"></div>
+  </div>
+</div>
+
+<!-- ══════════ TOOL MODAL: COMING SOON ══════════ -->
+<div class="tool-modal" id="modal-soon">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="closeModal('modal-soon')">←</button>
+    <div class="modal-title" id="soon-title">Tool</div>
+  </div>
+  <div class="tool-modal-body" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:60vh;">
+    <div style="font-size:3.5rem;margin-bottom:20px;" id="soon-icon">✨</div>
+    <h2 style="font-family:var(--display);font-size:1.3rem;font-weight:500;letter-spacing:.5px;margin-bottom:12px;color:var(--cream);" id="soon-name">Coming Soon</h2>
+    <p style="color:var(--cream-muted);max-width:280px;line-height:1.75;font-weight:300;" id="soon-desc">Dieses Tool wird gerade liebevoll entwickelt und ist bald für dich verfügbar.</p>
+    <div style="margin-top:28px;background:rgba(123,45,158,.1);border:1px solid rgba(212,168,32,.15);border-radius:14px;padding:14px 20px;max-width:280px;">
+      <div style="font-family:var(--display);font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--turquoise);margin-bottom:6px;">Bald verfügbar</div>
+      <div style="font-size:.83rem;color:var(--cream-muted);font-weight:300;">Du wirst benachrichtigt, sobald das Tool bereit ist.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL: DIE 4 SCHRITTE FÜR WUNDER ══════════ -->
+<div class="tool-modal" id="modal-wunder">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="wunderClose()">←</button>
+    <div class="modal-title">Die 4 Schritte für Wunder</div>
+    <div id="wunder-step-ind" style="font-family:var(--display);font-size:.58rem;color:rgba(185,130,255,.8);letter-spacing:1.5px;"></div>
+  </div>
+  <div class="progress-bar-wrap" id="wunder-pb-wrap" style="display:none;">
+    <div class="progress-bar" id="wunder-pb" style="width:0%;background:linear-gradient(90deg,var(--violet),rgba(185,130,255,.75));"></div>
+  </div>
+  <div class="tool-modal-body" id="wunder-body" style="overflow-y:auto;-webkit-overflow-scrolling:touch;"></div>
+</div>
+
+<!-- ══════════ MODAL: ENERGIEFELDER ANLEGEN ══════════ -->
+<div class="tool-modal" id="modal-felder">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="efvClose()">←</button>
+    <div class="modal-title">Energiefelder anlegen</div>
+    <div id="efv-step-indicator" style="font-family:var(--display);font-size:.58rem;color:var(--turquoise);letter-spacing:1.5px;"></div>
+  </div>
+  <div class="tool-modal-body" id="efv-body" style="overflow-y:auto;-webkit-overflow-scrolling:touch;"></div>
+</div>
+
+<!-- ══════════ MODAL: WUNSCHBUCHARBEIT ══════════ -->
+<div class="tool-modal" id="modal-wunsch">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="wbwClose()">←</button>
+    <div class="modal-title">Wunschbucharbeit</div>
+    <div id="wbw-step-indicator" style="font-family:var(--display);font-size:.58rem;color:var(--gold);letter-spacing:1.5px;"></div>
+  </div>
+  <div class="tool-modal-body" id="wbw-body" style="overflow-y:auto;-webkit-overflow-scrolling:touch;"></div>
+</div>
+
+<!-- ══════════ MODAL: BACK TO SENDER ══════════ -->
+<div class="tool-modal" id="modal-schutz">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="btsClose()">←</button>
+    <div class="modal-title">Back to Sender</div>
+    <div id="bts-step-indicator" style="font-family:var(--display);font-size:.58rem;color:var(--turquoise);letter-spacing:1.5px;"></div>
+  </div>
+  <div class="tool-modal-body" id="bts-body" style="overflow-y:auto;-webkit-overflow-scrolling:touch;"></div>
+</div>
+
+<!-- ══════════ MODAL: LÖSUNGSORIENTIERTE FRAGEN ══════════ -->
+<div class="tool-modal" id="modal-fragen">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="loqClose()">←</button>
+    <div class="modal-title">Lösungsorientierte Fragen</div>
+    <div id="loq-step-indicator" style="font-family:var(--display);font-size:.58rem;color:var(--gold);letter-spacing:1.5px;"></div>
+  </div>
+  <div class="tool-modal-body" id="loq-body" style="overflow-y:auto;-webkit-overflow-scrolling:touch;"></div>
+</div>
+
+<!-- ══════════ MODAL: GEFÜHRTE MEDITATIONEN ══════════ -->
+<div class="tool-modal" id="modal-meditationen">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="closeModal('modal-meditationen')">←</button>
+    <div class="modal-title">Geführte Meditationen</div>
+  </div>
+  <div class="tool-modal-body" style="padding:20px 16px;">
+    <div class="media-card" onclick="openPlayer('traenen')">
+      <div class="media-card-thumb meditation">
+        🌊
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="media-card-body">
+        <div class="media-card-tag">Geführte Meditation · Video</div>
+        <div class="media-card-title">Wenn Tränen Heilen</div>
+        <div class="media-card-desc">Eine einfühlsame Reise durch den Schmerz – hin zu tiefer Heilung und innerem Frieden.</div>
+      </div>
+    </div>
+    <div class="media-card" onclick="openPlayer('vollmond')">
+      <div class="media-card-thumb meditation">
+        🌕
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="media-card-body">
+        <div class="media-card-tag">Geführte Meditation · Video</div>
+        <div class="media-card-title">Vollmond – Loslassen, Aufladen & Fülle empfangen</div>
+        <div class="media-card-desc">Die Kraft des Vollmonds nutzen: loslassen, was nicht mehr dient, und Fülle einladen.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL: FREQUENZREISEN & MUSIK ══════════ -->
+<div class="tool-modal" id="modal-frequenzen">
+  <div class="tool-modal-header">
+    <button class="modal-back" onclick="closeModal('modal-frequenzen')">←</button>
+    <div class="modal-title">Frequenzreisen & Musik</div>
+  </div>
+  <div class="tool-modal-body" style="padding:20px 16px;">
+    <div class="media-card" onclick="openPlayer('urklang')">
+      <div class="media-card-thumb frequenz">
+        💛
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="media-card-body">
+        <div class="media-card-tag">Frequenzreise · Musik</div>
+        <div class="media-card-title">Urklang des Herzens</div>
+        <div class="media-card-desc">Heilende Herzfrequenzen für tiefe Verbindung und innere Harmonie.</div>
+        <span class="media-card-hz">432 Hz · 639 Hz</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── INIT ───
+window.addEventListener('DOMContentLoaded', () => {
+  const p = new URLSearchParams(window.location.search);
+  const name = p.get('name') || '';
+  if (name) { window._userName = name.split(' ')[0]; }
+  renderToolsList('');
+  renderRecentTools();
+});
+
+function handleLogout() {
+  const target = window.parent !== window ? window.parent : window;
+  target.location.href = '/wp-login.php?action=logout&_wpnonce=' + (window._wpLogoutNonce || '');
+}
+
+// ─── TOOLS META ───
+const TOOLS_META = [
+  {
+    id: 'blockaden', name: 'Blockaden lösen', desc: 'Multidimensionaler geführter Prozess',
+    bg: 'rgba(123,45,158,.18)', bar: 'rgba(123,45,158,.75)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="10" rx="2.5" stroke="rgba(185,130,255,.85)" stroke-width="1.4"/><path d="M7 11V8.5a5 5 0 0 1 10 0V11" stroke="rgba(185,130,255,.85)" stroke-width="1.4" stroke-linecap="round"/><circle cx="12" cy="16" r="1.4" fill="rgba(185,130,255,.85)"/></svg>`
+  },
+  {
+    id: 'strich', name: 'Strichmännchentech­nik', desc: 'Energetische Verbindungen lösen',
+    bg: 'rgba(196,37,122,.12)', bar: 'rgba(196,37,122,.75)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="5.5" r="2" stroke="rgba(230,120,190,.85)" stroke-width="1.3"/><line x1="6" y1="7.5" x2="6" y2="14" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/><circle cx="18" cy="5.5" r="2" stroke="rgba(230,120,190,.85)" stroke-width="1.3"/><line x1="18" y1="7.5" x2="18" y2="14" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/><path d="M6 11Q12 7.5 18 11" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="2 2" fill="none"/></svg>`
+  },
+  {
+    id: 'koerper', name: 'Körperkommuni­kation', desc: 'Fragen an den Körper – intuitive Antworten',
+    bg: 'rgba(196,37,122,.1)', bar: 'rgba(196,37,122,.6)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5" r="2.2" stroke="rgba(230,120,190,.85)" stroke-width="1.3"/><path d="M12 7.2v5.5" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/><path d="M9.5 10l-2.5 2M14.5 10l2.5 2" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/><path d="M12 12.7v3.5" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/><path d="M7 19Q9 17 12 18.5Q15 20 17 19" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>`
+  },
+  {
+    id: 'schutz', name: 'Back to Sender', desc: 'Fremde Energien erkennen & zurückgeben',
+    bg: 'rgba(68,214,214,.1)', bar: 'rgba(68,214,214,.65)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 2L3 5.5V12c0 4.4 3.5 7.7 9 9.5 5.5-1.8 9-5.1 9-9.5V5.5L12 2z" stroke="rgba(68,214,214,.9)" stroke-width="1.3" stroke-linejoin="round"/><path d="M12 15V9M9.5 11.5L12 9l2.5 2.5" stroke="rgba(68,214,214,.9)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+  },
+  {
+    id: 'wunsch', name: 'Wunschbuch­arbeit', desc: 'Wünsche formulieren & Frequenz aktivieren',
+    bg: 'rgba(212,168,32,.1)', bar: 'rgba(212,168,32,.65)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H12v16H5.5A1.5 1.5 0 0 1 4 18.5V5.5z" stroke="rgba(212,168,32,.9)" stroke-width="1.3"/><path d="M12 4h6.5A1.5 1.5 0 0 1 20 5.5v13A1.5 1.5 0 0 1 18.5 20H12V4z" stroke="rgba(212,168,32,.9)" stroke-width="1.3"/><path d="M16 8l.6 1.7 1.8.05-1.42 1.05.5 1.7L16 11.6l-1.48.95.5-1.7-1.42-1.05 1.8-.05L16 8z" fill="rgba(212,168,32,.9)"/></svg>`
+  },
+  {
+    id: 'felder', name: 'Energiefelder anlegen', desc: 'Schutz-, Heil- und Manifestationsfelder',
+    bg: 'rgba(68,214,214,.08)', bar: 'rgba(68,214,214,.6)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.5" stroke="rgba(68,214,214,.9)" stroke-width="1.4"/><circle cx="12" cy="12" r="6" stroke="rgba(68,214,214,.55)" stroke-width="1.1"/><circle cx="12" cy="12" r="10" stroke="rgba(68,214,214,.25)" stroke-width="1"/></svg>`
+  },
+  {
+    id: 'fragen', name: 'Lösungsorientierte Fragen', desc: 'Perspektivwechsel durch kraftvolle Impulse',
+    bg: 'rgba(212,168,32,.08)', bar: 'rgba(212,168,32,.6)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 2L22 12L12 22L2 12Z" stroke="rgba(212,168,32,.9)" stroke-width="1.3" stroke-linejoin="round"/><path d="M10.5 10a2 2 0 0 1 3.5 1.2c0 1.4-1.8 1.7-1.8 3" stroke="rgba(212,168,32,.9)" stroke-width="1.3" stroke-linecap="round"/><circle cx="12" cy="16.5" r=".8" fill="rgba(212,168,32,.9)"/></svg>`
+  },
+  {
+    id: 'wunder', name: 'Die 4 Schritte für Wunder', desc: 'Wahrnehmen · Annehmen · Transformieren · Feiern',
+    bg: 'rgba(123,45,158,.1)', bar: 'rgba(123,45,158,.7)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 1.5L14 10L22.5 12L14 14L12 22.5L10 14L1.5 12L10 10Z" stroke="rgba(185,130,255,.85)" stroke-width="1.3" stroke-linejoin="round"/></svg>`
+  },
+  {
+    id: 'meditationen', name: 'Geführte Meditationen', desc: 'Einfühlsame Reisen zur inneren Heilung & Stille',
+    bg: 'rgba(123,45,158,.15)', bar: 'rgba(123,45,158,.7)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5.5" r="2.2" stroke="rgba(185,130,255,.85)" stroke-width="1.3"/><path d="M12 7.7v4.5" stroke="rgba(185,130,255,.85)" stroke-width="1.3" stroke-linecap="round"/><path d="M9.5 10l-2.5 2M14.5 10l2.5 2" stroke="rgba(185,130,255,.85)" stroke-width="1.3" stroke-linecap="round"/><path d="M7 14.5Q9.5 19 12 17Q14.5 19 17 14.5" stroke="rgba(185,130,255,.85)" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>`
+  },
+  {
+    id: 'frequenzen', name: 'Frequenzreisen & Musik', desc: 'Heilende Klangfrequenzen für Harmonie & Verbindung',
+    bg: 'rgba(212,168,32,.1)', bar: 'rgba(212,168,32,.6)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><path d="M2 12Q4 5.5 6 12Q8 18.5 10 12Q12 5.5 14 12Q16 18.5 18 12Q19.5 7.5 22 12" stroke="rgba(212,168,32,.9)" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>`
+  },
+];
+
+// ─── RECENTLY USED ───
+function getRecentIds() {
+  try { return JSON.parse(localStorage.getItem('sn_recent') || '[]'); } catch { return []; }
+}
+function trackToolUsed(id) {
+  let arr = getRecentIds().filter(x => x !== id);
+  arr.unshift(id);
+  arr = arr.slice(0, 6);
+  try { localStorage.setItem('sn_recent', JSON.stringify(arr)); } catch {}
+  renderRecentTools();
+}
+function renderRecentTools() {
+  const ids = getRecentIds();
+  const sec = document.getElementById('recent-section');
+  const wrap = document.getElementById('recent-scroll');
+  if (!sec || !wrap) return;
+  if (!ids.length) { sec.style.display = 'none'; return; }
+  sec.style.display = '';
+  wrap.innerHTML = ids.map(id => {
+    const t = TOOLS_META.find(m => m.id === id);
+    if (!t) return '';
+    return `<div class="recent-card" onclick="openTool('${t.id}')">
+      <div class="recent-card-inner">
+        <div class="recent-card-icon" style="background:${t.bg};">${t.svg}</div>
+        <div class="recent-card-name">${t.name}</div>
+        <span class="recent-card-star">☆</span>
+      </div>
+      <div class="recent-card-bar" style="background:${t.bar};"></div>
+    </div>`;
+  }).join('');
+}
+
+// ─── TOOLS LIST ───
+function renderToolsList(filter) {
+  const wrap = document.getElementById('tools-list');
+  if (!wrap) return;
+  const q = (filter || '').toLowerCase();
+  const items = TOOLS_META.filter(t =>
+    !q || t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q)
+  );
+  if (!items.length) {
+    wrap.innerHTML = `<div style="padding:28px 20px;text-align:center;font-size:.82rem;color:rgba(255,255,255,.3);">Kein Tool gefunden</div>`;
+    return;
+  }
+  wrap.innerHTML = items.map(t => `
+    <div class="tool-row" onclick="openTool('${t.id}')">
+      <div class="tool-row-icon" style="background:${t.bg};">${t.svg}</div>
+      <div class="tool-row-body">
+        <div class="tool-row-name">${t.name}</div>
+        <div class="tool-row-desc">${t.desc}</div>
+      </div>
+      <span class="tool-row-arrow">›</span>
+    </div>`).join('');
+}
+function filterTools(val) { renderToolsList(val); }
+
+// ─── BOTTOM NAV ───
+function navGo(tab) {
+  document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById('nav-' + tab);
+  if (el) el.classList.add('active');
+}
+
+// ─── OPEN / CLOSE TOOLS ───
+const comingSoon = {};
+
+function openTool(id) {
+  trackToolUsed(id);
+  if (id === 'koerper') {
+    document.getElementById('modal-koerper').classList.add('open');
+  } else if (id === 'strich') {
+    smOpen();
+  } else if (id === 'blockaden') {
+    blReset();
+    document.getElementById('modal-blockaden').classList.add('open');
+  } else if (id === 'schutz') {
+    btsOpen();
+  } else if (id === 'wunsch') {
+    wbwOpen();
+  } else if (id === 'felder') {
+    efvOpen();
+  } else if (id === 'fragen') {
+    loqOpen();
+  } else if (id === 'wunder') {
+    wunderOpen();
+  } else if (id === 'meditationen') {
+    openSubSection('meditationen');
+  } else if (id === 'frequenzen') {
+    openSubSection('frequenzen');
+  } else if (comingSoon[id]) {
+    const d = comingSoon[id];
+    document.getElementById('soon-title').textContent = d.name;
+    document.getElementById('soon-icon').textContent  = d.icon;
+    document.getElementById('soon-name').textContent  = d.name;
+    document.getElementById('soon-desc').textContent  = d.desc;
+    document.getElementById('modal-soon').classList.add('open');
+  }
+}
+function closeTool(id)      { document.getElementById('modal-' + id).classList.remove('open'); }
+function closeModal(id)    { document.getElementById(id).classList.remove('open'); }
+function openSubSection(id) { document.getElementById('modal-' + id).classList.add('open'); }
+
+// ─── BLOCKADEN KOMPASS ───
+const BL_THEMES = {
+  1:"Angst / Starre", 2:"Trauer / Verlust", 3:"Frustration / Unzufriedenheit",
+  4:"Ärger / Wut", 5:"Unsicherheit / Zweifel", 6:"Scham / Schuld",
+  7:"Einsamkeit / Abweisung", 8:"Hilflosigkeit / Ohnmacht",
+  9:"Negatives Selbstbild / Minderwertigkeit", 10:"Belastung / Überwältigung"
+};
+const BL_LISTS = {
+  1:  ["Angst","Bedrohung","Entsetzen","Fassungslosigkeit","Neuheitsangst","Panik","Schrecken","Schock","Terror"],
+  2:  ["Betrübtheit","Gebrochenes Herz","Depression","Kummer","Sehnsucht","Traurigkeit","Verlassenheit","Verlust","Verzweiflung"],
+  3:  ["Eifersucht","Entmutigung","Enttäuschung","Frustration","Missmut","Sturheit","Unzufriedenheit","Niedergeschlagenheit","Vergebliche Mühe"],
+  4:  ["Ärger","Aggression","Empörung","Groll","Hass","Neid","Rachegelüste","Verbitterung","Wut"],
+  5:  ["Bedenken","Nervosität","Scheu","Selbstzweifel","Sprachlosigkeit","Unentschlossenheit","Unsicherheit","Verletzlichkeit","Zweifel"],
+  6:  ["Abscheu","Beschämung","Demütigung","Ekel","Reue","Scham","Schuldgefühle","Schuldzuweisung","Selbstmissbrauch"],
+  7:  ["Ablehnung","Alleinsein","Einsamkeit","Entfremdung","Isolation","Stolz","Unerwiderte Liebe","Zurückweisung","Verstrickung"],
+  8:  ["Erniedrigung","Hilflosigkeit","Kraftlosigkeit","Ohnmacht","Verlorenheit","Unterlegenheit","Hoffnungslosigkeit","Verrat","Sinnlosigkeit"],
+  9:  ["Bitterkeit","Geringschätzung","Herabsetzung","Selbstverachtung","Unzulänglichkeit","Undankbarkeit","Versagen","Unwertgefühl","Wertlosigkeit"],
+  10: ["Erschöpfung","Kontrollverlust","Gereiztheit","Strenge","Überempfindlichkeit","Überforderung","Überwältigung","Verwirrung","Verwundbarkeit"]
+};
+
+function blGetTriplet(n, col) {
+  const list = BL_LISTS[n] || [];
+  if (col === 'A') return list.slice(0,3);
+  if (col === 'B') return list.slice(3,6);
+  return list.slice(6,9);
+}
+
+let blData = {};
+const BL_TOTAL = 7;
+let blStep = 0;
+
+const blSteps = [
+  // 0 – INTRO
+  () => `
+    <div class="step-content">
+      <div class="step-icon-large">🌀</div>
+      <h2 class="step-title">Willkommen im BlockadenKompass</h2>
+      <p class="step-desc">Dieses Tool hilft dir, mit deiner Körperkommunikation eine aktuell wirksame Blockade zu erkennen. Nimm dir einen Moment Zeit, atme ruhig und teste jede Frage in deinem Tempo.</p>
+      <div class="breath-circle" style="margin-top:24px;">Atme<br/>tief ein</div>
+    </div>`,
+
+  // 1 – OBEN / UNTEN
+  () => `
+    <div class="step-content">
+      <div class="step-icon-large">🫀</div>
+      <h2 class="step-title">Teste: OBEN oder UNTEN?</h2>
+      <p class="step-desc">Stelle deinen Körper die Frage: <em style="font-family:var(--serif);font-size:1.05em;">„OBEN oder UNTEN?"</em><br/>und folge dem Muskeltest.</p>
+      <div class="connection-cards" style="margin-top:8px;">
+        <div class="connection-card ${blData.pos==='oben'?'sel':''}" onclick="blChoosePos('oben')">
+          <div class="cc-header"><span class="cc-icon">🔼</span><span class="cc-title">OBEN</span></div>
+          <p class="cc-desc">Themen 1–5: Angst · Trauer · Frustration · Wut · Unsicherheit</p>
+        </div>
+        <div class="connection-card ${blData.pos==='unten'?'sel':''}" onclick="blChoosePos('unten')">
+          <div class="cc-header"><span class="cc-icon">🔽</span><span class="cc-title">UNTEN</span></div>
+          <p class="cc-desc">Themen 6–10: Scham · Einsamkeit · Hilflosigkeit · Selbstbild · Belastung</p>
+        </div>
+      </div>
+    </div>`,
+
+  // 2 – ZAHL
+  () => {
+    const nums = blData.pos === 'oben' ? [1,2,3,4,5] : [6,7,8,9,10];
+    return `
+    <div class="step-content">
+      <div class="step-icon-large">🔢</div>
+      <h2 class="step-title">Teste: Welche Zahl?</h2>
+      <p class="step-desc">Gehe die Zahlen durch und teste jede einzeln mit deinem Muskeltest. Welche gibt ein klares JA?</p>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:8px;">
+        ${nums.map(n => `
+          <button onclick="blChooseNum(${n})" style="
+            padding:16px 8px;border-radius:14px;border:1px solid ${blData.num===n?'rgba(212,168,32,.5)':'rgba(212,168,32,.1)'};
+            background:${blData.num===n?'rgba(123,45,158,.2)':'rgba(5,6,8,.4)'};
+            font-family:var(--display);font-size:1.1rem;color:var(--cream);cursor:pointer;transition:.2s;">
+            ${n}
+          </button>`).join('')}
+      </div>
+      ${blData.num ? `<div style="margin-top:16px;padding:10px 16px;background:rgba(212,168,32,.06);border:1px solid rgba(212,168,32,.15);border-radius:12px;text-align:center;">
+        <div style="font-family:var(--display);font-size:.62rem;letter-spacing:1.5px;color:var(--turquoise);">ZAHL ${blData.num} GEWÄHLT ✦</div>
+      </div>` : ''}
+    </div>`;
+  },
+
+  // 3 – SPALTE A/B/C
+  () => `
+    <div class="step-content">
+      <div class="step-icon-large">📋</div>
+      <h2 class="step-title">Teste: Spalte A, B oder C?</h2>
+      <p class="step-desc">Frage deinen Körper: <em style="font-family:var(--serif);">„Ist es Spalte A, B oder C?"</em></p>
+      <div style="display:flex;gap:12px;margin-top:16px;">
+        ${['A','B','C'].map(c => `
+          <button onclick="blChooseCol('${c}')" style="
+            flex:1;padding:20px;border-radius:50px;border:1px solid ${blData.col===c?'rgba(212,168,32,.5)':'rgba(212,168,32,.1)'};
+            background:${blData.col===c?'linear-gradient(135deg,var(--violet),var(--magenta))':'rgba(5,6,8,.4)'};
+            font-family:var(--display);font-size:1.3rem;color:var(--cream);cursor:pointer;letter-spacing:2px;transition:.2s;">${c}</button>`).join('')}
+      </div>
+      ${blData.col ? `<div style="margin-top:16px;padding:10px 16px;background:rgba(212,168,32,.06);border:1px solid rgba(212,168,32,.15);border-radius:12px;text-align:center;">
+        <div style="font-family:var(--display);font-size:.62rem;letter-spacing:1.5px;color:var(--turquoise);">SPALTE ${blData.col} GEWÄHLT ✦</div>
+      </div>` : ''}
+    </div>`,
+
+  // 4 – KÄSTCHEN 1/2/3
+  () => {
+    const triplet = blGetTriplet(blData.num, blData.col);
+    return `
+    <div class="step-content">
+      <div class="step-icon-large">🎯</div>
+      <h2 class="step-title">Teste: Kästchen 1, 2 oder 3?</h2>
+      <p class="step-desc">Frage deinen Körper: <em style="font-family:var(--serif);">„Ist es 1, 2 oder 3?"</em></p>
+      <div style="display:flex;gap:14px;margin-top:20px;">
+        ${triplet.map((t,i) => `
+          <button onclick="blChooseIndex(${i+1})" style="
+            flex:1;padding:28px 10px;border-radius:18px;
+            border:2px solid ${blData.idx===i+1?'rgba(212,168,32,.7)':'rgba(212,168,32,.2)'};
+            background:${blData.idx===i+1?'linear-gradient(135deg,var(--violet),var(--magenta))':'rgba(255,255,255,.04)'};
+            cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;">
+            <span style="font-family:var(--display);font-size:2rem;font-weight:500;color:var(--cream);letter-spacing:1px;">${i+1}</span>
+          </button>`).join('')}
+      </div>
+    </div>`;
+  },
+
+  // 5 – ERGEBNIS + ABLÖSUNG
+  () => {
+    const blockade = blGetTriplet(blData.num, blData.col)[blData.idx - 1] || '—';
+    return `
+    <div class="step-content">
+      <div class="step-icon-large">✦</div>
+      <h2 class="step-title">Deine Blockade</h2>
+      <div style="text-align:center;margin:16px 0 24px;">
+        <div style="font-family:var(--display);font-size:.65rem;letter-spacing:2px;color:var(--turquoise);margin-bottom:8px;">${BL_THEMES[blData.num]} · Spalte ${blData.col} · ${blData.idx}</div>
+        <div style="font-family:var(--display);font-size:1.6rem;font-weight:500;color:var(--cream);letter-spacing:1px;margin-bottom:4px;">${blockade}</div>
+        <div style="font-family:var(--serif);font-style:italic;font-size:.95rem;color:var(--cream-muted);font-weight:300;">OBEN/UNTEN: ${blData.pos?.toUpperCase()} · Zahl ${blData.num}</div>
+      </div>
+      <div class="guided-box">
+        <div style="font-family:var(--display);font-size:.65rem;letter-spacing:1.5px;color:var(--gold);margin-bottom:14px;">ABLÖSUNG</div>
+        <div class="guided-step"><div class="gs-num">1</div><div class="gs-text">Frage deinen Körper: <em>„Darf ich diese Blockade – ${blockade} – jetzt ablösen?"</em></div></div>
+        <div class="guided-step"><div class="gs-num">2</div><div class="gs-text">Wenn JA: Klopfe sanft auf Schlüsselbein oder Scheitel – bewusst und verbunden.</div></div>
+        <div class="guided-step"><div class="gs-num">3</div><div class="gs-text">Nachtesten: <em>„Ist ${blockade} jetzt abgelöst?"</em></div></div>
+        <div class="guided-step"><div class="gs-num">4</div><div class="gs-text">Wenn NEIN: Frage: <em>„Muss ich mehr wissen?"</em> und folge dem Impuls.</div></div>
+      </div>
+    </div>`;
+  },
+
+  // 6 – ABSCHLUSS
+  () => `
+    <div class="step-content" style="text-align:center;">
+      <div class="completion-glow">✓</div>
+      <h2 class="step-title">Danke, dass du dir Zeit für dich genommen hast.</h2>
+      <p class="step-desc" style="text-align:center;font-family:var(--serif);font-style:italic;">Ich danke mir, dass ich mir diese Zeit für mich genommen habe.</p>
+      <div class="card" style="text-align:left;margin-top:20px;">
+        <div style="font-family:var(--display);font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--turquoise);margin-bottom:10px;">Erkenntnis festhalten</div>
+        <textarea class="step-input" id="bl-journal-text" rows="4" placeholder="Was hat sich gezeigt? Was darf du mitnehmen?"></textarea>
+      </div>
+    </div>`,
+];
+
+function blReset() {
+  blStep = 0;
+  blData = {};
+  blRender();
+}
+
+function blRender() {
+  document.getElementById('bl-body').innerHTML = blSteps[blStep]();
+  const pct = Math.round(((blStep + 1) / BL_TOTAL) * 100);
+  document.getElementById('bl-progress').style.width = pct + '%';
+  document.getElementById('bl-step-ind').textContent = `Schritt ${blStep + 1} von ${BL_TOTAL}`;
+  const isLast = blStep === BL_TOTAL - 1;
+  document.getElementById('bl-next').textContent = blStep === 0 ? 'Ich bin bereit ✦' : isLast ? 'Abschließen ✦' : 'Weiter';
+  document.getElementById('bl-skip').style.display = (blStep === 0 || isLast) ? 'none' : 'block';
+}
+
+function blNext() {
+  if (blStep === BL_TOTAL - 1) {
+    closeModal('modal-blockaden');
+    showToast('Prozess abgeschlossen ✦');
+    return;
+  }
+  if (blStep === 1 && !blData.pos)  { showToast('Bitte OBEN oder UNTEN wählen'); return; }
+  if (blStep === 2 && !blData.num)  { showToast('Bitte eine Zahl testen'); return; }
+  if (blStep === 3 && !blData.col)  { showToast('Bitte Spalte A, B oder C testen'); return; }
+  if (blStep === 4 && !blData.idx)  { showToast('Bitte 1, 2 oder 3 testen'); return; }
+  blStep++;
+  blRender();
+}
+
+function blSkip() {
+  if (blStep < BL_TOTAL - 1) { blStep++; blRender(); }
+}
+
+function blChoosePos(pos) { blData.pos = pos; blData.num = null; blData.col = null; blData.idx = null; blRender(); }
+function blChooseNum(n)   { blData.num = n; blData.col = null; blData.idx = null; blRender(); }
+function blChooseCol(col) { blData.col = col; blData.idx = null; blRender(); }
+function blChooseIndex(i) { blData.idx = i; blRender(); }
+
+// ─── MEDIA PLAYER ───
+const mediaItems = {
+  traenen: {
+    title: 'Wenn Tränen Heilen',
+    subtitle: 'Eine einfühlsame Reise durch den Schmerz – hin zu tiefer Heilung und innerem Frieden.',
+    type: 'video', src: 'media/wenn-traenen-heilen.mp4', hz: [],
+  },
+  vollmond: {
+    title: 'Vollmond – Loslassen, Aufladen & Fülle empfangen',
+    subtitle: 'Die Kraft des Vollmonds nutzen: loslassen, was nicht mehr dient, und Fülle einladen.',
+    type: 'video', src: 'media/vollmond-meditation.mp4', hz: [],
+  },
+  urklang: {
+    title: 'Urklang des Herzens',
+    subtitle: 'Heilende Herzfrequenzen für tiefe Verbindung, Mitgefühl und innere Harmonie.',
+    type: 'audio', src: 'media/urklang-des-herzens.mp3', hz: ['432 Hz', '639 Hz'], icon: '💛',
+  },
+};
+
+function openPlayer(id) {
+  const item = mediaItems[id];
+  document.getElementById('player-modal-title').textContent = item.title;
+  let mediaHtml = '';
+  if (item.type === 'video') {
+    mediaHtml = `<div class="video-wrap"><video controls playsinline preload="metadata"><source src="${item.src}" type="video/mp4" /></video></div>`;
+  } else {
+    mediaHtml = `<div class="audio-visual">${item.icon || '🎵'}</div><div class="audio-wrap"><audio controls preload="metadata"><source src="${item.src}" type="audio/mpeg" /></audio></div>`;
+  }
+  const hzHtml = item.hz.length
+    ? `<div class="player-hz-badges">${item.hz.map(h => `<span class="hz-badge">✧ ${h}</span>`).join('')}</div>`
+    : '';
+  document.getElementById('player-body').innerHTML = `${mediaHtml}<div class="player-title">${item.title}</div><div class="player-subtitle">${item.subtitle}</div>${hzHtml}`;
+  document.getElementById('player-modal').classList.add('open');
+}
+
+function closePlayer() {
+  const video = document.querySelector('#player-modal video');
+  const audio = document.querySelector('#player-modal audio');
+  if (video) video.pause();
+  if (audio) audio.pause();
+  document.getElementById('player-modal').classList.remove('open');
+}
+
+// ══════ STRICHMÄNNCHENTECHNIK ══════
+const SM_CHAKRA_COLORS = ['#9B59B6','#5B8DEF','#1ABC9C','#2ECC71','#F1C40F','#E67E22','#E74C3C'];
+const SM_CHAKRA_NAMES  = ['Scheitel','Stirn','Kehle','Herz','Solarplexus','Sakral','Wurzel'];
+
+let smStep = 1, smMyName = '', smOtherName = '';
+let smDrawnCircles = new Set();
+let smCircleAnim = { type: null, progress: 0 };
+let smLinesDrawn = 0;
+let smLineAnim = { active: false, progress: 0, idx: 0 };
+let smCutLines = Array(7).fill(false);
+let smCutAnims = [];
+let smFinalCutProgress = 0;
+let smOuterAlphaOverride = null;
+let smCanvas, smCtx, smDpr = 1;
+
+function smCw() { return smCanvas.width / smDpr; }
+function smCh() { return smCanvas.height / smDpr; }
+function smLine(x1,y1,x2,y2) { smCtx.beginPath(); smCtx.moveTo(x1,y1); smCtx.lineTo(x2,y2); smCtx.stroke(); }
+
+function smGetFig(side) {
+  const w = smCw(), h = smCh();
+  const isCenter = side === 'center';
+  const cx = isCenter ? w * 0.5 : (side === 'left' ? w * 0.25 : w * 0.75);
+  const R  = isCenter ? Math.round(w * 0.065) : Math.round(w * 0.038);
+  const topY=h*0.10, headCY=topY+R, neckY=headCY+R+R*0.18, shoulderY=neckY+R*0.35;
+  const hipY=shoulderY+R*3.4, armLX=cx-R*1.85, armRX=cx+R*1.85, armMidY=shoulderY+R*1.35;
+  const footLX=cx-R*1.25, footRX=cx+R*1.25, footY=hipY+R*3.1, nameY=footY+R*1.05;
+  const chakras=[
+    {x:cx,y:topY+R*0.05},{x:cx,y:headCY},{x:cx,y:neckY+R*0.08},
+    {x:cx,y:shoulderY+R*1.05},{x:cx,y:shoulderY+R*1.9},{x:cx,y:shoulderY+R*2.75},{x:cx,y:hipY}
+  ];
+  return {cx,R,topY,headCY,neckY,shoulderY,hipY,armLX,armRX,armMidY,footLX,footRX,footY,nameY,chakras};
+}
+
+function smDrawFig(fig, color) {
+  color = color || 'rgba(245,236,208,.87)';
+  const {cx,R,headCY,neckY,shoulderY,hipY,armLX,armRX,armMidY,footLX,footRX,footY} = fig;
+  smCtx.save();
+  smCtx.strokeStyle=color; smCtx.lineWidth=Math.max(2,R*0.13); smCtx.lineCap='round'; smCtx.lineJoin='round';
+  smCtx.shadowColor=color; smCtx.shadowBlur=8;
+  smCtx.beginPath(); smCtx.arc(cx,headCY,R,0,Math.PI*2); smCtx.stroke();
+  smLine(cx,neckY,cx,hipY); smLine(cx,shoulderY+R*0.3,armLX,armMidY); smLine(cx,shoulderY+R*0.3,armRX,armMidY);
+  smLine(cx,hipY,footLX,footY); smLine(cx,hipY,footRX,footY);
+  smCtx.restore();
+}
+
+function smDrawFigName(fig, name) {
+  if (!name) return;
+  smCtx.save();
+  smCtx.fillStyle='rgba(245,236,208,.6)';
+  smCtx.font=`400 ${Math.max(11,Math.round(fig.R*0.62))}px 'Cormorant Garamond',serif`;
+  smCtx.textAlign='center'; smCtx.fillText(name,fig.cx,fig.nameY); smCtx.restore();
+}
+
+function smDrawChakras(fig) {
+  const r=Math.max(4,fig.R*0.21);
+  fig.chakras.forEach((c,i)=>{
+    smCtx.save(); smCtx.beginPath(); smCtx.arc(c.x,c.y,r,0,Math.PI*2);
+    smCtx.fillStyle=SM_CHAKRA_COLORS[i]; smCtx.shadowColor=SM_CHAKRA_COLORS[i]; smCtx.shadowBlur=10;
+    smCtx.fill(); smCtx.restore();
+  });
+}
+
+function smDrawLightCircle(cx,cy,radius,alpha,rays) {
+  rays=rays||16; smCtx.save(); smCtx.globalAlpha=alpha;
+  const grd=smCtx.createRadialGradient(cx,cy,radius*.6,cx,cy,radius*1.3);
+  grd.addColorStop(0,'rgba(212,168,32,0)'); grd.addColorStop(.55,'rgba(212,168,32,.1)'); grd.addColorStop(1,'rgba(212,168,32,0)');
+  smCtx.beginPath(); smCtx.arc(cx,cy,radius*1.3,0,Math.PI*2); smCtx.fillStyle=grd; smCtx.fill();
+  smCtx.beginPath(); smCtx.arc(cx,cy,radius,0,Math.PI*2);
+  smCtx.strokeStyle='#D4A820'; smCtx.lineWidth=1.8; smCtx.shadowColor='#D4A820'; smCtx.shadowBlur=12; smCtx.stroke();
+  for(let i=0;i<rays;i++){
+    const ang=(i/rays)*Math.PI*2, r1=radius+3, r2=radius+14+(i%2===0?10:0);
+    smCtx.beginPath(); smCtx.moveTo(cx+Math.cos(ang)*r1,cy+Math.sin(ang)*r1);
+    smCtx.lineTo(cx+Math.cos(ang)*r2,cy+Math.sin(ang)*r2);
+    smCtx.strokeStyle='rgba(212,168,32,.65)'; smCtx.lineWidth=1.4; smCtx.shadowBlur=6; smCtx.stroke();
+  }
+  smCtx.restore();
+}
+
+function smPillPath(x,y,w,h,r) {
+  const r2=Math.min(r,w/2,h/2);
+  if(typeof smCtx.roundRect==='function'){ smCtx.roundRect(x,y,w,h,r2); return; }
+  smCtx.moveTo(x+r2,y); smCtx.lineTo(x+w-r2,y); smCtx.arcTo(x+w,y,x+w,y+r2,r2);
+  smCtx.lineTo(x+w,y+h-r2); smCtx.arcTo(x+w,y+h,x+w-r2,y+h,r2);
+  smCtx.lineTo(x+r2,y+h); smCtx.arcTo(x,y+h,x,y+h-r2,r2);
+  smCtx.lineTo(x,y+r2); smCtx.arcTo(x,y,x+r2,y,r2); smCtx.closePath();
+}
+
+function smDrawPillShape(L,R,alpha) {
+  const cr=(L.footY-L.headCY)/2+L.R*1.3, centerY=(L.headCY+L.footY)/2, pad=L.R*0.5;
+  const x1=L.cx-cr-pad, x2=R.cx+cr+pad, y1=centerY-cr-pad, y2=centerY+cr+pad;
+  const pw=x2-x1, ph=y2-y1, rx=ph/2, cx=(x1+x2)/2, cy=(y1+y2)/2, a=pw/2, b=ph/2;
+  smCtx.save(); smCtx.globalAlpha=alpha;
+  const grd=smCtx.createRadialGradient(cx,cy,ph*0.15,cx,cy,pw*0.55);
+  grd.addColorStop(0,'rgba(212,168,32,0)'); grd.addColorStop(.55,'rgba(212,168,32,.09)'); grd.addColorStop(1,'rgba(212,168,32,0)');
+  smCtx.beginPath(); smPillPath(x1,y1,pw,ph,rx); smCtx.fillStyle=grd; smCtx.fill();
+  smCtx.beginPath(); smPillPath(x1,y1,pw,ph,rx);
+  smCtx.strokeStyle='#D4A820'; smCtx.lineWidth=1.8; smCtx.shadowColor='#D4A820'; smCtx.shadowBlur=14; smCtx.stroke();
+  const nRays=28; smCtx.lineWidth=1.4; smCtx.shadowBlur=5;
+  for(let i=0;i<nRays;i++){
+    const t=(i/nRays)*Math.PI*2, ex=cx+a*Math.cos(t), ey=cy+b*Math.sin(t);
+    const nxr=Math.cos(t)/a, nyr=Math.sin(t)/b, nl=Math.hypot(nxr,nyr);
+    const rnx=nxr/nl, rny=nyr/nl, r2=i%3===0?16:(i%2===0?11:7);
+    smCtx.strokeStyle='rgba(212,168,32,.65)'; smCtx.beginPath();
+    smCtx.moveTo(ex+rnx*3,ey+rny*3); smCtx.lineTo(ex+rnx*r2,ey+rny*r2); smCtx.stroke();
+  }
+  smCtx.restore();
+}
+
+function smDrawCircleForType(type,L,R,alpha) {
+  const circFig=(fig)=>{ const cy=(fig.headCY+fig.footY)/2, rad=(fig.footY-fig.headCY)/2+fig.R*1.3; smDrawLightCircle(fig.cx,cy,rad,alpha); };
+  if(type==='left')  circFig(L);
+  if(type==='right') circFig(R);
+  if(type==='outer') smDrawPillShape(L,R,alpha);
+}
+
+function smDrawConnLine(c1,c2,idx,alpha,isCut,cutProg) {
+  const {x:x1,y:y1}=c1, {x:x2,y:y2}=c2;
+  smCtx.save(); smCtx.globalAlpha=alpha;
+  const grad=smCtx.createLinearGradient(x1,y1,x2,y2);
+  grad.addColorStop(0,SM_CHAKRA_COLORS[idx]); grad.addColorStop(.5,'rgba(212,168,32,.8)'); grad.addColorStop(1,SM_CHAKRA_COLORS[idx]);
+  smCtx.strokeStyle=grad; smCtx.lineWidth=2; smCtx.lineCap='round'; smCtx.shadowColor=SM_CHAKRA_COLORS[idx]; smCtx.shadowBlur=7;
+  if(!isCut){
+    smCtx.beginPath(); smCtx.moveTo(x1,y1); smCtx.lineTo(x2,y2); smCtx.stroke();
+  } else {
+    const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy),nx=dx/len,ny=dy/len,midX=(x1+x2)/2,midY=(y1+y2)/2,gap=Math.min(cutProg*28,22);
+    smCtx.globalAlpha=alpha*Math.max(0,1-cutProg*.85);
+    smCtx.beginPath(); smCtx.moveTo(x1,y1); smCtx.lineTo(midX-nx*gap,midY-ny*gap); smCtx.stroke();
+    smCtx.beginPath(); smCtx.moveTo(midX+nx*gap,midY+ny*gap); smCtx.lineTo(x2,y2); smCtx.stroke();
+    if(cutProg<.45){
+      const flash=(1-cutProg/.45)*.95; smCtx.save(); smCtx.globalAlpha=flash;
+      smCtx.beginPath(); smCtx.arc(midX,midY,gap*.5,0,Math.PI*2);
+      smCtx.fillStyle='#fff'; smCtx.shadowColor='#fff'; smCtx.shadowBlur=20; smCtx.fill(); smCtx.restore();
+    }
+  }
+  smCtx.restore();
+}
+
+function smDrawAll() {
+  if(!smCanvas||!smCtx) return;
+  smCtx.clearRect(0,0,smCw(),smCh());
+  if(smStep===1){
+    const C=smGetFig('center'); smDrawFig(C); smDrawFigName(C,smMyName); return;
+  }
+  const L=smGetFig('left'),R=smGetFig('right');
+  smDrawFig(L); smDrawFigName(L,smMyName);
+  if(smStep>=2){ smDrawFig(R); smDrawFigName(R,smOtherName); }
+  smDrawnCircles.forEach(t=>{
+    const alpha=(t==='outer'&&smOuterAlphaOverride!==null)?smOuterAlphaOverride:1;
+    if(alpha>0) smDrawCircleForType(t,L,R,alpha);
+  });
+  if(smCircleAnim.type) smDrawCircleForType(smCircleAnim.type,L,R,smCircleAnim.progress);
+  if(smFinalCutProgress>0){
+    const midX=smCw()/2, p=smFinalCutProgress;
+    const cutH=Math.min(1,p/0.45)*smCh();
+    const glow=p<0.72?1:Math.max(0,1-(p-0.72)/0.28);
+    smCtx.save(); smCtx.globalAlpha=glow;
+    const lg=smCtx.createLinearGradient(midX-9,0,midX+9,0);
+    lg.addColorStop(0,'rgba(255,255,255,0)'); lg.addColorStop(0.5,'rgba(255,255,255,.95)'); lg.addColorStop(1,'rgba(255,255,255,0)');
+    smCtx.fillStyle=lg; smCtx.shadowColor='#D4A820'; smCtx.shadowBlur=22;
+    smCtx.fillRect(midX-9,0,18,cutH);
+    if(p<0.5){ smCtx.beginPath(); smCtx.arc(midX,cutH,5,0,Math.PI*2); smCtx.fillStyle='#fff'; smCtx.shadowBlur=30; smCtx.fill(); }
+    smCtx.restore();
+  }
+  if(smStep>=6){
+    smDrawChakras(L); smDrawChakras(R);
+    for(let i=0;i<7;i++){
+      const isAnim=smLineAnim.active&&smLineAnim.idx===i;
+      if(i>=smLinesDrawn&&!isAnim) continue;
+      const alpha=isAnim?smLineAnim.progress:1;
+      const cutAnim=smCutAnims.find(a=>a.idx===i);
+      smDrawConnLine(L.chakras[i],R.chakras[i],i,alpha,smCutLines[i]||!!cutAnim,cutAnim?cutAnim.progress:(smCutLines[i]?1:0));
+    }
+  }
+}
+
+function smResizeCanvas() {
+  smDpr=window.devicePixelRatio||1;
+  const wrap=document.getElementById('sm-canvas-wrap');
+  if(!wrap||!smCanvas) return;
+  const w=wrap.clientWidth;
+  const isPortrait=window.innerHeight>window.innerWidth;
+  const idealH=Math.round(w*(isPortrait?0.90:0.76));
+  const maxH=Math.round(window.innerHeight*0.55);
+  const minH=Math.round(w*0.47);
+  const h=Math.max(minH,Math.min(idealH,maxH));
+  smCanvas.width=w*smDpr; smCanvas.height=h*smDpr; smCanvas.style.height=h+'px';
+  smCtx.setTransform(smDpr,0,0,smDpr,0,0);
+  smDrawAll();
+}
+
+function smAnimateCircle(type,onDone) {
+  smCircleAnim={type,progress:0};
+  const start=performance.now(),dur=850;
+  (function frame(now){
+    smCircleAnim.progress=Math.min((now-start)/dur,1); smDrawAll();
+    if(smCircleAnim.progress<1) requestAnimationFrame(frame);
+    else{smDrawnCircles.add(type);smCircleAnim={type:null,progress:0};smDrawAll();if(onDone)onDone();}
+  })(performance.now());
+}
+
+function smAnimateLines(onDone) {
+  smLinesDrawn=0;
+  function nextLine(){
+    if(smLinesDrawn>=7){smLineAnim.active=false;smDrawAll();if(onDone)onDone();return;}
+    smLineAnim={active:true,progress:0,idx:smLinesDrawn};
+    const start=performance.now(),dur=480;
+    (function frame(now){
+      smLineAnim.progress=Math.min((now-start)/dur,1); smDrawAll();
+      if(smLineAnim.progress<1) requestAnimationFrame(frame);
+      else{smLinesDrawn++;smLineAnim.active=false;smDrawAll();setTimeout(nextLine,180);}
+    })(performance.now());
+  }
+  nextLine();
+}
+
+function smAnimateFinalCut(onDone) {
+  smFinalCutProgress=0.001; smOuterAlphaOverride=1;
+  const start=performance.now(),dur=1700;
+  (function frame(now){
+    const p=Math.min((now-start)/dur,1);
+    smFinalCutProgress=p;
+    smOuterAlphaOverride=p<0.45?1:Math.max(0,1-(p-0.45)/0.35);
+    smDrawAll();
+    if(p<1) requestAnimationFrame(frame);
+    else{ smFinalCutProgress=0; smOuterAlphaOverride=0; smDrawAll(); if(onDone) onDone(); }
+  })(performance.now());
+}
+
+function smAnimateCut(idx) {
+  if(smCutLines[idx]||smCutAnims.find(a=>a.idx===idx)) return;
+  const obj={idx,progress:0}; smCutAnims.push(obj);
+  const start=performance.now(),dur=620;
+  (function frame(now){
+    obj.progress=Math.min((now-start)/dur,1); smDrawAll();
+    if(obj.progress<1) requestAnimationFrame(frame);
+    else{
+      smCutLines[idx]=true; smCutAnims=smCutAnims.filter(a=>a.idx!==idx); smDrawAll();
+      const el=document.getElementById('sm-cut-progress');
+      if(el) el.textContent=`${smCutLines.filter(Boolean).length} von 7 durchtrennt`;
+      if(smCutLines.every(Boolean)) setTimeout(()=>smAnimateFinalCut(smShowCompletion),700);
+    }
+  })(performance.now());
+}
+
+function smEnableTap()  { smCanvas.addEventListener('pointerdown',smHandleTap); }
+function smDisableTap() { if(smCanvas) smCanvas.removeEventListener('pointerdown',smHandleTap); }
+
+function smHandleTap(e) {
+  e.preventDefault();
+  const rect=smCanvas.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;
+  const L=smGetFig('left'),R=smGetFig('right'),thr=Math.max(18,smCw()*0.05);
+  for(let i=0;i<7;i++){
+    if(smCutLines[i]||smCutAnims.find(a=>a.idx===i)||i>=smLinesDrawn) continue;
+    const {x:x1,y:y1}=L.chakras[i],{x:x2,y:y2}=R.chakras[i];
+    const dx=x2-x1,dy=y2-y1,lenSq=dx*dx+dy*dy;
+    const t=lenSq===0?0:Math.max(0,Math.min(1,((x-x1)*dx+(y-y1)*dy)/lenSq));
+    if(Math.hypot(x-x1-t*dx,y-y1-t*dy)<thr){smAnimateCut(i);break;}
+  }
+}
+
+function smEscHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+const SM_CANVAS_INSTRS = ['','Zeichne dich selbst als Strichmännchen','Benenne die andere Person oder Situation','Aktiviere deinen Lichtkreis','Aktiviere den Lichtkreis der anderen Person','Verbindet euch im gemeinsamen Lichtkreis','Verbinde die sieben Energiezentren','Durchtrennt die Verbindungslinien achtsam'];
+
+function smUpdateCanvasInstr(s) {
+  const el=document.getElementById('sm-canvas-instr'); if(el) el.textContent=SM_CANVAS_INSTRS[s]||'';
+}
+
+function smRender() {
+  const el=document.getElementById('sm-step-content'); if(!el) return;
+  const th=document.getElementById('sm-tap-hint'); if(th) th.style.display='none';
+  smUpdateCanvasInstr(smStep);
+  const inputStyle='width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(212,168,32,.22);border-radius:12px;padding:13px 16px;color:var(--cream);font-family:var(--serif);font-size:17px;outline:none;-webkit-appearance:none;';
+  const affStyle='background:linear-gradient(135deg,rgba(123,45,158,.1),rgba(196,37,122,.07));border:1px solid rgba(212,168,32,.2);border-radius:16px;padding:18px 20px;margin-bottom:14px;';
+  const lblStyle='font-family:var(--display);font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--turquoise);margin-bottom:10px;';
+  const txtStyle='font-family:var(--serif);font-size:17px;line-height:1.72;color:var(--cream);font-style:italic;';
+  const hintStyle='display:flex;align-items:flex-start;gap:9px;margin-top:13px;padding-top:13px;border-top:1px solid rgba(212,168,32,.12);font-size:12px;line-height:1.55;color:rgba(212,168,32,.6);letter-spacing:.04em;';
+
+  if(smStep===1){
+    el.innerHTML=`<div style="margin-bottom:14px;"><label style="${lblStyle}">Mein Vor- und Nachname</label><input id="sm-inp-my" type="text" placeholder="z. B. Maria Muster" value="${smEscHtml(smMyName)}" inputmode="text" autocomplete="off" autocorrect="off" style="${inputStyle}"></div><button class="btn-next" onclick="smGoNext()">Weiter →</button>`;
+    const i=document.getElementById('sm-inp-my');
+    i.addEventListener('input',e=>{smMyName=e.target.value;smDrawAll();});
+    i.addEventListener('keydown',e=>{if(e.key==='Enter'){e.target.blur();smGoNext();}});
+    setTimeout(()=>i.focus(),350);
+  }
+  else if(smStep===2){
+    el.innerHTML=`<div style="margin-bottom:14px;"><label style="${lblStyle}">Name der anderen Person oder Situation</label><input id="sm-inp-other" type="text" placeholder="z. B. Anna Müller" value="${smEscHtml(smOtherName)}" inputmode="text" autocomplete="off" autocorrect="off" style="${inputStyle}"></div><button class="btn-next" onclick="smGoNext()">Weiter →</button>`;
+    const i=document.getElementById('sm-inp-other');
+    i.addEventListener('input',e=>{smOtherName=e.target.value;smDrawAll();});
+    i.addEventListener('keydown',e=>{if(e.key==='Enter'){e.target.blur();smGoNext();}});
+    setTimeout(()=>i.focus(),350);
+  }
+  else if(smStep===3){
+    el.innerHTML=`<div style="${affStyle}"><div style="${lblStyle}">Sprich laut oder innerlich:</div><div style="${txtStyle}">„Ich wünsche mir das, was für mich das Beste ist,<br>auch wenn ich nicht genau weiß, was es ist."</div><div style="${hintStyle}"><span style="font-size:15px;flex-shrink:0;margin-top:1px;">☝</span><span>Fahre dabei mit dem Finger deinen Lichtkreis entlang, während du sprichst.</span></div></div><button class="btn-next" onclick="smGoNext()">Weiter →</button>`;
+    setTimeout(()=>smAnimateCircle('left'),250);
+  }
+  else if(smStep===4){
+    const name=smOtherName||'die andere Person';
+    el.innerHTML=`<div style="${affStyle}"><div style="${lblStyle}">Sprich laut oder innerlich:</div><div style="${txtStyle}">„Ich wünsche mir das, was für <strong style="font-style:normal;">${smEscHtml(name)}</strong> am Besten ist,<br>auch wenn ich nicht weiß, was es ist."</div><div style="${hintStyle}"><span style="font-size:15px;flex-shrink:0;margin-top:1px;">☝</span><span>Fahre dabei mit dem Finger den Lichtkreis von <strong>${smEscHtml(name)}</strong> entlang, während du sprichst.</span></div></div><button class="btn-next" onclick="smGoNext()">Weiter →</button>`;
+    setTimeout(()=>smAnimateCircle('right'),250);
+  }
+  else if(smStep===5){
+    el.innerHTML=`<div style="${affStyle}"><div style="${lblStyle}">Sprich laut oder innerlich:</div><div style="${txtStyle}">„Ich wünsche mir das, was für uns beide am Besten ist,<br>auch wenn ich nicht genau weiß, was das ist."</div><div style="${hintStyle}"><span style="font-size:15px;flex-shrink:0;margin-top:1px;">☝</span><span>Fahre dabei mit dem Finger den gemeinsamen Lichtkreis entlang, während du sprichst.</span></div></div><button class="btn-next" onclick="smGoNext()">Weiter →</button>`;
+    setTimeout(()=>smAnimateCircle('outer'),250);
+  }
+  else if(smStep===6){
+    el.innerHTML=`<p style="font-size:13px;line-height:1.65;color:rgba(255,255,255,.6);margin-bottom:14px;text-align:center;">Die 7 Energiezentren beider Personen werden nun<br>durch Verbindungslinien verbunden.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin-bottom:16px;">${SM_CHAKRA_NAMES.map((n,i)=>`<div style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(245,236,208,.6);"><div style="width:9px;height:9px;border-radius:50%;background:${SM_CHAKRA_COLORS[i]};flex-shrink:0;"></div><span>${n}</span></div>`).join('')}</div><button class="btn-next" id="sm-btn-lines" onclick="smGoNext()" disabled>Linien werden gezeichnet …</button>`;
+    setTimeout(()=>smAnimateLines(()=>{const b=document.getElementById('sm-btn-lines');if(b){b.disabled=false;b.textContent='Weiter →';}}),300);
+  }
+  else if(smStep===7){
+    if(th) th.style.display='block';
+    el.innerHTML=`<div style="background:rgba(196,37,122,.07);border:1px solid rgba(196,37,122,.25);border-radius:14px;padding:16px 18px;margin-bottom:12px;text-align:center;"><p style="font-family:var(--serif);font-size:15px;line-height:1.7;color:var(--cream);">Tippe auf jede Verbindungslinie,<br>um sie zu durchtrennen.<br><br>Sage dabei:<br><strong style="color:var(--gold);">„Danke, danke, danke"</strong><br>oder<br><strong style="color:var(--gold);">„Ich akzeptiere, ich akzeptiere, ich akzeptiere."</strong></p></div><div id="sm-cut-progress" style="font-family:var(--display);font-size:.7rem;letter-spacing:.22em;color:var(--turquoise);text-align:center;margin-bottom:8px;">0 von 7 durchtrennt</div>`;
+    smEnableTap();
+  }
+}
+
+function smShowCompletion() {
+  smDisableTap();
+  const th=document.getElementById('sm-tap-hint'); if(th) th.style.display='none';
+  const ind=document.getElementById('sm-step-ind'); if(ind) ind.textContent='✦';
+  const prog=document.getElementById('sm-progress'); if(prog) prog.style.width='100%';
+  const el=document.getElementById('sm-step-content');
+  el.innerHTML=`<div style="text-align:center;padding:8px 0 4px;"><div style="font-size:44px;margin-bottom:14px;">✨</div><div style="font-family:var(--display);font-size:1.3rem;letter-spacing:.16em;background:linear-gradient(135deg,#D4A820,#F5ECD0,#D4A820);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;">Danke, es ist erledigt.</div><div style="width:100px;height:1px;margin:12px auto 16px;background:linear-gradient(90deg,transparent,rgba(212,168,32,.45),transparent);"></div><div style="font-family:var(--serif);font-size:16px;line-height:1.75;color:rgba(245,236,208,.75);margin-bottom:28px;">Alle Verbindungslinien sind durchtrennt.<br>Die Technik ist vollständig abgeschlossen.<br><br><em>„Danke, danke, danke."</em></div><button class="btn-next" onclick="smReset()">Neue Sitzung beginnen</button><button class="btn-skip" onclick="closeStrich()">Zurück zur Toolbox</button></div>`;
+}
+
+function smGoNext() {
+  if(smStep===1){const i=document.getElementById('sm-inp-my');    if(i) smMyName   =i.value.trim();}
+  if(smStep===2){const i=document.getElementById('sm-inp-other'); if(i) smOtherName=i.value.trim();}
+  if(smStep>=7) return;
+  smStep++;
+  const pct=Math.round((smStep/7)*100);
+  const prog=document.getElementById('sm-progress'); if(prog) prog.style.width=pct+'%';
+  const ind=document.getElementById('sm-step-ind');  if(ind)  ind.textContent=smStep+' / 7';
+  smDrawAll(); smRender();
+}
+
+function smReset() {
+  smDisableTap();
+  smStep=1; smMyName=''; smOtherName='';
+  smDrawnCircles.clear(); smCircleAnim={type:null,progress:0};
+  smLinesDrawn=0; smLineAnim={active:false,progress:0,idx:0};
+  smCutLines=Array(7).fill(false); smCutAnims=[];
+  smFinalCutProgress=0; smOuterAlphaOverride=null;
+  const prog=document.getElementById('sm-progress'); if(prog) prog.style.width='14%';
+  const ind=document.getElementById('sm-step-ind');  if(ind)  ind.textContent='1 / 7';
+  smDrawAll(); smRender();
+}
+
+function smOpen() {
+  document.getElementById('modal-strich').classList.add('open');
+  requestAnimationFrame(()=>{
+    smCanvas=document.getElementById('sm-canvas');
+    smCtx=smCanvas.getContext('2d');
+    smDpr=window.devicePixelRatio||1;
+    smReset();
+    smResizeCanvas();
+  });
+}
+
+window.addEventListener('resize',()=>{ if(smCanvas&&document.getElementById('modal-strich').classList.contains('open')) smResizeCanvas(); });
+
+function closeStrich() {
+  smDisableTap();
+  document.getElementById('modal-strich').classList.remove('open');
+}
+
+// ─── TOAST ───
+// ─── ENERGIEFELDER ANLEGEN ───
+let efvStep = 0, efvAusrichtung = '', efvConnector = '', efvFormulation = '';
+
+const EFV_BEREICHE = ['Für mich selbst','Für eine Person','Für einen Raum','Für eine Situation','Für einen Prozess'];
+
+const EFV_IMPULSES = {
+  'Für mich selbst': {
+    'um':   ['…um in meiner Mitte zu bleiben','…um meine Energie zu schützen und zu stärken','…um Klarheit und innere Führung zu empfangen','…um tiefen Frieden in mir zu verankern','…um meine Schöpferkraft vollständig zu aktivieren'],
+    'dass': ['…dass ich mich leicht und frei fühle','…dass Heilung auf allen Ebenen in mir geschehen kann','…dass Blockaden sich sanft und vollständig auflösen','…dass ich meiner inneren Weisheit vertraue'],
+    'für':  ['…für mein Wohlbefinden auf allen Ebenen','…für meinen nächsten Schritt auf meinem Weg','…für tiefe Regeneration und Erneuerung'],
+  },
+  'Für eine Person': {
+    'um':   ['…um sie in ihrer Kraft zu halten','…um ihr Heilung und Unterstützung zu ermöglichen','…um sie auf ihrem Weg zu begleiten'],
+    'dass': ['…dass sie Frieden und Geborgenheit findet','…dass sie auf ihrem Weg geführt wird','…dass sie sich sicher, stark und geliebt fühlt'],
+    'für':  ['…für ihre Heilung auf allen Ebenen','…für das Beste in ihr und für sie','…für ihren Weg und ihre Entfaltung'],
+  },
+  'Für einen Raum': {
+    'um':   ['…um ihn energetisch zu reinigen und aufzuladen','…um Harmonie und Frieden in ihm zu verankern','…um ihn mit heilsamer Energie zu füllen'],
+    'dass': ['…dass er zu einem Ort der Kraft und Stille wird','…dass Heilung in diesem Raum geschehen kann','…dass alle, die ihn betreten, sich wohl und willkommen fühlen'],
+    'für':  ['…für Schutz, Geborgenheit und reine Energie','…für positive und heilsame Schwingung','…für Frieden, Klarheit und Licht'],
+  },
+  'Für eine Situation': {
+    'um':   ['…um sie in Harmonie aufzulösen','…um Klarheit und Frieden hineinzubringen','…um das Beste für alle Beteiligten zu ermöglichen'],
+    'dass': ['…dass sich das Beste für alle entfalten kann','…dass Frieden und echtes Verständnis entstehen','…dass eine Lösung sichtbar und spürbar wird'],
+    'für':  ['…für das höchste Wohl aller Beteiligten','…für eine friedvolle und klärende Auflösung','…für den bestmöglichen Ausgang auf allen Ebenen'],
+  },
+  'Für einen Prozess': {
+    'um':   ['…um ihm die richtige Energie und Führung zu geben','…um Hindernisse sanft zu lösen und den Weg zu öffnen','…um ihn mit Leichtigkeit zu begleiten'],
+    'dass': ['…dass er sich mit Leichtigkeit und Klarheit entfaltet','…dass das Richtige zur richtigen Zeit geschieht','…dass ich auf allen Ebenen geführt werde'],
+    'für':  ['…für sein Gelingen und seinen bestmöglichen Verlauf','…für Unterstützung und Führung auf allen Ebenen','…für Leichtigkeit, Klarheit und Erfolg'],
+  },
+};
+
+function efvAllImpulses() {
+  const all = [];
+  Object.values(EFV_IMPULSES).forEach(c => Object.values(c).forEach(a => a.forEach(i => all.push(i))));
+  return all;
+}
+
+function efvOpen() {
+  efvStep = 0; efvAusrichtung = ''; efvConnector = ''; efvFormulation = '';
+  document.getElementById('modal-felder').classList.add('open');
+  efvRender();
+}
+
+function efvClose() { document.getElementById('modal-felder').classList.remove('open'); }
+
+function efvNext() {
+  if (efvStep === 1 && !efvAusrichtung) { showToast('Wähle eine Ausrichtung aus.'); return; }
+  if (efvStep === 2 && !efvFormulation) { showToast('Wähle einen Impuls oder nutze den Spontan-Impuls.'); return; }
+  efvStep++;
+  efvRender();
+}
+
+function efvSelectBereich(el, val) {
+  document.querySelectorAll('.efv-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  efvAusrichtung = val;
+  efvFormulation = ''; efvConnector = '';
+}
+
+function efvSelectConnector(btn, conn) {
+  efvConnector = conn; efvFormulation = '';
+  document.querySelectorAll('.efv-conn-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  efvUpdateImpulses();
+  const sr = document.getElementById('efv-spontan-result');
+  if (sr) { sr.style.display = 'none'; }
+}
+
+function efvUpdateImpulses() {
+  const container = document.getElementById('efv-impulse-container');
+  if (!container) return;
+  container.innerHTML = '';
+  if (!efvConnector || !efvAusrichtung) return;
+  const list = (EFV_IMPULSES[efvAusrichtung] || {})[efvConnector] || [];
+  list.forEach(text => {
+    const div = document.createElement('div');
+    div.className = 'efv-impulse-card';
+    const lbl = document.createElement('span');
+    lbl.className = 'efv-conn-label';
+    lbl.textContent = efvConnector;
+    div.appendChild(lbl);
+    div.appendChild(document.createTextNode(' ' + text.replace('…','')));
+    div.addEventListener('click', () => {
+      document.querySelectorAll('.efv-impulse-card').forEach(c => c.classList.remove('active'));
+      div.classList.add('active');
+      efvFormulation = text;
+      const sr = document.getElementById('efv-spontan-result');
+      if (sr) sr.style.display = 'none';
+      const ci = document.getElementById('efv-custom-input');
+      if (ci) ci.value = '';
+    });
+    container.appendChild(div);
+  });
+}
+
+function efvSpontanImpuls() {
+  const all = efvAllImpulses();
+  const pick = all[Math.floor(Math.random() * all.length)];
+  efvFormulation = pick;
+  document.querySelectorAll('.efv-impulse-card').forEach(c => c.classList.remove('active'));
+  const ci = document.getElementById('efv-custom-input');
+  if (ci) ci.value = '';
+  const sr = document.getElementById('efv-spontan-result');
+  if (sr) {
+    sr.style.opacity = '0'; sr.style.display = '';
+    sr.textContent = 'Welche Energiefelder kann ich anlegen ' + pick;
+    setTimeout(() => { sr.style.opacity = '1'; }, 30);
+  }
+}
+
+function efvCustomInput(val) {
+  const trimmed = val.trim();
+  if (trimmed) {
+    efvFormulation = '…' + trimmed;
+    document.querySelectorAll('.efv-impulse-card').forEach(c => c.classList.remove('active'));
+    const sr = document.getElementById('efv-spontan-result');
+    if (sr) sr.style.display = 'none';
+  } else {
+    efvFormulation = '';
+  }
+}
+
+function efvRender() {
+  const body = document.getElementById('efv-body');
+  const ind  = document.getElementById('efv-step-indicator');
+  body.scrollTop = 0;
+
+  if (efvStep === 0) {
+    ind.textContent = '';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:44px 24px 36px;text-align:center;">
+        <svg width="84" height="84" viewBox="0 0 22 22" fill="none" style="margin-bottom:28px;">
+          <circle cx="11" cy="11" r="2.2" stroke="rgba(68,214,214,.9)" stroke-width="1.4"/>
+          <circle cx="11" cy="11" r="5.3" stroke="rgba(68,214,214,.55)" stroke-width="1.1"/>
+          <circle cx="11" cy="11" r="8.5" stroke="rgba(68,214,214,.25)" stroke-width="1"/>
+        </svg>
+        <h2 style="font-family:var(--display);font-size:1.4rem;font-weight:500;letter-spacing:.5px;color:var(--cream);margin-bottom:20px;">Energiefelder anlegen</h2>
+        <p style="font-family:var(--sans);font-size:.9rem;color:var(--cream-muted);line-height:1.8;font-weight:300;max-width:300px;margin-bottom:14px;">
+          Du sendest deine Energie, deine Seele, dein Feld los — mit einer klaren Frage und einer bewussten Intention.
+        </p>
+        <p style="font-family:var(--sans);font-size:.9rem;color:var(--cream-muted);line-height:1.8;font-weight:300;max-width:300px;margin-bottom:12px;">Die Formel ist immer dieselbe:</p>
+        <div style="background:rgba(68,214,214,.06);border:1px solid rgba(68,214,214,.18);border-radius:14px;padding:14px 20px;margin-bottom:40px;">
+          <span style="font-family:var(--serif);font-style:italic;font-size:1rem;color:rgba(68,214,214,.9);">„Welche Energiefelder kann ich anlegen…"</span>
+        </div>
+        <button class="efv-btn-primary" onclick="efvNext()">Starten</button>
+      </div>`;
+
+  } else if (efvStep === 1) {
+    ind.textContent = 'SCHRITT 1 / 3';
+    body.innerHTML = `
+      <div style="padding:32px 20px 36px;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--turquoise);text-transform:uppercase;margin-bottom:14px;text-align:center;">Ausrichtung</div>
+        <h2 style="font-family:var(--display);font-size:1.15rem;font-weight:500;color:var(--cream);text-align:center;margin-bottom:8px;text-wrap:balance;">Für wen oder was möchtest du ein Feld anlegen?</h2>
+        <p style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);text-align:center;font-weight:300;margin-bottom:24px;">Wähle deinen Fokus für dieses Feld.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:36px;">
+          ${EFV_BEREICHE.map(b => `<div class="efv-chip" onclick="efvSelectBereich(this,this.textContent)">${b}</div>`).join('')}
+        </div>
+        <button class="efv-btn-primary" onclick="efvNext()">Weiter</button>
+      </div>`;
+
+  } else if (efvStep === 2) {
+    ind.textContent = 'SCHRITT 2 / 3';
+    body.innerHTML = `
+      <div style="padding:32px 20px 36px;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--turquoise);text-transform:uppercase;margin-bottom:16px;text-align:center;">Formulierung</div>
+        <div style="background:rgba(68,214,214,.06);border:1px solid rgba(68,214,214,.18);border-radius:14px;padding:14px 18px;margin-bottom:20px;text-align:center;">
+          <span style="font-family:var(--serif);font-style:italic;font-size:1rem;color:rgba(68,214,214,.9);line-height:1.7;">Welche Energiefelder kann ich anlegen…</span>
+        </div>
+        <p style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);text-align:center;font-weight:300;margin-bottom:12px;">Wähle deinen Anschluss:</p>
+        <div style="display:flex;gap:8px;justify-content:center;margin-bottom:18px;">
+          <button class="efv-conn-btn" onclick="efvSelectConnector(this,'um')">um</button>
+          <button class="efv-conn-btn" onclick="efvSelectConnector(this,'dass')">dass</button>
+          <button class="efv-conn-btn" onclick="efvSelectConnector(this,'für')">für</button>
+        </div>
+        <div id="efv-impulse-container" style="display:flex;flex-direction:column;gap:8px;min-height:8px;margin-bottom:4px;"></div>
+        <div style="display:flex;align-items:center;gap:12px;margin:22px 0 16px;">
+          <div style="flex:1;height:1px;background:rgba(255,255,255,.05);"></div>
+          <span style="font-family:var(--display);font-size:.58rem;letter-spacing:1.5px;color:rgba(255,255,255,.25);">ODER</span>
+          <div style="flex:1;height:1px;background:rgba(255,255,255,.05);"></div>
+        </div>
+        <button class="efv-spontan-btn" onclick="efvSpontanImpuls()">✦ Spontan-Impuls</button>
+        <div id="efv-spontan-result" style="display:none;margin-top:14px;background:rgba(185,130,255,.07);border:1px solid rgba(185,130,255,.22);border-radius:12px;padding:14px 18px;font-family:var(--serif);font-style:italic;font-size:.95rem;color:rgba(255,255,255,.88);line-height:1.75;text-align:center;transition:opacity .4s;opacity:0;"></div>
+        <div style="display:flex;align-items:center;gap:12px;margin:22px 0 16px;">
+          <div style="flex:1;height:1px;background:rgba(255,255,255,.05);"></div>
+          <span style="font-family:var(--display);font-size:.58rem;letter-spacing:1.5px;color:rgba(255,255,255,.22);">EIGENER SATZ</span>
+          <div style="flex:1;height:1px;background:rgba(255,255,255,.05);"></div>
+        </div>
+        <div class="efv-custom-wrap">
+          <span class="efv-custom-prefix">…</span>
+          <input type="text" id="efv-custom-input" placeholder="deinen eigenen Impuls eintippen" oninput="efvCustomInput(this.value)" autocomplete="off" />
+        </div>
+        <div style="margin-top:28px;">
+          <button class="efv-btn-primary" onclick="efvNext()">Weiter</button>
+        </div>
+      </div>`;
+
+  } else if (efvStep === 3) {
+    ind.textContent = 'SCHRITT 3 / 3';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:32px 24px 36px;text-align:center;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--turquoise);text-transform:uppercase;margin-bottom:18px;">Aussenden</div>
+        <div style="position:relative;width:220px;height:220px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;">
+          <canvas id="efv-canvas" width="220" height="220" style="position:absolute;inset:0;"></canvas>
+          <div id="efv-sent-label" style="position:relative;z-index:2;font-family:var(--display);font-size:.9rem;letter-spacing:3.5px;color:rgba(255,240,140,.95);opacity:0;transition:opacity .9s;text-shadow:0 0 20px rgba(212,168,32,.6);">AUSGESANDT</div>
+        </div>
+        <div style="background:rgba(68,214,214,.05);border:1px solid rgba(68,214,214,.14);border-radius:14px;padding:16px 20px;max-width:310px;margin-bottom:12px;">
+          <div style="font-family:var(--display);font-size:.58rem;letter-spacing:1.5px;color:var(--turquoise);opacity:.65;margin-bottom:8px;">DEIN FELD</div>
+          <p style="font-family:var(--serif);font-style:italic;font-size:.98rem;color:rgba(255,255,255,.9);line-height:1.8;margin:0;">Welche Energiefelder kann ich anlegen ${efvFormulation}</p>
+        </div>
+        <p style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);font-weight:300;margin-bottom:28px;">Schließ kurz die Augen. Spüre dein Feld. Dann sende.</p>
+        <button id="efv-send-btn" class="efv-send-btn" onclick="efvSend()">Feld jetzt aussenden</button>
+        <div style="height:10px;"></div>
+        <button id="efv-weiter-btn" class="efv-btn-primary" onclick="efvNext()" style="display:none;">Weiter</button>
+      </div>`;
+    efvDrawIdle();
+
+  } else if (efvStep === 4) {
+    ind.textContent = '';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:52px 24px 44px;text-align:center;">
+        <canvas id="efv-done-canvas" width="160" height="160" style="margin-bottom:28px;"></canvas>
+        <h2 style="font-family:var(--display);font-size:1.3rem;font-weight:500;color:var(--cream);margin-bottom:12px;">Dein Feld ist unterwegs.</h2>
+        <p style="font-family:var(--sans);font-size:.86rem;color:var(--cream-muted);font-weight:300;margin-bottom:32px;">Lass los. Vertraue. Das Feld wirkt.</p>
+        <div style="background:rgba(68,214,214,.05);border:1px solid rgba(68,214,214,.14);border-radius:16px;padding:22px;max-width:300px;margin-bottom:44px;">
+          <p style="font-family:var(--serif);font-style:italic;font-size:.98rem;color:rgba(255,255,255,.88);line-height:1.85;margin:0;">„Ich sende mein Feld mit Vertrauen. Es erfüllt seinen Zweck — vollständig, liebevoll und perfekt."</p>
+        </div>
+        <button class="efv-btn-primary" onclick="efvClose()">Zur Toolbox</button>
+      </div>`;
+    efvAnimateDone();
+  }
+}
+
+function efvDrawIdle() {
+  const c = document.getElementById('efv-canvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const cx = 110, cy = 110;
+  let t = 0;
+  window._efvSending = false;
+  function loop() {
+    if (window._efvSending || !document.getElementById('efv-canvas')) return;
+    t++;
+    ctx.clearRect(0, 0, 220, 220);
+    const breathe = 0.65 + 0.35 * Math.sin(t * 0.035);
+    // Soft radial glow
+    const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, 70);
+    grd.addColorStop(0, `rgba(255,250,190,${0.18 * breathe})`);
+    grd.addColorStop(0.5, `rgba(212,168,32,${0.09 * breathe})`);
+    grd.addColorStop(1, 'rgba(212,168,32,0)');
+    ctx.beginPath(); ctx.arc(cx, cy, 70, 0, Math.PI * 2);
+    ctx.fillStyle = grd; ctx.fill();
+    // Gentle rays
+    const rot = t * 0.006;
+    for (let i = 0; i < 10; i++) {
+      const angle = (i / 10) * Math.PI * 2 + rot;
+      const halfA = Math.PI / 10 * 0.28;
+      const rg = ctx.createRadialGradient(cx, cy, 4, cx, cy, 94);
+      rg.addColorStop(0, `rgba(255,252,200,${0.09 * breathe})`);
+      rg.addColorStop(1, 'rgba(212,168,32,0)');
+      ctx.beginPath(); ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, 94, angle - halfA, angle + halfA);
+      ctx.closePath(); ctx.fillStyle = rg; ctx.fill();
+    }
+    // Centre dot
+    ctx.beginPath(); ctx.arc(cx, cy, 3.5 + breathe * 2, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,252,200,${0.7 * breathe})`; ctx.fill();
+    requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+function efvSend() {
+  window._efvSending = true;
+  const btn = document.getElementById('efv-send-btn');
+  if (btn) { btn.disabled = true; btn.style.opacity = '.3'; }
+  const c = document.getElementById('efv-canvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const cx = 110, cy = 110;
+  const NUM_RAYS = 16;
+  let tick = 0;
+  function frame() {
+    ctx.clearRect(0, 0, 220, 220);
+    const prog  = Math.min(tick / 90, 1);
+    const eased = prog < 0.5 ? 2 * prog * prog : -1 + (4 - 2 * prog) * prog;
+    const maxR  = 10 + eased * 105;
+    const rot   = tick * 0.009;
+    const gAlpha = tick < 90
+      ? Math.min(tick / 18, 1)
+      : Math.max(0, 1 - (tick - 90) / 38);
+
+    for (let i = 0; i < NUM_RAYS; i++) {
+      const angle = (i / NUM_RAYS) * Math.PI * 2 + rot;
+      const wobble = 0.3 + 0.12 * Math.sin(tick * 0.12 + i * 1.3);
+      const halfA  = (Math.PI / NUM_RAYS) * wobble;
+      const rg = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR);
+      // alternating warm-white and gold rays
+      const isWarm = i % 2 === 0;
+      rg.addColorStop(0,   `rgba(255,255,230,${0.95 * gAlpha})`);
+      rg.addColorStop(0.25, isWarm
+        ? `rgba(255,252,200,${0.75 * gAlpha})`
+        : `rgba(255,230,100,${0.65 * gAlpha})`);
+      rg.addColorStop(0.7,  `rgba(212,168,32,${0.35 * gAlpha})`);
+      rg.addColorStop(1,    'rgba(212,168,32,0)');
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, maxR, angle - halfA, angle + halfA);
+      ctx.closePath();
+      ctx.fillStyle = rg;
+      ctx.fill();
+    }
+    // Central burst glow
+    const bR = 6 + eased * 22;
+    const bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, bR);
+    bg.addColorStop(0,   `rgba(255,255,240,${gAlpha})`);
+    bg.addColorStop(0.5, `rgba(255,248,180,${0.7 * gAlpha})`);
+    bg.addColorStop(1,   'rgba(212,168,32,0)');
+    ctx.beginPath(); ctx.arc(cx, cy, bR, 0, Math.PI * 2);
+    ctx.fillStyle = bg; ctx.fill();
+
+    tick++;
+    if (tick < 130) {
+      requestAnimationFrame(frame);
+    } else {
+      const lbl = document.getElementById('efv-sent-label');
+      if (lbl) lbl.style.opacity = '1';
+      setTimeout(() => {
+        const wb = document.getElementById('efv-weiter-btn');
+        if (wb) wb.style.display = '';
+        if (btn) btn.style.display = 'none';
+      }, 900);
+    }
+  }
+  frame();
+}
+
+function efvAnimateDone() {
+  const c = document.getElementById('efv-done-canvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const cx = 80, cy = 80;
+  let a = 0, t = 0;
+  const NUM = 12;
+  function draw() {
+    a = Math.min(a + 0.02, 1); t++;
+    ctx.clearRect(0, 0, 160, 160);
+    const breathe = 0.75 + 0.25 * Math.sin(t * 0.045);
+    const rot = t * 0.005;
+    // Steady light rays
+    for (let i = 0; i < NUM; i++) {
+      const angle = (i / NUM) * Math.PI * 2 + rot;
+      const halfA = Math.PI / NUM * 0.24;
+      const rg = ctx.createRadialGradient(cx, cy, 0, cx, cy, 68 * breathe);
+      rg.addColorStop(0,   `rgba(255,252,200,${0.2 * a})`);
+      rg.addColorStop(0.5, `rgba(212,168,32,${0.12 * a})`);
+      rg.addColorStop(1,   'rgba(212,168,32,0)');
+      ctx.beginPath(); ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, 68 * breathe, angle - halfA, angle + halfA);
+      ctx.closePath(); ctx.fillStyle = rg; ctx.fill();
+    }
+    // Soft inner glow
+    const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, 38);
+    grd.addColorStop(0,   `rgba(255,255,230,${0.28 * a * breathe})`);
+    grd.addColorStop(1,   'rgba(212,168,32,0)');
+    ctx.beginPath(); ctx.arc(cx, cy, 38, 0, Math.PI * 2);
+    ctx.fillStyle = grd; ctx.fill();
+    // Centre
+    ctx.beginPath(); ctx.arc(cx, cy, 4 + breathe * 2, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,250,200,${0.9 * a})`; ctx.fill();
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// ─── BACK TO SENDER ───
+let btsStep = 0;
+
+function btsOpen() {
+  btsStep = 0;
+  document.getElementById('modal-schutz').classList.add('open');
+  btsRender();
+}
+
+function btsClose() {
+  document.getElementById('modal-schutz').classList.remove('open');
+}
+
+function btsNext() {
+  btsStep++;
+  btsRender();
+}
+
+function btsToggleChip(el) {
+  el.classList.toggle('active');
+}
+
+function btsRender() {
+  const body = document.getElementById('bts-body');
+  const ind  = document.getElementById('bts-step-indicator');
+  body.scrollTop = 0;
+
+  if (btsStep === 0) {
+    ind.textContent = '';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:44px 24px 32px;text-align:center;">
+        <svg width="84" height="84" viewBox="0 0 22 22" fill="none" style="margin-bottom:28px;">
+          <path d="M11 2L3 5.5V11c0 4.2 3.3 7.2 8 8.8 4.7-1.6 8-4.6 8-8.8V5.5L11 2z"
+            stroke="rgba(68,214,214,.8)" stroke-width="1" stroke-linejoin="round" fill="rgba(68,214,214,.07)"/>
+          <path d="M11 14.5V9M8.5 11.5l2.5-2.5 2.5 2.5"
+            stroke="rgba(68,214,214,.8)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h2 style="font-family:var(--display);font-size:1.4rem;font-weight:500;letter-spacing:.5px;color:var(--cream);margin-bottom:20px;text-wrap:balance;">Back to Sender</h2>
+        <p style="font-family:var(--sans);font-size:.9rem;color:var(--cream-muted);line-height:1.8;font-weight:300;max-width:300px;margin-bottom:14px;">
+          Gedanken, Gefühle, Schwere — die nicht dir gehören. Wir tragen sie oft, ohne es zu erkennen.
+        </p>
+        <p style="font-family:var(--sans);font-size:.9rem;color:var(--cream-muted);line-height:1.8;font-weight:300;max-width:300px;margin-bottom:40px;">
+          Dieser Prozess führt dich klar und liebevoll durch das Erkennen, Loslassen und Zurückgeben — energetisch vollständig.
+        </p>
+        <button class="bts-btn-primary" onclick="btsNext()">Prozess starten</button>
+      </div>`;
+
+  } else if (btsStep === 1) {
+    ind.textContent = 'SCHRITT 1 / 4';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:36px 24px 32px;text-align:center;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--turquoise);text-transform:uppercase;margin-bottom:18px;">Ankommen</div>
+        <h2 style="font-family:var(--display);font-size:1.25rem;font-weight:500;color:var(--cream);margin-bottom:36px;">Komm zu dir.</h2>
+        <div class="bts-breathe-ring">
+          <span style="font-family:var(--serif);font-style:italic;font-size:.82rem;color:rgba(68,214,214,.75);">atme</span>
+        </div>
+        <p style="font-family:var(--sans);font-size:.88rem;color:var(--cream-muted);line-height:1.8;font-weight:300;max-width:270px;margin:36px 0 40px;">
+          Schließe kurz die Augen. Spüre deinen Körper. Atme dreimal tief und bewusst in den Bauch.
+        </p>
+        <button class="bts-btn-primary" onclick="btsNext()">Ich bin angekommen</button>
+      </div>`;
+
+  } else if (btsStep === 2) {
+    ind.textContent = 'SCHRITT 2 / 4';
+    const opts = ['Schwere & Erschöpfung','Gedrückte Stimmung','Fremde Gedanken','Angst ohne Grund','Körperspannung','Gereiztheit','Innere Unruhe','Etwas stimmt nicht'];
+    body.innerHTML = `
+      <div style="padding:32px 20px 32px;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--turquoise);text-transform:uppercase;margin-bottom:14px;text-align:center;">Wahrnehmen</div>
+        <h2 style="font-family:var(--display);font-size:1.15rem;font-weight:500;color:var(--cream);text-align:center;margin-bottom:8px;text-wrap:balance;">Was spürst du, das sich fremd anfühlt?</h2>
+        <p style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);text-align:center;font-weight:300;margin-bottom:24px;">Wähle alles aus, was gerade zutrifft.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:36px;">
+          ${opts.map(o => `<div class="bts-chip" onclick="btsToggleChip(this)">${o}</div>`).join('')}
+        </div>
+        <button class="bts-btn-primary" onclick="btsNext()">Weiter</button>
+      </div>`;
+
+  } else if (btsStep === 3) {
+    ind.textContent = 'SCHRITT 3 / 4';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:36px 24px 32px;text-align:center;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--turquoise);text-transform:uppercase;margin-bottom:18px;">Erkennen</div>
+        <h2 style="font-family:var(--display);font-size:1.15rem;font-weight:500;color:var(--cream);margin-bottom:28px;text-wrap:balance;">Lies diese Worte — laut oder leise.</h2>
+        <div class="bts-affirmation" style="max-width:320px;margin-bottom:40px;text-align:left;">
+          <p>„Diese Energie, diese Gedanken, diese Gefühle — sie gehören nicht zu mir."</p>
+          <p>„Ich habe sie aufgenommen — aber ich bin nicht sie."</p>
+          <p>„Ich gebe alles zurück, was nicht zu mir gehört — mit Liebe und ohne Urteil."</p>
+        </div>
+        <button class="bts-btn-primary" onclick="btsNext()">Ich bin bereit</button>
+      </div>`;
+
+  } else if (btsStep === 4) {
+    ind.textContent = 'SCHRITT 4 / 4';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:32px 24px 32px;text-align:center;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--turquoise);text-transform:uppercase;margin-bottom:18px;">Zurückgeben</div>
+        <div style="position:relative;width:220px;height:220px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+          <canvas id="bts-canvas" width="220" height="220" style="position:absolute;inset:0;"></canvas>
+          <svg id="bts-shield" width="80" height="80" viewBox="0 0 22 22" fill="none" style="position:relative;z-index:2;transition:opacity .6s;">
+            <path d="M11 2L3 5.5V11c0 4.2 3.3 7.2 8 8.8 4.7-1.6 8-4.6 8-8.8V5.5L11 2z"
+              stroke="rgba(68,214,214,.85)" stroke-width="1" stroke-linejoin="round" fill="rgba(68,214,214,.09)"/>
+            <path d="M11 14.5V9M8.5 11.5l2.5-2.5 2.5 2.5"
+              stroke="rgba(68,214,214,.85)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div id="bts-sent-label" style="font-family:var(--display);font-size:1.1rem;letter-spacing:4px;color:var(--turquoise);margin-bottom:12px;opacity:0;transition:opacity .8s;">ZURÜCKGEGEBEN</div>
+        <p id="bts-sent-desc" style="font-family:var(--serif);font-style:italic;font-size:.92rem;color:var(--cream-muted);line-height:1.8;max-width:270px;margin-bottom:32px;opacity:0;transition:opacity 1s .4s;">
+          Alles, was nicht dir gehört, kehrt jetzt vollständig zurück. Mit Liebe. Ohne Rest.
+        </p>
+        <button id="bts-send-btn" class="bts-btn-send" onclick="btsSend()">Jetzt zurückgeben</button>
+        <div style="height:12px;"></div>
+        <button id="bts-done-btn" class="bts-btn-primary" onclick="btsNext()" style="display:none;">Abschließen</button>
+      </div>`;
+    btsDrawIdle();
+
+  } else if (btsStep === 5) {
+    ind.textContent = '';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:56px 24px 44px;text-align:center;">
+        <canvas id="bts-done-canvas" width="160" height="160" style="margin-bottom:28px;"></canvas>
+        <h2 style="font-family:var(--display);font-size:1.3rem;font-weight:500;color:var(--cream);margin-bottom:12px;">Prozess abgeschlossen.</h2>
+        <p style="font-family:var(--sans);font-size:.86rem;color:var(--cream-muted);font-weight:300;margin-bottom:32px;">Dein Energiefeld ist klar und versiegelt.</p>
+        <div class="bts-affirmation" style="max-width:300px;margin-bottom:44px;">
+          <p style="text-align:center;">„Ich bin in meiner Energie. Geerdet. Klar. Frei."</p>
+        </div>
+        <button class="bts-btn-primary" onclick="btsClose()">Zur Toolbox</button>
+      </div>`;
+    btsAnimateDone();
+  }
+}
+
+function btsDrawIdle() {
+  const c = document.getElementById('bts-canvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const cx = 110, cy = 110;
+  ctx.clearRect(0, 0, 220, 220);
+  [44, 66, 88].forEach((r, i) => {
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(68,214,214,${0.1 - i * 0.025})`;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+}
+
+function btsSend() {
+  const sendBtn = document.getElementById('bts-send-btn');
+  if (sendBtn) { sendBtn.disabled = true; sendBtn.style.opacity = '.3'; }
+
+  const c = document.getElementById('bts-canvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const cx = 110, cy = 110;
+  let rings = [], tick = 0;
+
+  function frame() {
+    ctx.clearRect(0, 0, 220, 220);
+    if (tick % 10 === 0 && tick < 80) {
+      rings.push({ r: 8, a: 0.85, gold: tick % 20 === 0 });
+    }
+    rings = rings.filter(r => r.a > 0.02);
+    rings.forEach(r => {
+      r.r += 2.8;
+      r.a *= 0.958;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r.r, 0, Math.PI * 2);
+      ctx.strokeStyle = r.gold
+        ? `rgba(212,168,32,${r.a})`
+        : `rgba(68,214,214,${r.a})`;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    });
+    tick++;
+    if (tick < 120 || rings.length > 0) {
+      requestAnimationFrame(frame);
+    } else {
+      const shield = document.getElementById('bts-shield');
+      if (shield) shield.style.opacity = '0.25';
+      setTimeout(() => {
+        const lbl  = document.getElementById('bts-sent-label');
+        const desc = document.getElementById('bts-sent-desc');
+        const done = document.getElementById('bts-done-btn');
+        if (lbl)  lbl.style.opacity  = '1';
+        if (desc) desc.style.opacity = '1';
+        if (done) done.style.display = '';
+        if (sendBtn) sendBtn.style.display = 'none';
+      }, 200);
+    }
+  }
+  frame();
+}
+
+function btsAnimateDone() {
+  const c = document.getElementById('bts-done-canvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const cx = 80, cy = 80;
+  let a = 0;
+
+  function draw() {
+    a = Math.min(a + 0.025, 1);
+    ctx.clearRect(0, 0, 160, 160);
+    [24, 42, 58].forEach((r, i) => {
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(68,214,214,${(0.55 - i * 0.14) * a})`;
+      ctx.lineWidth = 1.1 - i * 0.15;
+      ctx.stroke();
+    });
+    ctx.beginPath();
+    ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(212,168,32,${0.85 * a})`;
+    ctx.fill();
+    if (a < 1) requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// ─── WUNSCHBUCHARBEIT ───
+let wbwStep = 0;
+let wbwArea = '';
+
+const wbwAreas = [
+  'Liebe & Partnerschaft','Gesundheit & Wohlbefinden','Beruf & Finanzen',
+  'Kreativität & Ausdruck','Beziehungen & Familie','Innere Freiheit & Wachstum',
+  'Haus & Lebensraum','Spiritualität & Verbindung'
+];
+
+const wbwExamples = {
+  'Liebe & Partnerschaft':       'Ich bin so dankbar und glücklich, dass ich eine tiefe, liebevolle Verbindung in meinem Leben erfahre — ich fühle Geborgenheit, Freude und echte Nähe.',
+  'Gesundheit & Wohlbefinden':   'Ich bin so dankbar und glücklich, dass mein Körper voller Lebenskraft und Vitalität ist — ich fühle mich lebendig, leicht und in meiner Mitte.',
+  'Beruf & Finanzen':            'Ich bin so dankbar und glücklich, dass ich meine Gaben sinnvoll einbringe und in finanziellem Überfluss lebe — ich fühle Erfüllung und tiefe Sicherheit.',
+  'Kreativität & Ausdruck':      'Ich bin so dankbar und glücklich, dass meine Kreativität frei fließt und ich mich authentisch ausdrücken kann — ich fühle Leichtigkeit und innere Freude.',
+  'Beziehungen & Familie':       'Ich bin so dankbar und glücklich, dass meine Beziehungen von Liebe, Vertrauen und gegenseitigem Respekt getragen werden — ich fühle Verbundenheit und Frieden.',
+  'Innere Freiheit & Wachstum':  'Ich bin so dankbar und glücklich, dass ich in meiner eigenen Kraft lebe und wachse — ich fühle mich frei, klar und vollständig bei mir.',
+  'Haus & Lebensraum':           'Ich bin so dankbar und glücklich, dass ich in einem Zuhause lebe, das mich nährt und inspiriert — ich fühle Wärme, Sicherheit und Freude.',
+  'Spiritualität & Verbindung':  'Ich bin so dankbar und glücklich, dass ich meine spirituelle Verbindung täglich spüre und vertiefe — ich fühle Führung, Vertrauen und inneren Frieden.',
+};
+
+function wbwOpen() {
+  wbwStep = 0;
+  wbwArea = '';
+  document.getElementById('modal-wunsch').classList.add('open');
+  wbwRender();
+}
+
+function wbwClose() {
+  document.getElementById('modal-wunsch').classList.remove('open');
+}
+
+function wbwNext() {
+  if (wbwStep === 1 && !wbwArea) { showToast('Wähle einen Lebensbereich aus.'); return; }
+  wbwStep++;
+  wbwRender();
+}
+
+function wbwSelectArea(el, val) {
+  document.querySelectorAll('.wbw-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  wbwArea = val;
+}
+
+function wbwRender() {
+  const body = document.getElementById('wbw-body');
+  const ind  = document.getElementById('wbw-step-indicator');
+  body.scrollTop = 0;
+
+  if (wbwStep === 0) {
+    ind.textContent = '';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:44px 24px 36px;text-align:center;">
+        <svg width="80" height="80" viewBox="0 0 22 22" fill="none" style="margin-bottom:28px;">
+          <path d="M3 5.5A1.5 1.5 0 0 1 4.5 4H11v14H4.5A1.5 1.5 0 0 1 3 16.5V5.5z"
+            stroke="rgba(212,168,32,.8)" stroke-width="1" fill="rgba(212,168,32,.07)"/>
+          <path d="M11 4h6.5A1.5 1.5 0 0 1 19 5.5v11A1.5 1.5 0 0 1 17.5 18H11V4z"
+            stroke="rgba(212,168,32,.8)" stroke-width="1" fill="rgba(212,168,32,.05)"/>
+          <path d="M15 7.5l.55 1.6 1.7.05-1.35 1 .5 1.65L15 10.9l-1.4.9.5-1.65-1.35-1 1.7-.05L15 7.5z"
+            fill="rgba(212,168,32,.85)"/>
+        </svg>
+        <h2 style="font-family:var(--display);font-size:1.4rem;font-weight:500;letter-spacing:.5px;color:var(--cream);margin-bottom:20px;text-wrap:balance;">Wunschbucharbeit</h2>
+        <p style="font-family:var(--sans);font-size:.9rem;color:var(--cream-muted);line-height:1.8;font-weight:300;max-width:300px;margin-bottom:14px;">
+          Das Wunschbuch ist kein Tagebuch. Es ist ein energetisches Werkzeug — ein Ort, an dem du Wünsche nicht nur aufschreibst, sondern sie in die Realität einpflanzt.
+        </p>
+        <p style="font-family:var(--sans);font-size:.9rem;color:var(--cream-muted);line-height:1.8;font-weight:300;max-width:300px;margin-bottom:40px;">
+          Dieser Assistent führt dich durch die richtige Haltung, die Formel und die Aktivierung — damit dein Eintrag die maximale Frequenz trägt.
+        </p>
+        <button class="wbw-btn-primary" onclick="wbwNext()">Assistent starten</button>
+      </div>`;
+
+  } else if (wbwStep === 1) {
+    ind.textContent = 'SCHRITT 1 / 4';
+    body.innerHTML = `
+      <div style="padding:32px 20px 36px;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:14px;text-align:center;">Fokus wählen</div>
+        <h2 style="font-family:var(--display);font-size:1.15rem;font-weight:500;color:var(--cream);text-align:center;margin-bottom:8px;text-wrap:balance;">Welchen Bereich möchtest du heute erschaffen?</h2>
+        <p style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);text-align:center;font-weight:300;margin-bottom:24px;">Wähle einen Bereich — für diesen Eintrag.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:36px;">
+          ${wbwAreas.map(a => `<div class="wbw-chip" onclick="wbwSelectArea(this,'${a}')">${a}</div>`).join('')}
+        </div>
+        <button class="wbw-btn-primary" onclick="wbwNext()">Weiter</button>
+      </div>`;
+
+  } else if (wbwStep === 2) {
+    ind.textContent = 'SCHRITT 2 / 4';
+    body.innerHTML = `
+      <div style="padding:32px 20px 36px;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:14px;text-align:center;">Kernwunsch klären</div>
+        <h2 style="font-family:var(--display);font-size:1.15rem;font-weight:500;color:var(--cream);text-align:center;margin-bottom:6px;text-wrap:balance;">Was will dein Herz wirklich?</h2>
+        <p style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);text-align:center;font-weight:300;margin-bottom:24px;">Lass diese Fragen in dir wirken. Dein Verstand kennt Ziele — dein Herz kennt Wünsche.</p>
+        <div class="wbw-question-card">„Was möchte ich wirklich erleben — jenseits von dem, was ich glaube, verdienen zu dürfen?"</div>
+        <div class="wbw-question-card">„Wie würde sich mein Alltag anfühlen, wenn dieser Wunsch bereits wahr ist?"</div>
+        <div class="wbw-question-card">„Was würde sich in mir verändern — welche Version von mir zeigt sich dann?"</div>
+        <div style="background:rgba(212,168,32,.05);border:1px solid rgba(212,168,32,.12);border-radius:14px;padding:16px 18px;margin:20px 0 32px;">
+          <p style="font-family:var(--sans);font-size:.82rem;color:var(--cream-muted);font-weight:300;line-height:1.75;margin:0;">
+            Nimm dir einen Moment. Schließ kurz die Augen. Dann hol dein Wunschbuch — und bring das, was entsteht, auf die nächste Seite.
+          </p>
+        </div>
+        <button class="wbw-btn-primary" onclick="wbwNext()">Ich habe meinen Wunsch</button>
+      </div>`;
+
+  } else if (wbwStep === 3) {
+    ind.textContent = 'SCHRITT 3 / 4';
+    const example = wbwExamples[wbwArea] || 'Ich bin so dankbar und glücklich, dass [dein Wunsch in der Gegenwart] — ich fühle [das Gefühl, das damit kommt].';
+    body.innerHTML = `
+      <div style="padding:32px 20px 36px;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:14px;text-align:center;">Die Formel</div>
+        <h2 style="font-family:var(--display);font-size:1.15rem;font-weight:500;color:var(--cream);text-align:center;margin-bottom:6px;text-wrap:balance;">So schreibst du mit maximaler Frequenz.</h2>
+        <p style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);text-align:center;font-weight:300;margin-bottom:22px;">Drei Prinzipien — sie machen den Unterschied.</p>
+        <div style="background:rgba(212,168,32,.04);border:1px solid rgba(212,168,32,.1);border-radius:16px;padding:16px 18px;margin-bottom:20px;">
+          <div class="wbw-rule">
+            <div class="wbw-rule-num">1</div>
+            <div>
+              <div style="font-family:var(--display);font-size:.82rem;color:var(--cream);margin-bottom:4px;">Gegenwart</div>
+              <div style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);font-weight:300;line-height:1.65;">Schreib, als wäre es bereits wahr. Nicht „Ich will" oder „Ich wünsche mir" — sondern „Ich bin", „Ich habe", „Ich erlebe".</div>
+            </div>
+          </div>
+          <div class="wbw-rule">
+            <div class="wbw-rule-num">2</div>
+            <div>
+              <div style="font-family:var(--display);font-size:.82rem;color:var(--cream);margin-bottom:4px;">Gefühl</div>
+              <div style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);font-weight:300;line-height:1.65;">Füg das Gefühl hinzu. Das Universum reagiert nicht auf Worte — es reagiert auf die Frequenz, die du dabei aussendest.</div>
+            </div>
+          </div>
+          <div class="wbw-rule">
+            <div class="wbw-rule-num">3</div>
+            <div>
+              <div style="font-family:var(--display);font-size:.82rem;color:var(--cream);margin-bottom:4px;">Dankbarkeit</div>
+              <div style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);font-weight:300;line-height:1.65;">Dankbarkeit ist die höchste Empfangsfrequenz. Beginne jeden Eintrag mit „Ich bin so dankbar und glücklich, dass…"</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2px;color:var(--gold);opacity:.7;margin-bottom:6px;">BEISPIEL FÜR ${wbwArea.toUpperCase()}</div>
+        <div class="wbw-example-box">${example}</div>
+        <button class="wbw-btn-primary" onclick="wbwNext()">Jetzt eintragen</button>
+      </div>`;
+
+  } else if (wbwStep === 4) {
+    ind.textContent = 'SCHRITT 4 / 4';
+    body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;padding:44px 24px 40px;text-align:center;">
+        <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:18px;">Aktivierung</div>
+        <canvas id="wbw-canvas" width="160" height="160" style="margin-bottom:24px;"></canvas>
+        <h2 style="font-family:var(--display);font-size:1.2rem;font-weight:500;color:var(--cream);margin-bottom:16px;text-wrap:balance;">Schreib deinen Eintrag jetzt.</h2>
+        <p style="font-family:var(--sans);font-size:.88rem;color:var(--cream-muted);line-height:1.8;font-weight:300;max-width:280px;margin-bottom:28px;">
+          In der Gegenwart. Mit dem Gefühl, das du dir wünschst. Und mit aufrichtigem Dank — als wäre es bereits geschehen.
+        </p>
+        <div style="background:rgba(212,168,32,.05);border:1px solid rgba(212,168,32,.15);border-radius:16px;padding:20px 22px;max-width:300px;margin-bottom:40px;">
+          <p style="font-family:var(--serif);font-style:italic;font-size:.98rem;color:rgba(255,255,255,.88);line-height:1.88;margin:0;">„Diese Worte tragen die Frequenz meines Herzens. Sie sind gesetzt."</p>
+        </div>
+        <button class="wbw-btn-primary" onclick="wbwClose()">Zur Toolbox</button>
+      </div>`;
+    wbwAnimateActivation();
+  }
+}
+
+function wbwAnimateActivation() {
+  const c = document.getElementById('wbw-canvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const cx = 80, cy = 80;
+  let t = 0;
+  // Particles radiating outward
+  const particles = Array.from({length: 24}, (_, i) => ({
+    angle: (i / 24) * Math.PI * 2,
+    r: 0,
+    speed: 0.4 + Math.random() * 0.4,
+    alpha: 0,
+    size: 1 + Math.random() * 1.5,
+  }));
+  let alpha = 0;
+
+  function draw() {
+    t++;
+    alpha = Math.min(alpha + 0.03, 1);
+    ctx.clearRect(0, 0, 160, 160);
+
+    // Concentric glow rings
+    [20, 36, 52].forEach((r, i) => {
+      ctx.beginPath();
+      ctx.arc(cx, cy, r + Math.sin(t * 0.04) * 2, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(212,168,32,${(0.45 - i * 0.1) * alpha})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    });
+
+    // Expanding particles
+    particles.forEach(p => {
+      if (t > 20) {
+        p.r += p.speed;
+        p.alpha = Math.max(0, 0.8 - p.r / 65);
+        if (p.r < 65) {
+          ctx.beginPath();
+          ctx.arc(
+            cx + Math.cos(p.angle) * p.r,
+            cy + Math.sin(p.angle) * p.r,
+            p.size, 0, Math.PI * 2
+          );
+          ctx.fillStyle = `rgba(212,168,32,${p.alpha * alpha})`;
+          ctx.fill();
+        }
+        // Reset when faded out
+        if (p.r > 65) { p.r = 0; p.alpha = 0.8; }
+      }
+    });
+
+    // Central star point
+    ctx.beginPath();
+    ctx.arc(cx, cy, 4.5 + Math.sin(t * 0.06) * 1, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(212,168,32,${0.9 * alpha})`;
+    ctx.fill();
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// ─── LÖSUNGSORIENTIERTE FRAGEN ───
+
+const LOQ_DATA = [
+  {
+    icon: '🌟',
+    name: 'Möglichkeiten & neue Perspektiven',
+    questions: [
+      'Was ist hier noch möglich, das ich bisher nicht gesehen habe?',
+      'Welche andere Perspektive darf ich einnehmen?',
+      'Welche Tür möchte sich gerade für mich öffnen?',
+      'Was entsteht, wenn ich aufhöre, gegen diese Situation anzukämpfen?',
+      'Welche Möglichkeit wartet darauf, von mir erkannt zu werden?',
+      'Wenn alles zu meinem höchsten Wohl geschieht – was könnte der tiefere Sinn sein?',
+      'Was wäre möglich, wenn alles leichter sein dürfte?',
+      'Welche neue Sichtweise verändert gerade alles?',
+    ]
+  },
+  {
+    icon: '🌿',
+    name: 'Vertrauen & Hingabe',
+    questions: [
+      'Was darf ich jetzt loslassen, damit etwas Neues entstehen kann?',
+      'Wo darf ich mehr vertrauen?',
+      'Was möchte das Leben gerade durch mich erfahren?',
+      'Wenn ich dem Fluss des Lebens vertrauen würde – welcher Schritt wäre jetzt leicht?',
+      'Was geschieht, wenn ich nicht kontrollieren muss?',
+      'Welche Last darf ich heute abgeben?',
+      'Was möchte sich entfalten, wenn ich einen Schritt zurücktrete?',
+    ]
+  },
+  {
+    icon: '💫',
+    name: 'Innere Weisheit & Intuition',
+    questions: [
+      'Was weiß meine Seele bereits, das mein Verstand noch nicht versteht?',
+      'Welche Antwort trägt mein Herz bereits in sich?',
+      'Welche Wahrheit möchte sich mir jetzt zeigen?',
+      'Wenn ich meiner Intuition vollkommen vertrauen würde – was würde ich tun?',
+      'Welche innere Stimme möchte heute gehört werden?',
+      'Welche Botschaft liegt hinter dieser Situation?',
+      'Was würde mein höheres Selbst mir jetzt raten?',
+    ]
+  },
+  {
+    icon: '🔮',
+    name: 'Zukunft & Manifestation',
+    questions: [
+      'Wie sieht die beste Version dieser Situation aus?',
+      'Welche Energie darf ich heute verkörpern, um das Gewünschte anzuziehen?',
+      'Was darf ich wählen, um eine neue Realität zu erschaffen?',
+      'Wer darf ich werden, damit sich mein Wunsch erfüllen kann?',
+      'Welche Entscheidung bringt mich näher an mein wahres Sein?',
+      'Was wäre mein nächster liebevoller Schritt?',
+      'Welche Möglichkeit darf ich heute empfangen?',
+    ]
+  },
+  {
+    icon: '🌙',
+    name: 'Selbstermächtigung',
+    questions: [
+      'Welche Kraft in mir möchte jetzt aktiviert werden?',
+      'Was wäre möglich, wenn ich mich nicht mehr kleinhalten würde?',
+      'Wie würde ich handeln, wenn ich mir selbst vollkommen vertrauen würde?',
+      'Welche Größe in mir möchte gelebt werden?',
+      'Was würde die mutigste Version von mir jetzt wählen?',
+      'Welche Stärke habe ich bisher unterschätzt?',
+      'Welche Entscheidung dient meinem höchsten Wohl?',
+    ]
+  },
+  {
+    icon: '🌸',
+    name: 'Heilung & Transformation',
+    questions: [
+      'Was möchte in mir gesehen und angenommen werden?',
+      'Welcher Teil von mir ruft nach Liebe?',
+      'Welche alte Geschichte darf jetzt enden?',
+      'Was darf heilen, damit ich freier werde?',
+      'Welche neue Wahrheit darf ich über mich selbst annehmen?',
+      'Welche Emotion möchte heute gefühlt werden?',
+      'Was darf ich mir selbst vergeben?',
+    ]
+  },
+  {
+    icon: '✨',
+    name: 'Magie & Bewusstsein',
+    questions: [
+      'Welche Energie, welcher Raum und welches Bewusstsein kann ich heute sein, um mehr zu empfangen, als ich mir bisher vorstellen konnte?',
+      'Wenn alles bereits für mich arbeitet – was darf ich erkennen?',
+      'Welche Magie möchte sich durch mich entfalten?',
+      'Welche Wunder sind bereits auf dem Weg zu mir?',
+      'Welche Version meines Lebens wartet darauf, von mir gewählt zu werden?',
+      'Was darf ich heute empfangen, statt dafür kämpfen zu müssen?',
+      'Wenn mein zukünftiges Ich mir jetzt einen Rat geben könnte – welcher wäre das?',
+      'Welche Frequenz möchte ich heute verkörpern?',
+      'Wenn ich nichts reparieren müsste – was würde ich stattdessen erschaffen?',
+      'Was ist jetzt möglich, das ich bisher noch nicht in Betracht gezogen habe?',
+      'Wenn alles bereits in mir vorhanden ist – welcher nächste Schritt zeigt sich mir jetzt?',
+    ]
+  },
+];
+
+let loqMode = null;
+let loqCatIdx = null;
+let loqQIdx = 0;
+let loqCurrentQ = null;
+let loqPendingQ = null;
+
+function loqOpen() {
+  loqMode = null; loqCatIdx = null; loqQIdx = 0; loqCurrentQ = null;
+  document.getElementById('modal-fragen').classList.add('open');
+  loqRenderIntro();
+}
+
+function loqClose() {
+  document.getElementById('modal-fragen').classList.remove('open');
+}
+
+function loqRenderIntro() {
+  document.getElementById('loq-step-indicator').textContent = '';
+  const body = document.getElementById('loq-body');
+  body.innerHTML = `
+    <div style="padding:24px 16px 100px;">
+      <div style="text-align:center;margin-bottom:30px;">
+        <div style="width:66px;height:66px;border-radius:50%;background:rgba(212,168,32,.08);border:1px solid rgba(212,168,32,.22);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+          <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" width="30" height="30">
+            <path d="M11 2L20 11L11 20L2 11Z" stroke="rgba(212,168,32,.9)" stroke-width="1.3" stroke-linejoin="round"/>
+            <path d="M9.5 9a1.8 1.8 0 0 1 3.2 1.1c0 1.3-1.7 1.6-1.7 2.9" stroke="rgba(212,168,32,.9)" stroke-width="1.3" stroke-linecap="round"/>
+            <circle cx="11" cy="15" r=".7" fill="rgba(212,168,32,.9)"/>
+          </svg>
+        </div>
+        <p style="font-family:var(--serif);font-style:italic;font-size:.98rem;color:rgba(255,255,255,.72);line-height:1.85;max-width:290px;margin:0 auto;">
+          Kraftvolle Fragen öffnen Räume, die Antworten noch nicht gefunden haben.
+        </p>
+      </div>
+
+      <div style="font-family:var(--display);font-size:.6rem;letter-spacing:2px;color:var(--gold);margin-bottom:12px;padding-left:2px;">WÄHLE EIN THEMA</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
+        ${LOQ_DATA.map((cat, i) => `
+          <button class="loq-cat-btn" onclick="loqSelectCategory(${i})">
+            <span class="loq-cat-icon">${cat.icon}</span>
+            <span class="loq-cat-name">${cat.name}</span>
+            <span class="loq-cat-count">${cat.questions.length}</span>
+          </button>
+        `).join('')}
+      </div>
+
+      <button class="loq-random-btn" onclick="loqSelectRandom()">✦ &nbsp;Zufälliger Impuls</button>
+    </div>
+  `;
+}
+
+function loqSelectCategory(idx) {
+  loqMode = 'category';
+  loqCatIdx = idx;
+  loqQIdx = 0;
+  loqRenderCard();
+}
+
+function loqSelectRandom() {
+  loqMode = 'random';
+  const all = LOQ_DATA.flatMap(cat => cat.questions.map(q => ({ q, icon: cat.icon, name: cat.name })));
+  loqCurrentQ = all[Math.floor(Math.random() * all.length)];
+  loqRenderCard();
+}
+
+function loqAdvance() {
+  const body = document.getElementById('loq-body');
+  const card = body.querySelector('.loq-card');
+  function doNext() {
+    if (loqMode === 'random') {
+      const all = LOQ_DATA.flatMap(cat => cat.questions.map(q => ({ q, icon: cat.icon, name: cat.name })));
+      loqCurrentQ = all[Math.floor(Math.random() * all.length)];
+      loqRenderCard();
+    } else {
+      loqQIdx++;
+      if (loqQIdx >= LOQ_DATA[loqCatIdx].questions.length) {
+        loqRenderDone();
+      } else {
+        loqRenderCard();
+      }
+    }
+  }
+  if (card) {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(-12px)';
+    setTimeout(doNext, 300);
+  } else {
+    doNext();
+  }
+}
+
+function loqRenderCard() {
+  const isCategory = loqMode === 'category';
+  const q    = isCategory ? LOQ_DATA[loqCatIdx].questions[loqQIdx] : loqCurrentQ.q;
+  const icon = isCategory ? LOQ_DATA[loqCatIdx].icon : loqCurrentQ.icon;
+  const name = isCategory ? LOQ_DATA[loqCatIdx].name : loqCurrentQ.name;
+  const total = isCategory ? LOQ_DATA[loqCatIdx].questions.length : 0;
+  const isLast = isCategory && (loqQIdx + 1 >= total);
+  loqPendingQ = q;
+
+  document.getElementById('loq-step-indicator').textContent = isCategory ? `${loqQIdx + 1} / ${total}` : '';
+
+  const body = document.getElementById('loq-body');
+  body.innerHTML = `
+    <div style="padding:24px 16px 100px;display:flex;flex-direction:column;gap:18px;">
+      <div class="loq-cat-label">${icon}&nbsp; ${name}</div>
+      <div class="loq-card" style="opacity:0;transform:translateY(16px);">
+        <p style="font-family:var(--serif);font-style:italic;font-size:1.08rem;line-height:1.85;color:var(--cream);text-align:center;">
+          „${q}"
+        </p>
+      </div>
+      <div class="loq-own-wrap">
+        <textarea class="loq-own-textarea" id="loq-own-input" placeholder="Eigene Frage eingeben – oder die angezeigte abgeben …" rows="2"></textarea>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;align-items:center;">
+        <button class="loq-send-btn" onclick="loqSendCurrent()">✦ &nbsp;Ins Universum abgeben</button>
+        <button class="loq-next-btn" onclick="loqAdvance()">
+          ${isLast ? 'Abschließen' : 'Nächste Frage'}
+        </button>
+      </div>
+      <button class="loq-back-link" onclick="loqRenderIntro()">← Kategorien</button>
+    </div>
+  `;
+
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const card = body.querySelector('.loq-card');
+    if (card) { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }
+  }));
+}
+
+function loqSendOwn() {
+  const input = document.getElementById('loq-own-input');
+  if (!input) return;
+  const q = input.value.trim();
+  if (!q) return;
+  loqSendQuestion(q);
+}
+
+function loqSendCurrent() {
+  const input = document.getElementById('loq-own-input');
+  const own = input ? input.value.trim() : '';
+  loqSendQuestion(own || loqPendingQ);
+}
+
+function loqSendQuestion(q) {
+  if (!q) return;
+  document.getElementById('loq-step-indicator').textContent = '';
+  const body = document.getElementById('loq-body');
+  body.innerHTML = `
+    <div style="padding:36px 16px 100px;display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center;">
+      <p style="font-family:var(--serif);font-style:italic;font-size:1.05rem;color:rgba(255,255,255,.82);line-height:1.85;max-width:280px;">
+        „${q}"
+      </p>
+      <canvas id="loq-send-canvas" width="200" height="200" style="width:200px;height:200px;transition:opacity .4s;"></canvas>
+      <div id="loq-sent-msg" style="display:none;flex-direction:column;align-items:center;gap:14px;">
+        <div style="font-family:var(--display);font-size:.7rem;letter-spacing:3px;color:rgba(212,168,32,.9);">ABGEGEBEN</div>
+        <p style="font-family:var(--serif);font-style:italic;font-size:.92rem;color:rgba(255,255,255,.55);line-height:1.8;max-width:250px;">
+          Deine Frage ist auf dem Weg. Das Universum hat gehört.
+        </p>
+        <button class="loq-next-btn" onclick="loqRenderIntro()">Neue Frage</button>
+      </div>
+    </div>
+  `;
+  requestAnimationFrame(() => loqAnimateSend());
+}
+
+function loqAnimateSend() {
+  const canvas = document.getElementById('loq-send-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = 200, H = 200, cx = 100, cy = 100;
+  let t = 0;
+  const RAYS = 18;
+
+  function draw() {
+    if (!document.getElementById('loq-send-canvas')) return;
+    t++;
+    ctx.clearRect(0, 0, W, H);
+
+    const fade = Math.max(0, 1 - Math.max(0, t - 85) / 15);
+
+    for (let i = 0; i < RAYS; i++) {
+      const angle = (i / RAYS) * Math.PI * 2 + t * 0.01;
+      const progress = Math.min(t / 80, 1);
+      const len = 18 + progress * 72 + Math.sin(t * 0.07 + i * 1.1) * 5;
+      const warm = i % 2 === 0;
+      const alpha = (warm ? 0.75 : 0.45) * fade;
+
+      const grd = ctx.createLinearGradient(cx, cy, cx + Math.cos(angle) * len, cy + Math.sin(angle) * len);
+      grd.addColorStop(0, warm ? `rgba(255,238,130,${alpha})` : `rgba(212,168,32,${alpha})`);
+      grd.addColorStop(1, 'rgba(212,168,32,0)');
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(angle) * len, cy + Math.sin(angle) * len);
+      ctx.strokeStyle = grd;
+      ctx.lineWidth = warm ? 2.5 : 1.4;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    }
+
+    // Central glow
+    const glowR = 10 + Math.sin(t * 0.09) * 3;
+    const glowA = Math.min(1, t / 16) * fade;
+    const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowR * 3);
+    glow.addColorStop(0, `rgba(255,242,150,${glowA})`);
+    glow.addColorStop(1, 'rgba(212,168,32,0)');
+    ctx.beginPath();
+    ctx.arc(cx, cy, glowR * 3, 0, Math.PI * 2);
+    ctx.fillStyle = glow;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,242,150,${glowA})`;
+    ctx.fill();
+
+    if (t < 100) {
+      requestAnimationFrame(draw);
+    } else {
+      if (canvas) canvas.style.opacity = '0';
+      const msg = document.getElementById('loq-sent-msg');
+      if (msg) { msg.style.display = 'flex'; }
+    }
+  }
+  draw();
+}
+
+function loqRenderDone() {
+  document.getElementById('loq-step-indicator').textContent = '';
+  const cat = LOQ_DATA[loqCatIdx];
+  const body = document.getElementById('loq-body');
+  body.innerHTML = `
+    <div style="padding:48px 20px 100px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:22px;">
+      <div style="font-size:2.4rem;">${cat.icon}</div>
+      <p style="font-family:var(--serif);font-style:italic;font-size:1.05rem;color:rgba(255,255,255,.78);line-height:1.85;max-width:270px;">
+        Du hast alle Fragen dieser Kategorie empfangen. Lass sie wirken.
+      </p>
+      <div style="background:rgba(212,168,32,.05);border:1px solid rgba(212,168,32,.14);border-radius:16px;padding:18px 22px;max-width:300px;">
+        <p style="font-family:var(--sans);font-weight:300;font-size:.85rem;color:rgba(255,255,255,.6);line-height:1.75;">
+          Welche Frage hat dich am meisten berührt? Schreibe sie auf und gib ihr Raum.
+        </p>
+      </div>
+      <button class="loq-next-btn" style="margin-top:4px;" onclick="loqRenderIntro()">Zurück zu den Themen</button>
+    </div>
+  `;
+}
+
+// ─── DIE 4 SCHRITTE FÜR WUNDER ───
+
+let wunderStep = 0;
+let wunderWish = '';
+let wunderImpulse = '';
+
+function wunderOpen() {
+  wunderStep = 0; wunderWish = ''; wunderImpulse = '';
+  document.getElementById('modal-wunder').classList.add('open');
+  wunderRenderIntro();
+}
+
+function wunderClose() {
+  document.getElementById('modal-wunder').classList.remove('open');
+}
+
+function wunderSetProgress(step) {
+  const wrap = document.getElementById('wunder-pb-wrap');
+  const bar  = document.getElementById('wunder-pb');
+  const ind  = document.getElementById('wunder-step-ind');
+  if (step === 0) {
+    wrap.style.display = 'none';
+    ind.textContent = '';
+  } else {
+    wrap.style.display = '';
+    bar.style.width = (step * 25) + '%';
+    ind.textContent = step + ' / 4';
+  }
+}
+
+function wunderGoStep(n) {
+  if (n === 2) { const i = document.getElementById('wunder-wish-input');    wunderWish    = i ? i.value.trim() : ''; }
+  if (n === 3) { const i = document.getElementById('wunder-impulse-input'); wunderImpulse = i ? i.value.trim() : ''; }
+  wunderStep = n;
+  const fns = [wunderRenderIntro, wunderRenderStep1, wunderRenderStep2, wunderRenderStep3, wunderRenderStep4, wunderRenderDone];
+  if (fns[n]) fns[n]();
+}
+
+function wunderRenderIntro() {
+  wunderSetProgress(0);
+  document.getElementById('wunder-body').innerHTML = `
+    <div style="padding:28px 16px 100px;">
+      <div style="text-align:center;margin-bottom:32px;">
+        <div style="width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,rgba(123,45,158,.2),rgba(196,37,122,.1));border:1px solid rgba(185,130,255,.22);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
+          <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+            <path d="M11 1.5L12.8 9.2L20.5 11L12.8 12.8L11 20.5L9.2 12.8L1.5 11L9.2 9.2Z" stroke="rgba(185,130,255,.9)" stroke-width="1.3" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2 style="font-family:var(--display);font-size:1.1rem;letter-spacing:.5px;color:var(--cream);margin-bottom:14px;">Die 4 Schritte für Wunder</h2>
+        <p style="font-family:var(--serif);font-style:italic;font-size:.98rem;color:rgba(255,255,255,.65);line-height:1.85;max-width:290px;margin:0 auto;">
+          Wunder entstehen, wenn du lernst dem Universum zu vertrauen – und deinen Impulsen zu folgen.
+        </p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:32px;">
+        ${[['1','Verbinde dich mit deinem Wunsch'],['2','Was ist dafür heute zu tun?'],['3','Setze deinen Impuls um'],['4','Wertschätze und feier dich']].map(([n,t]) => `
+          <div style="display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:12px;background:rgba(185,130,255,.04);border:1px solid rgba(185,130,255,.1);">
+            <div class="wunder-step-badge">${n}</div>
+            <div style="font-family:var(--sans);font-size:.88rem;font-weight:300;color:rgba(255,255,255,.78);">${t}</div>
+          </div>`).join('')}
+      </div>
+      <button class="wunder-btn-primary" onclick="wunderGoStep(1)">Los geht's</button>
+    </div>`;
+}
+
+function wunderRenderStep1() {
+  wunderSetProgress(1);
+  document.getElementById('wunder-body').innerHTML = `
+    <div style="padding:24px 16px 100px;display:flex;flex-direction:column;gap:20px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="wunder-step-badge">1</div>
+        <h3 style="font-family:var(--display);font-size:.95rem;letter-spacing:.5px;color:var(--cream);">Verbinde dich mit deinem Wunsch</h3>
+      </div>
+      <div class="wunder-info-box">
+        <p style="font-family:var(--sans);font-size:.86rem;font-weight:300;color:rgba(255,255,255,.7);line-height:1.8;margin-bottom:12px;">
+          Nimm dir einen Moment inne. Schließe die Augen, atme tief ein und verbinde dich mit deinem Herzen.
+        </p>
+        <p style="font-family:var(--serif);font-style:italic;font-size:.95rem;color:rgba(185,130,255,.88);line-height:1.75;">
+          Spüre in dich hinein: Was wünschst du dir wirklich? Lass es aufsteigen, ohne es zu analysieren.
+        </p>
+      </div>
+      <div>
+        <div style="font-family:var(--display);font-size:.6rem;letter-spacing:2px;color:rgba(185,130,255,.6);margin-bottom:10px;">WIE WILLST DU ES HABEN?</div>
+        <div class="wunder-textarea-wrap">
+          <textarea class="wunder-textarea" id="wunder-wish-input" placeholder="Mein Wunsch ist …" rows="4">${wunderWish}</textarea>
+        </div>
+        <p style="font-size:.74rem;color:rgba(255,255,255,.28);margin-top:7px;font-weight:300;">Optional – du kannst auch einfach innerlich spüren.</p>
+      </div>
+      <button class="wunder-btn-primary" onclick="wunderGoStep(2)">Weiter zu Schritt 2</button>
+    </div>`;
+}
+
+function wunderRenderStep2() {
+  wunderSetProgress(2);
+  document.getElementById('wunder-body').innerHTML = `
+    <div style="padding:24px 16px 100px;display:flex;flex-direction:column;gap:20px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="wunder-step-badge">2</div>
+        <h3 style="font-family:var(--display);font-size:.95rem;letter-spacing:.5px;color:var(--cream);">Was ist dafür heute zu tun?</h3>
+      </div>
+      ${wunderWish ? `
+        <div style="background:rgba(185,130,255,.06);border-left:2px solid rgba(185,130,255,.4);border-radius:0 12px 12px 0;padding:14px 16px;">
+          <div style="font-family:var(--display);font-size:.55rem;letter-spacing:2px;color:rgba(185,130,255,.5);margin-bottom:5px;">DEIN WUNSCH</div>
+          <p style="font-family:var(--serif);font-style:italic;font-size:.92rem;color:rgba(255,255,255,.8);line-height:1.7;">${wunderWish}</p>
+        </div>` : ''}
+      <div class="wunder-info-box">
+        <p style="font-family:var(--sans);font-size:.86rem;font-weight:300;color:rgba(255,255,255,.7);line-height:1.8;margin-bottom:14px;">
+          Atme tief durch. Halte deinen Wunsch im Herzen und stelle dir innerlich die Frage:
+        </p>
+        <p style="font-family:var(--serif);font-style:italic;font-size:1.08rem;color:rgba(185,130,255,.92);line-height:1.7;text-align:center;margin-bottom:14px;">
+          „Was ist dafür heute zu tun?"
+        </p>
+        <p style="font-family:var(--sans);font-size:.84rem;font-weight:300;color:rgba(255,255,255,.58);line-height:1.8;">
+          Warte auf den ersten Impuls. Er kann alles sein — eine Banane essen, tanzen, spazieren gehen. Egal was kommt: Es ist die Antwort.
+        </p>
+        <p style="font-family:var(--serif);font-style:italic;font-size:.88rem;color:rgba(212,168,32,.75);margin-top:12px;">
+          Vertraue dem ersten Gedanken. Hinterfrage ihn nicht.
+        </p>
+      </div>
+      <div>
+        <div style="font-family:var(--display);font-size:.6rem;letter-spacing:2px;color:rgba(185,130,255,.6);margin-bottom:10px;">MEIN IMPULS IST …</div>
+        <div class="wunder-textarea-wrap">
+          <textarea class="wunder-textarea" id="wunder-impulse-input" placeholder="Was als erstes kam …" rows="3">${wunderImpulse}</textarea>
+        </div>
+        <p style="font-size:.74rem;color:rgba(255,255,255,.28);margin-top:7px;font-weight:300;">Notiere was kommt — auch wenn es keinen Sinn ergibt.</p>
+      </div>
+      <button class="wunder-btn-primary" onclick="wunderGoStep(3)">Ich habe meinen Impuls erhalten</button>
+    </div>`;
+}
+
+function wunderRenderStep3() {
+  wunderSetProgress(3);
+  document.getElementById('wunder-body').innerHTML = `
+    <div style="padding:24px 16px 100px;display:flex;flex-direction:column;gap:20px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="wunder-step-badge">3</div>
+        <h3 style="font-family:var(--display);font-size:.95rem;letter-spacing:.5px;color:var(--cream);">Setze deinen Impuls um</h3>
+      </div>
+      ${wunderImpulse ? `
+        <div style="background:rgba(212,168,32,.06);border:1px solid rgba(212,168,32,.2);border-radius:16px;padding:20px;text-align:center;">
+          <div style="font-family:var(--display);font-size:.55rem;letter-spacing:2px;color:rgba(212,168,32,.6);margin-bottom:8px;">DEIN IMPULS</div>
+          <p style="font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--cream);line-height:1.75;">${wunderImpulse}</p>
+        </div>` : ''}
+      <div class="wunder-info-box">
+        <p style="font-family:var(--sans);font-size:.86rem;font-weight:300;color:rgba(255,255,255,.7);line-height:1.8;margin-bottom:10px;">
+          Dein Impuls ist die Botschaft des Universums für dich. Setze ihn jetzt um — egal wie klein oder unlogisch er erscheint.
+        </p>
+        <p style="font-family:var(--serif);font-style:italic;font-size:.95rem;color:rgba(185,130,255,.85);line-height:1.75;">
+          Die Umsetzung ist der eigentliche Schritt zum Wunder.
+        </p>
+      </div>
+      <button class="wunder-btn-primary" style="margin-top:8px;" onclick="wunderGoStep(4)">Ich habe es umgesetzt ✓</button>
+    </div>`;
+}
+
+function wunderRenderStep4() {
+  wunderSetProgress(4);
+  document.getElementById('wunder-body').innerHTML = `
+    <div style="padding:24px 16px 100px;display:flex;flex-direction:column;gap:20px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:34px;height:34px;border-radius:50%;background:rgba(212,168,32,.18);border:1px solid rgba(212,168,32,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--display);font-size:.8rem;color:var(--gold);">4</div>
+        <h3 style="font-family:var(--display);font-size:.95rem;letter-spacing:.5px;color:var(--cream);">Wertschätze und feier dich</h3>
+      </div>
+      <div style="background:rgba(212,168,32,.05);border:1px solid rgba(212,168,32,.15);border-radius:16px;padding:20px;text-align:center;">
+        <p style="font-family:var(--serif);font-style:italic;font-size:1rem;color:rgba(255,255,255,.82);line-height:1.85;">
+          Du hast etwas Mutiges getan: Du hast dem Universum vertraut und deinen Impuls umgesetzt.
+        </p>
+        <p style="font-family:var(--serif);font-style:italic;font-size:.92rem;color:rgba(212,168,32,.85);margin-top:12px;line-height:1.75;">
+          Das verdient echte Anerkennung — von dir selbst.
+        </p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="wunder-affirm">„Ich bin stolz auf mich, weil ich meinem Impuls vertraut habe."</div>
+        <div class="wunder-affirm">„Ich vertraue dem Weg, der sich für mich öffnet."</div>
+        <div class="wunder-affirm">„Ich bin würdig, Wunder zu empfangen."</div>
+      </div>
+      <button class="wunder-btn-gold" style="margin-top:4px;" onclick="wunderGoStep(5)">✦ &nbsp;Ich feiere mich!</button>
+    </div>`;
+}
+
+function wunderRenderDone() {
+  wunderSetProgress(0);
+  document.getElementById('wunder-body').innerHTML = `
+    <div style="padding:52px 20px 100px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:24px;">
+      <canvas id="wunder-done-canvas" width="180" height="180" style="width:180px;height:180px;"></canvas>
+      <div style="font-family:var(--display);font-size:.72rem;letter-spacing:3px;color:rgba(212,168,32,.9);">WUNDER GESCHEHEN</div>
+      <p style="font-family:var(--serif);font-style:italic;font-size:1.05rem;color:rgba(255,255,255,.75);line-height:1.88;max-width:272px;">
+        Du hast heute Raum für ein Wunder geschaffen. Das Universum hat deine Bereitschaft gesehen.
+      </p>
+      <button class="wunder-btn-primary" onclick="wunderOpen()">Nochmal durchführen</button>
+    </div>`;
+  requestAnimationFrame(() => {
+    const canvas = document.getElementById('wunder-done-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const cx = 90, cy = 90;
+    let t = 0;
+    const pts = Array.from({length: 28}, (_, i) => ({
+      angle: (i / 28) * Math.PI * 2,
+      r: 0, speed: 0.32 + Math.random() * 0.5,
+      size: 1 + Math.random() * 1.6,
+      violet: Math.random() > 0.45,
+    }));
+    function draw() {
+      if (!document.getElementById('wunder-done-canvas')) return;
+      t++;
+      ctx.clearRect(0, 0, 180, 180);
+      [16, 30, 44].forEach((r, i) => {
+        ctx.beginPath();
+        ctx.arc(cx, cy, r + Math.sin(t * 0.04 + i) * 2.5, 0, Math.PI * 2);
+        ctx.strokeStyle = i % 2 === 0 ? `rgba(185,130,255,${.42 - i*.1})` : `rgba(212,168,32,${.35 - i*.08})`;
+        ctx.lineWidth = 1; ctx.stroke();
+      });
+      pts.forEach(p => {
+        if (t > 12) {
+          p.r += p.speed;
+          const a = Math.max(0, 0.88 - p.r / 76);
+          if (p.r < 76) {
+            ctx.beginPath();
+            ctx.arc(cx + Math.cos(p.angle) * p.r, cy + Math.sin(p.angle) * p.r, p.size, 0, Math.PI * 2);
+            ctx.fillStyle = p.violet ? `rgba(185,130,255,${a})` : `rgba(212,168,32,${a})`;
+            ctx.fill();
+          }
+          if (p.r > 76) p.r = 0;
+        }
+      });
+      const ga = Math.min(1, t / 18);
+      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 14);
+      g.addColorStop(0, `rgba(255,242,155,${ga})`);
+      g.addColorStop(1, 'rgba(185,130,255,0)');
+      ctx.beginPath(); ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+      ctx.fillStyle = g; ctx.fill();
+      ctx.beginPath(); ctx.arc(cx, cy, 4.5 + Math.sin(t * 0.07) * 1.2, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,245,160,${ga})`; ctx.fill();
+      requestAnimationFrame(draw);
+    }
+    draw();
+  });
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--violet);color:var(--cream);padding:12px 24px;border-radius:50px;font-family:var(--display);font-size:.7rem;letter-spacing:1px;z-index:999;animation:fadeUp .3s ease;white-space:nowrap;box-shadow:0 8px 24px rgba(123,45,158,.4)';
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+</script>
+</body>
