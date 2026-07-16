@@ -62,22 +62,25 @@
       font-family: 'Cinzel', serif;
       font-size: .56rem;
       letter-spacing: .22em;
-      color: rgba(255,255,255,.38);
+      color: var(--turquoise);
       margin-top: 5px;
       text-transform: uppercase;
     }
-    .header-star-btn {
+    .flower-link { display: block; line-height: 0; }
+    .wa-btn {
       width: 40px; height: 40px;
       border-radius: 50%;
       background: rgba(0,0,0,.3);
-      border: 1.5px solid rgba(212,168,32,.55);
-      color: rgba(212,168,32,.75);
-      font-size: 1.1rem;
+      border: 1.5px solid rgba(37,211,102,.5);
+      color: rgba(37,211,102,.85);
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
-      line-height: 1;
+      text-decoration: none;
+      transition: border-color .2s, background .2s;
     }
+    .wa-btn:hover { background: rgba(37,211,102,.1); border-color: rgba(37,211,102,.8); }
+    .wa-btn svg { width: 22px; height: 22px; }
 
     /* ─── SEARCH BAR ─── */
     .search-bar-wrap { padding: 16px 16px 0; }
@@ -85,13 +88,13 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      background: rgba(255,255,255,.055);
-      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(123,45,158,.08);
+      border: 1px solid rgba(123,45,158,.45);
       border-radius: 50px;
       padding: 11px 18px;
       transition: border-color .2s;
     }
-    .search-bar:focus-within { border-color: rgba(212,168,32,.4); }
+    .search-bar:focus-within { border-color: rgba(185,130,255,.7); }
     .search-bar input {
       flex: 1;
       background: none;
@@ -136,8 +139,8 @@
     .recent-card {
       flex-shrink: 0;
       width: 155px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(123,45,158,.08);
+      border: 1px solid rgba(123,45,158,.45);
       border-radius: 14px;
       overflow: hidden;
       cursor: pointer;
@@ -186,12 +189,12 @@
       gap: 14px;
       padding: 13px 14px;
       cursor: pointer;
-      transition: background .18s;
-      background: rgba(255,255,255,.025);
-      border: 1px solid rgba(255,255,255,.07);
+      transition: background .18s, border-color .18s;
+      background: rgba(123,45,158,.07);
+      border: 1px solid rgba(123,45,158,.38);
       border-radius: 16px;
     }
-    .tool-row:active { background: rgba(123,45,158,.14); border-color: rgba(123,45,158,.35); }
+    .tool-row:active { background: rgba(123,45,158,.18); border-color: rgba(123,45,158,.65); }
     .tool-row-icon {
       width: 52px; height: 52px;
       border-radius: 14px;
@@ -828,6 +831,7 @@
 <header>
   <div class="header-inner">
     <div class="header-logo-wrap">
+      <a href="https://www.sonisanantes.com" target="_blank" rel="noopener" class="flower-link">
       <svg class="flower-logo" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="flg" cx="50%" cy="50%" r="50%">
@@ -853,12 +857,17 @@
         <circle cx="36" cy="36" r="34" stroke="rgba(185,130,255,.22)" stroke-width="0.8"/>
         <circle cx="36" cy="36" r="2.2" fill="rgba(212,168,32,.95)"/>
       </svg>
+      </a>
       <div>
         <div class="header-title">Energetik<br>Toolbox</div>
         <div class="header-subtitle">Sonisanantes</div>
       </div>
     </div>
-    <button class="header-star-btn" onclick="navGo('favoriten')">☆</button>
+    <a href="https://wa.me/4915115603352" target="_blank" rel="noopener" class="wa-btn" title="WhatsApp Kontakt">
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.978-1.406A9.954 9.954 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.94 7.94 0 0 1-4.073-1.116l-.291-.173-3.007.849.855-2.924-.19-.3A7.958 7.958 0 0 1 4 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8zm4.406-5.958c-.242-.121-1.43-.706-1.652-.786-.221-.08-.383-.12-.543.121-.16.241-.623.786-.764.947-.14.16-.281.18-.523.06-.242-.12-1.02-.376-1.942-1.198-.718-.64-1.203-1.431-1.344-1.672-.14-.241-.015-.372.106-.491.108-.108.242-.281.362-.422.121-.14.162-.24.242-.4.08-.161.04-.302-.02-.422-.06-.121-.543-1.31-.744-1.793-.196-.471-.395-.407-.543-.415l-.463-.008c-.16 0-.42.06-.64.3-.22.241-.84.821-.84 2.003 0 1.18.86 2.32.98 2.481.12.16 1.69 2.58 4.097 3.617.574.248 1.021.396 1.369.506.575.183 1.099.157 1.513.095.461-.068 1.43-.584 1.63-1.148.202-.563.202-1.045.142-1.148-.06-.1-.22-.16-.462-.28z"/>
+      </svg>
+    </a>
   </div>
   <p style="font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.2em;color:rgba(255,255,255,.3);text-align:center;padding-bottom:18px;">Finde das passende Tool</p>
 </header>
