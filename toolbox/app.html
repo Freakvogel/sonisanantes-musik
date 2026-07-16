@@ -36,157 +36,228 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    /* ─── HEADER ─── */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(5,6,8,.96);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(212,168,32,.15);
-      padding: 12px 20px 10px;
+    /* ─── APP SHELL ─── */
+    header { padding: 20px 20px 0; }
+    .header-inner {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 10px;
     }
-    .logo-name {
+    .header-logo-wrap { display: flex; align-items: center; gap: 16px; }
+    .flower-logo { width: 72px; height: 72px; flex-shrink: 0; }
+    .header-title {
       font-family: 'Cinzel', Georgia, serif;
-      font-size: clamp(1rem, 3.5vw, 1.35rem);
-      font-weight: 500;
-      letter-spacing: .22em;
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      line-height: 1.08;
       text-transform: uppercase;
-      background: linear-gradient(135deg, #D4A820, #F5ECD0, #D4A820);
+      background: linear-gradient(160deg, #D4A820 0%, #F5D860 45%, #D4A820 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      line-height: 1.2;
     }
-    .logo-sub {
-      font-family: 'Inter', sans-serif;
+    .header-subtitle {
+      font-family: 'Cinzel', serif;
       font-size: .56rem;
-      letter-spacing: .40em;
+      letter-spacing: .22em;
+      color: rgba(255,255,255,.38);
+      margin-top: 5px;
       text-transform: uppercase;
-      color: #44D6D6;
-      margin-top: 3px;
+    }
+    .header-star-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(0,0,0,.3);
+      border: 1.5px solid rgba(212,168,32,.55);
+      color: rgba(212,168,32,.75);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    /* ─── SEARCH BAR ─── */
+    .search-bar-wrap { padding: 16px 16px 0; }
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,.055);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 50px;
+      padding: 11px 18px;
+      transition: border-color .2s;
+    }
+    .search-bar:focus-within { border-color: rgba(212,168,32,.4); }
+    .search-bar input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      font-size: .88rem;
+      font-weight: 300;
+      color: rgba(255,255,255,.85);
+      caret-color: var(--gold);
+    }
+    .search-bar input::placeholder { color: rgba(255,255,255,.3); }
+
+    /* ─── SECTION LABEL ─── */
+    .section-label {
+      font-family: 'Cinzel', serif;
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(212,168,32,.85);
+      padding: 0 20px;
+      margin: 26px 0 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .section-label-arrow {
+      font-size: .85rem;
+      color: rgba(212,168,32,.5);
+    }
+
+    /* ─── RECENT SCROLL ─── */
+    .recent-scroll {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 0 16px 4px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .recent-scroll::-webkit-scrollbar { display: none; }
+    .recent-card {
+      flex-shrink: 0;
+      width: 155px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .18s, border-color .18s;
+      position: relative;
+    }
+    .recent-card:active { transform: scale(.97); }
+    .recent-card-inner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 10px 12px 12px;
+    }
+    .recent-card-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .recent-card-icon svg { width: 22px; height: 22px; }
+    .recent-card-name {
+      flex: 1;
+      font-family: 'Cinzel', serif;
+      font-size: .66rem;
+      font-weight: 500;
+      color: rgba(255,255,255,.82);
+      line-height: 1.3;
+    }
+    .recent-card-star {
+      font-size: .8rem;
+      color: rgba(255,255,255,.3);
+      align-self: flex-start;
+    }
+    .recent-card-bar { height: 3px; width: 100%; }
+
+    /* ─── TOOLS LIST ─── */
+    .tools-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 0 16px 96px;
+    }
+    .tool-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 14px;
+      cursor: pointer;
+      transition: background .18s;
+      background: rgba(255,255,255,.025);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px;
+    }
+    .tool-row:active { background: rgba(123,45,158,.14); border-color: rgba(123,45,158,.35); }
+    .tool-row-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .tool-row-icon svg { width: 24px; height: 24px; display: block; }
+    .tool-row-body { flex: 1; min-width: 0; }
+    .tool-row-name {
+      font-family: 'Cinzel', serif;
+      font-size: .8rem;
+      font-weight: 500;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      color: var(--cream);
+    }
+    .tool-row-desc {
+      font-size: .72rem;
+      color: rgba(255,255,255,.44);
+      font-weight: 300;
+      line-height: 1.4;
+    }
+    .tool-row-arrow { color: rgba(255,255,255,.25); font-size: 1.1rem; flex-shrink: 0; }
+
+    /* ─── BOTTOM NAV ─── */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 200;
+      background: rgba(18,10,30,.97);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(123,45,158,.3);
+      padding: 10px 0 max(10px, env(safe-area-inset-bottom));
+      display: flex;
+    }
+    .nav-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 0;
+      cursor: pointer;
+      transition: color .18s;
+      border: none;
+      background: none;
+      color: rgba(255,255,255,.32);
+    }
+    .nav-tab.active { color: #A855E8; }
+    .nav-tab svg { width: 22px; height: 22px; }
+    .nav-tab-label {
+      font-family: 'Cinzel', serif;
+      font-size: .5rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
     }
 
     /* ─── MAIN ─── */
     main {
-      padding: 0 0 48px;
+      padding: 0;
+      background: radial-gradient(ellipse 80% 30% at 50% 0%, rgba(100,30,150,.2) 0%, transparent 60%);
     }
 
-    /* ─── GREETING ─── */
-    .greeting-bar {
-      padding: 18px 20px 0;
-      font-family: var(--display);
-      font-size: .65rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--turquoise);
-    }
-
-    /* ─── IMPULSE CARD ─── */
-    .impulse-card {
-      background: linear-gradient(135deg, rgba(123,45,158,.18), rgba(196,37,122,.1));
-      border: 1px solid rgba(212,168,32,.18);
-      border-radius: 18px;
-      padding: 22px;
-      margin: 16px 16px 0;
-      position: relative;
-      overflow: hidden;
-    }
-    .impulse-card::before {
-      content: '✦';
-      position: absolute;
-      right: 16px; top: 14px;
-      font-size: 1.2rem;
-      color: rgba(212,168,32,.25);
-    }
-    .impulse-label {
-      font-family: var(--display);
-      font-size: .65rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 10px;
-    }
-    .impulse-text {
-      font-family: var(--serif);
-      font-size: 1.05rem;
-      color: rgba(255,255,255,0.9);
-      line-height: 1.8;
-      font-style: italic;
-      font-weight: 300;
-    }
-
-    /* ─── SECTION LABEL ─── */
-    .section-label {
-      font-family: var(--display);
-      font-size: .58rem;
-      letter-spacing: .28em;
-      text-transform: uppercase;
-      color: var(--turquoise);
-      opacity: .7;
-      padding: 0 20px;
-      margin: 36px 0 10px;
-    }
-    .section-label:first-of-type { margin-top: 28px; }
-
-    /* ─── TOOLS LIST ─── */
-    .tools-category {
-      background: rgba(255,255,255,.028);
-      border: 1px solid rgba(212,168,32,.1);
-      border-radius: 18px;
-      overflow: hidden;
-      margin: 0 16px 12px;
-    }
-    .tool-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 15px 16px;
-      cursor: pointer;
-      transition: background .18s;
-      border-bottom: 1px solid rgba(255,255,255,.04);
-    }
-    .tools-category .tool-item:last-child { border-bottom: none; }
-    .tool-item:hover  { background: rgba(123,45,158,.08); }
-    .tool-item:active { background: rgba(123,45,158,.14); }
-    .tool-item-icon {
-      width: 44px; height: 44px;
-      border-radius: 11px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.25rem;
-      flex-shrink: 0;
-    }
-    .tool-item-body { flex: 1; min-width: 0; }
-    .tool-item-name { font-family: var(--display); font-size: .84rem; font-weight: 500; letter-spacing: .02em; margin-bottom: 3px; color: var(--cream); }
-    .tool-item-desc { font-size: .74rem; color: var(--cream-muted); font-weight: 300; line-height: 1.45; }
-    .tool-item-arrow { color: rgba(255,255,255,.28); font-size: .85rem; flex-shrink: 0; }
-    .tool-item-icon svg { width: 22px; height: 22px; display: block; }
-    .tool-item-badge {
-      font-family: var(--display);
-      font-size: .56rem;
-      letter-spacing: 1px;
-      padding: 2px 8px;
-      border-radius: 50px;
-      text-transform: uppercase;
-      flex-shrink: 0;
-    }
-
-    /* ─── MEDIA CARDS ─── */
-    .media-section { padding: 0 16px; }
-    .media-category-label {
-      font-family: var(--display);
-      font-size: .62rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: rgba(68,214,214,.6);
-      margin: 20px 0 10px;
-    }
-    .media-category-label:first-child { margin-top: 4px; }
+    /* ─── MEDIA CARDS (used in sub-modals) ─── */
     .media-card {
       background: var(--card);
       border: 1px solid rgba(212,168,32,.12);
@@ -755,192 +826,98 @@
 
 <!-- ══════════ HEADER ══════════ -->
 <header>
-  <div>
-    <div class="logo-name">Sonisanantes</div>
-    <div class="logo-sub">Energetic Toolbox</div>
+  <div class="header-inner">
+    <div class="header-logo-wrap">
+      <svg class="flower-logo" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="flg" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="rgba(160,64,200,0.55)"/>
+            <stop offset="60%" stop-color="rgba(123,45,158,0.2)"/>
+            <stop offset="100%" stop-color="rgba(60,20,90,0.05)"/>
+          </radialGradient>
+          <filter id="flglow">
+            <feGaussianBlur stdDeviation="2.5" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+        <circle cx="36" cy="36" r="34" fill="url(#flg)"/>
+        <g filter="url(#flglow)" opacity="0.7">
+          <circle cx="36" cy="36" r="13" stroke="rgba(185,130,255,.8)" stroke-width="0.9" fill="none"/>
+          <circle cx="36" cy="23" r="13" stroke="rgba(185,130,255,.8)" stroke-width="0.9" fill="none"/>
+          <circle cx="47.26" cy="29.5" r="13" stroke="rgba(185,130,255,.8)" stroke-width="0.9" fill="none"/>
+          <circle cx="47.26" cy="42.5" r="13" stroke="rgba(185,130,255,.8)" stroke-width="0.9" fill="none"/>
+          <circle cx="36" cy="49" r="13" stroke="rgba(185,130,255,.8)" stroke-width="0.9" fill="none"/>
+          <circle cx="24.74" cy="42.5" r="13" stroke="rgba(185,130,255,.8)" stroke-width="0.9" fill="none"/>
+          <circle cx="24.74" cy="29.5" r="13" stroke="rgba(185,130,255,.8)" stroke-width="0.9" fill="none"/>
+        </g>
+        <circle cx="36" cy="36" r="34" stroke="rgba(185,130,255,.22)" stroke-width="0.8"/>
+        <circle cx="36" cy="36" r="2.2" fill="rgba(212,168,32,.95)"/>
+      </svg>
+      <div>
+        <div class="header-title">Energetik<br>Toolbox</div>
+        <div class="header-subtitle">Sonisanantes</div>
+      </div>
+    </div>
+    <button class="header-star-btn" onclick="navGo('favoriten')">☆</button>
   </div>
+  <p style="font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.2em;color:rgba(255,255,255,.3);text-align:center;padding-bottom:18px;">Finde das passende Tool</p>
 </header>
 
 <main>
 
-  <!-- ── Greeting + Tagesimpuls ── -->
-  <div id="greeting-bar" class="greeting-bar" style="display:none;"></div>
-  <div class="impulse-card">
-    <div class="impulse-label">✦ Tagesimpuls</div>
-    <p class="impulse-text" id="daily-impulse">„Was in dir wartet, wartet nicht auf die perfekte Zeit. Es wartet auf deine Bereitschaft."</p>
+  <!-- Search -->
+  <div class="search-bar-wrap">
+    <div class="search-bar">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="7" cy="7" r="4.5" stroke="rgba(255,255,255,.45)" stroke-width="1.5"/>
+        <path d="M10.5 10.5L14 14" stroke="rgba(255,255,255,.45)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <input id="tools-search" type="text" placeholder="Suche nach Tools..." oninput="filterTools(this.value)">
+    </div>
   </div>
 
-  <!-- ── Tools ── -->
-  <div class="section-label">Deine Werkzeuge</div>
-
-  <div class="tools-category">
-
-    <!-- Blockaden lösen -->
-    <div class="tool-item" onclick="openTool('blockaden')">
-      <div class="tool-item-icon" style="background:rgba(123,45,158,.18);">
-        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="3" y="11" width="16" height="9" rx="2.5" stroke="rgba(185,130,255,.85)" stroke-width="1.4"/>
-          <path d="M7 11V8.5a4 4 0 0 1 8 0" stroke="rgba(185,130,255,.85)" stroke-width="1.4" stroke-linecap="round" fill="none"/>
-          <circle cx="11" cy="15.5" r="1.3" fill="rgba(185,130,255,.85)"/>
-          <rect x="10.35" y="15.5" width="1.3" height="2" rx=".5" fill="rgba(185,130,255,.85)"/>
-        </svg>
-      </div>
-      <div class="tool-item-body">
-        <div class="tool-item-name">Blockaden lösen</div>
-        <div class="tool-item-desc">Multidimensionaler geführter Prozess</div>
-      </div>
-      <span class="tool-item-arrow">›</span>
-    </div>
-
-    <!-- Strichmännchentechnik -->
-    <div class="tool-item" onclick="openTool('strich')">
-      <div class="tool-item-icon" style="background:rgba(196,37,122,.12);">
-        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="6" cy="5.5" r="1.8" stroke="rgba(230,120,190,.85)" stroke-width="1.3"/>
-          <line x1="6" y1="7.3" x2="6" y2="13" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/>
-          <circle cx="16" cy="5.5" r="1.8" stroke="rgba(230,120,190,.85)" stroke-width="1.3"/>
-          <line x1="16" y1="7.3" x2="16" y2="13" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/>
-          <path d="M6 10.5 Q11 7.5 16 10.5" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="2 1.8" fill="none"/>
-        </svg>
-      </div>
-      <div class="tool-item-body">
-        <div class="tool-item-name">Strichmännchentechnik</div>
-        <div class="tool-item-desc">Energetische Verbindungen lösen</div>
-      </div>
-      <span class="tool-item-arrow">›</span>
-    </div>
-
-    <!-- Körperkommunikation -->
-    <div class="tool-item" onclick="openTool('koerper')">
-      <div class="tool-item-icon" style="background:rgba(196,37,122,.1);">
-        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="11" cy="5" r="2" stroke="rgba(230,120,190,.85)" stroke-width="1.3"/>
-          <path d="M11 7v5" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/>
-          <path d="M8.5 9.5l-2 1.5M13.5 9.5l2 1.5" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/>
-          <path d="M11 12v3" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/>
-          <path d="M6 17.5 Q8.5 15.5 11 17 Q13.5 18.5 16 17.5" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round" fill="none"/>
-          <path d="M7.5 16 Q9.5 14.5 11 15.8 Q12.5 17 14.5 16" stroke="rgba(230,120,190,.4)" stroke-width="1" stroke-linecap="round" fill="none"/>
-        </svg>
-      </div>
-      <div class="tool-item-body">
-        <div class="tool-item-name">Körperkommunikation</div>
-        <div class="tool-item-desc">Fragen an den Körper – intuitive Antworten</div>
-      </div>
-      <span class="tool-item-arrow">›</span>
-    </div>
-
-    <!-- Back to Sender -->
-    <div class="tool-item" onclick="openTool('schutz')">
-      <div class="tool-item-icon" style="background:rgba(68,214,214,.1);">
-        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M11 2L3 5.5V11c0 4.2 3.3 7.2 8 8.8 4.7-1.6 8-4.6 8-8.8V5.5L11 2z" stroke="rgba(68,214,214,.9)" stroke-width="1.3" stroke-linejoin="round"/>
-          <path d="M11 14.5V9M8.5 11.5l2.5-2.5 2.5 2.5" stroke="rgba(68,214,214,.9)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <div class="tool-item-body">
-        <div class="tool-item-name">Back to Sender</div>
-        <div class="tool-item-desc">Fremde Energien erkennen & zurückgeben</div>
-      </div>
-      <span class="tool-item-arrow">›</span>
-    </div>
-
-    <!-- Wunschbucharbeit -->
-    <div class="tool-item" onclick="openTool('wunsch')">
-      <div class="tool-item-icon" style="background:rgba(212,168,32,.1);">
-        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3 5.5A1.5 1.5 0 0 1 4.5 4H11v14H4.5A1.5 1.5 0 0 1 3 16.5V5.5z" stroke="rgba(212,168,32,.9)" stroke-width="1.3"/>
-          <path d="M11 4h6.5A1.5 1.5 0 0 1 19 5.5v11A1.5 1.5 0 0 1 17.5 18H11V4z" stroke="rgba(212,168,32,.9)" stroke-width="1.3"/>
-          <path d="M15 7.5l.55 1.6 1.7.05-1.35 1 .5 1.65L15 10.9l-1.4.9.5-1.65-1.35-1 1.7-.05L15 7.5z" fill="rgba(212,168,32,.9)"/>
-        </svg>
-      </div>
-      <div class="tool-item-body">
-        <div class="tool-item-name">Wunschbucharbeit</div>
-        <div class="tool-item-desc">Wünsche formulieren & Frequenz aktivieren</div>
-      </div>
-      <span class="tool-item-arrow">›</span>
-    </div>
-
-    <!-- Energiefelder anlegen -->
-    <div class="tool-item" onclick="openTool('felder')">
-      <div class="tool-item-icon" style="background:rgba(68,214,214,.08);">
-        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="11" cy="11" r="2.2" stroke="rgba(68,214,214,.9)" stroke-width="1.4"/>
-          <circle cx="11" cy="11" r="5.3" stroke="rgba(68,214,214,.55)" stroke-width="1.1"/>
-          <circle cx="11" cy="11" r="8.5" stroke="rgba(68,214,214,.25)" stroke-width="1"/>
-        </svg>
-      </div>
-      <div class="tool-item-body">
-        <div class="tool-item-name">Energiefelder anlegen</div>
-        <div class="tool-item-desc">Schutz-, Heil- und Manifestationsfelder</div>
-      </div>
-      <span class="tool-item-arrow">›</span>
-    </div>
-
-    <!-- Lösungsorientierte Fragen -->
-    <div class="tool-item" onclick="openTool('fragen')">
-      <div class="tool-item-icon" style="background:rgba(212,168,32,.08);">
-        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M11 2L20 11L11 20L2 11Z" stroke="rgba(212,168,32,.9)" stroke-width="1.3" stroke-linejoin="round"/>
-          <path d="M9.5 9a1.8 1.8 0 0 1 3.2 1.1c0 1.3-1.7 1.6-1.7 2.9" stroke="rgba(212,168,32,.9)" stroke-width="1.3" stroke-linecap="round"/>
-          <circle cx="11" cy="15" r=".7" fill="rgba(212,168,32,.9)"/>
-        </svg>
-      </div>
-      <div class="tool-item-body">
-        <div class="tool-item-name">Lösungsorientierte Fragen</div>
-        <div class="tool-item-desc">Perspektivwechsel durch kraftvolle Impulse</div>
-      </div>
-      <span class="tool-item-arrow">›</span>
-    </div>
-
-    <!-- Die 4 Schritte für Wunder -->
-    <div class="tool-item" onclick="openTool('wunder')">
-      <div class="tool-item-icon" style="background:rgba(123,45,158,.1);">
-        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M11 1.5L12.8 9.2L20.5 11L12.8 12.8L11 20.5L9.2 12.8L1.5 11L9.2 9.2Z" stroke="rgba(185,130,255,.85)" stroke-width="1.3" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <div class="tool-item-body">
-        <div class="tool-item-name">Die 4 Schritte für Wunder</div>
-        <div class="tool-item-desc">Wahrnehmen · Annehmen · Transformieren · Neu ausrichten</div>
-      </div>
-      <span class="tool-item-arrow">›</span>
-    </div>
-
-    <!-- Geführte Meditationen -->
-    <div class="tool-item" onclick="openSubSection('meditationen')">
-      <div class="tool-item-icon" style="background:rgba(123,45,158,.15);">
-        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="11" cy="5.5" r="2" stroke="rgba(185,130,255,.85)" stroke-width="1.3"/>
-          <path d="M11 7.5v4" stroke="rgba(185,130,255,.85)" stroke-width="1.3" stroke-linecap="round"/>
-          <path d="M9 9.5L7 11M13 9.5l2 1" stroke="rgba(185,130,255,.85)" stroke-width="1.3" stroke-linecap="round"/>
-          <path d="M6.5 13 Q8.5 17.5 11 15.5 Q13.5 17.5 15.5 13" stroke="rgba(185,130,255,.85)" stroke-width="1.3" stroke-linecap="round" fill="none"/>
-        </svg>
-      </div>
-      <div class="tool-item-body">
-        <div class="tool-item-name">Geführte Meditationen</div>
-        <div class="tool-item-desc">Einfühlsame Reisen zur inneren Heilung & Stille</div>
-      </div>
-      <span class="tool-item-arrow">›</span>
-    </div>
-
-    <!-- Frequenzreisen & Musik -->
-    <div class="tool-item" onclick="openSubSection('frequenzen')">
-      <div class="tool-item-icon" style="background:rgba(212,168,32,.1);">
-        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M1.5 11 Q3.5 4.5 5.5 11 Q7.5 17.5 9.5 11 Q11.5 4.5 13.5 11 Q15.5 17.5 17.5 11 Q19 6.5 20.5 11" stroke="rgba(212,168,32,.9)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-        </svg>
-      </div>
-      <div class="tool-item-body">
-        <div class="tool-item-name">Frequenzreisen & Musik</div>
-        <div class="tool-item-desc">Heilende Klangfrequenzen für Harmonie & Verbindung</div>
-      </div>
-      <span class="tool-item-arrow">›</span>
-    </div>
-
+  <!-- Recently used -->
+  <div id="recent-section" style="display:none;">
+    <div class="section-label">Zuletzt Verwendet <span class="section-label-arrow">›</span></div>
+    <div class="recent-scroll" id="recent-scroll"></div>
   </div>
+
+  <!-- All tools -->
+  <div class="section-label" id="all-tools-label">Alle Tools</div>
+  <div class="tools-list" id="tools-list"></div>
 
 </main>
 
+<!-- ══════════ BOTTOM NAV ══════════ -->
+<nav class="bottom-nav">
+  <button class="nav-tab active" id="nav-start" onclick="navGo('start')">
+    <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9.5L11 3l8 6.5V19a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M8 20v-7h6v7"/>
+    </svg>
+    <span class="nav-tab-label">Start</span>
+  </button>
+  <button class="nav-tab" id="nav-favoriten" onclick="navGo('favoriten')">
+    <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 18.5L4.5 12.5A4.5 4.5 0 0 1 11 6a4.5 4.5 0 0 1 6.5 6.5z"/>
+    </svg>
+    <span class="nav-tab-label">Favoriten</span>
+  </button>
+  <button class="nav-tab" id="nav-bibliothek" onclick="navGo('bibliothek')">
+    <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <rect x="3" y="3" width="7" height="16" rx="1"/><rect x="12" y="3" width="7" height="16" rx="1"/>
+    </svg>
+    <span class="nav-tab-label">Bibliothek</span>
+  </button>
+  <button class="nav-tab" id="nav-profil" onclick="navGo('profil')">
+    <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="11" cy="8" r="3.5"/><path d="M4 19c0-3.5 3.1-6 7-6s7 2.5 7 6"/>
+    </svg>
+    <span class="nav-tab-label">Profil</span>
+  </button>
+</nav>
+
+<!-- ══════════ (legacy anchor kept for compat) ══════════ -->
+<div style="display:none;" id="greeting-bar"></div>
 <!-- ══════════ MEDIA PLAYER MODAL ══════════ -->
 <div class="player-modal" id="player-modal">
   <div class="player-modal-header">
@@ -1271,14 +1248,13 @@
 </div>
 
 <script>
-// ─── INIT: Name aus URL-Param (von WordPress übergeben) ───
+// ─── INIT ───
 window.addEventListener('DOMContentLoaded', () => {
   const p = new URLSearchParams(window.location.search);
   const name = p.get('name') || '';
-  if (name) {
-    const bar = document.getElementById('greeting-bar');
-    if (bar) { bar.textContent = `Hallo, ${name.split(' ')[0]} ✦`; bar.style.display = ''; }
-  }
+  if (name) { window._userName = name.split(' ')[0]; }
+  renderToolsList('');
+  renderRecentTools();
 });
 
 function handleLogout() {
@@ -1286,30 +1262,133 @@ function handleLogout() {
   target.location.href = '/wp-login.php?action=logout&_wpnonce=' + (window._wpLogoutNonce || '');
 }
 
-// ─── TAGESIMPULSE ───
-const impulses = [
-  '„Was in dir wartet, wartet nicht auf die perfekte Zeit. Es wartet auf deine Bereitschaft."',
-  '„Dein Körper kennt jede Antwort. Du musst nur lernen, ihm zuzuhören."',
-  '„Heilung bedeutet nicht, dass der Schmerz nie war. Es bedeutet, dass er dich nicht mehr hält."',
-  '„Du bist nicht das, was dir passiert ist. Du bist das, was du daraus machst."',
-  '„Jede Blockade trägt eine Botschaft. Höre hin, bevor du loslässt."',
-  '„Energie folgt der Aufmerksamkeit. Richte dein Licht auf das, was wachsen soll."',
+// ─── TOOLS META ───
+const TOOLS_META = [
+  {
+    id: 'blockaden', name: 'Blockaden lösen', desc: 'Multidimensionaler geführter Prozess',
+    bg: 'rgba(123,45,158,.18)', bar: 'rgba(123,45,158,.75)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="10" rx="2.5" stroke="rgba(185,130,255,.85)" stroke-width="1.4"/><path d="M7 11V8.5a5 5 0 0 1 10 0V11" stroke="rgba(185,130,255,.85)" stroke-width="1.4" stroke-linecap="round"/><circle cx="12" cy="16" r="1.4" fill="rgba(185,130,255,.85)"/></svg>`
+  },
+  {
+    id: 'strich', name: 'Strichmännchentech­nik', desc: 'Energetische Verbindungen lösen',
+    bg: 'rgba(196,37,122,.12)', bar: 'rgba(196,37,122,.75)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="5.5" r="2" stroke="rgba(230,120,190,.85)" stroke-width="1.3"/><line x1="6" y1="7.5" x2="6" y2="14" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/><circle cx="18" cy="5.5" r="2" stroke="rgba(230,120,190,.85)" stroke-width="1.3"/><line x1="18" y1="7.5" x2="18" y2="14" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/><path d="M6 11Q12 7.5 18 11" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="2 2" fill="none"/></svg>`
+  },
+  {
+    id: 'koerper', name: 'Körperkommuni­kation', desc: 'Fragen an den Körper – intuitive Antworten',
+    bg: 'rgba(196,37,122,.1)', bar: 'rgba(196,37,122,.6)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5" r="2.2" stroke="rgba(230,120,190,.85)" stroke-width="1.3"/><path d="M12 7.2v5.5" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/><path d="M9.5 10l-2.5 2M14.5 10l2.5 2" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/><path d="M12 12.7v3.5" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round"/><path d="M7 19Q9 17 12 18.5Q15 20 17 19" stroke="rgba(230,120,190,.85)" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>`
+  },
+  {
+    id: 'schutz', name: 'Back to Sender', desc: 'Fremde Energien erkennen & zurückgeben',
+    bg: 'rgba(68,214,214,.1)', bar: 'rgba(68,214,214,.65)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 2L3 5.5V12c0 4.4 3.5 7.7 9 9.5 5.5-1.8 9-5.1 9-9.5V5.5L12 2z" stroke="rgba(68,214,214,.9)" stroke-width="1.3" stroke-linejoin="round"/><path d="M12 15V9M9.5 11.5L12 9l2.5 2.5" stroke="rgba(68,214,214,.9)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+  },
+  {
+    id: 'wunsch', name: 'Wunschbuch­arbeit', desc: 'Wünsche formulieren & Frequenz aktivieren',
+    bg: 'rgba(212,168,32,.1)', bar: 'rgba(212,168,32,.65)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H12v16H5.5A1.5 1.5 0 0 1 4 18.5V5.5z" stroke="rgba(212,168,32,.9)" stroke-width="1.3"/><path d="M12 4h6.5A1.5 1.5 0 0 1 20 5.5v13A1.5 1.5 0 0 1 18.5 20H12V4z" stroke="rgba(212,168,32,.9)" stroke-width="1.3"/><path d="M16 8l.6 1.7 1.8.05-1.42 1.05.5 1.7L16 11.6l-1.48.95.5-1.7-1.42-1.05 1.8-.05L16 8z" fill="rgba(212,168,32,.9)"/></svg>`
+  },
+  {
+    id: 'felder', name: 'Energiefelder anlegen', desc: 'Schutz-, Heil- und Manifestationsfelder',
+    bg: 'rgba(68,214,214,.08)', bar: 'rgba(68,214,214,.6)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.5" stroke="rgba(68,214,214,.9)" stroke-width="1.4"/><circle cx="12" cy="12" r="6" stroke="rgba(68,214,214,.55)" stroke-width="1.1"/><circle cx="12" cy="12" r="10" stroke="rgba(68,214,214,.25)" stroke-width="1"/></svg>`
+  },
+  {
+    id: 'fragen', name: 'Lösungsorientierte Fragen', desc: 'Perspektivwechsel durch kraftvolle Impulse',
+    bg: 'rgba(212,168,32,.08)', bar: 'rgba(212,168,32,.6)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 2L22 12L12 22L2 12Z" stroke="rgba(212,168,32,.9)" stroke-width="1.3" stroke-linejoin="round"/><path d="M10.5 10a2 2 0 0 1 3.5 1.2c0 1.4-1.8 1.7-1.8 3" stroke="rgba(212,168,32,.9)" stroke-width="1.3" stroke-linecap="round"/><circle cx="12" cy="16.5" r=".8" fill="rgba(212,168,32,.9)"/></svg>`
+  },
+  {
+    id: 'wunder', name: 'Die 4 Schritte für Wunder', desc: 'Wahrnehmen · Annehmen · Transformieren · Feiern',
+    bg: 'rgba(123,45,158,.1)', bar: 'rgba(123,45,158,.7)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 1.5L14 10L22.5 12L14 14L12 22.5L10 14L1.5 12L10 10Z" stroke="rgba(185,130,255,.85)" stroke-width="1.3" stroke-linejoin="round"/></svg>`
+  },
+  {
+    id: 'meditationen', name: 'Geführte Meditationen', desc: 'Einfühlsame Reisen zur inneren Heilung & Stille',
+    bg: 'rgba(123,45,158,.15)', bar: 'rgba(123,45,158,.7)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5.5" r="2.2" stroke="rgba(185,130,255,.85)" stroke-width="1.3"/><path d="M12 7.7v4.5" stroke="rgba(185,130,255,.85)" stroke-width="1.3" stroke-linecap="round"/><path d="M9.5 10l-2.5 2M14.5 10l2.5 2" stroke="rgba(185,130,255,.85)" stroke-width="1.3" stroke-linecap="round"/><path d="M7 14.5Q9.5 19 12 17Q14.5 19 17 14.5" stroke="rgba(185,130,255,.85)" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>`
+  },
+  {
+    id: 'frequenzen', name: 'Frequenzreisen & Musik', desc: 'Heilende Klangfrequenzen für Harmonie & Verbindung',
+    bg: 'rgba(212,168,32,.1)', bar: 'rgba(212,168,32,.6)',
+    svg: `<svg viewBox="0 0 24 24" fill="none"><path d="M2 12Q4 5.5 6 12Q8 18.5 10 12Q12 5.5 14 12Q16 18.5 18 12Q19.5 7.5 22 12" stroke="rgba(212,168,32,.9)" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>`
+  },
 ];
-document.getElementById('daily-impulse').textContent = impulses[new Date().getDay() % impulses.length];
+
+// ─── RECENTLY USED ───
+function getRecentIds() {
+  try { return JSON.parse(localStorage.getItem('sn_recent') || '[]'); } catch { return []; }
+}
+function trackToolUsed(id) {
+  let arr = getRecentIds().filter(x => x !== id);
+  arr.unshift(id);
+  arr = arr.slice(0, 6);
+  try { localStorage.setItem('sn_recent', JSON.stringify(arr)); } catch {}
+  renderRecentTools();
+}
+function renderRecentTools() {
+  const ids = getRecentIds();
+  const sec = document.getElementById('recent-section');
+  const wrap = document.getElementById('recent-scroll');
+  if (!sec || !wrap) return;
+  if (!ids.length) { sec.style.display = 'none'; return; }
+  sec.style.display = '';
+  wrap.innerHTML = ids.map(id => {
+    const t = TOOLS_META.find(m => m.id === id);
+    if (!t) return '';
+    return `<div class="recent-card" onclick="openTool('${t.id}')">
+      <div class="recent-card-inner">
+        <div class="recent-card-icon" style="background:${t.bg};">${t.svg}</div>
+        <div class="recent-card-name">${t.name}</div>
+        <span class="recent-card-star">☆</span>
+      </div>
+      <div class="recent-card-bar" style="background:${t.bar};"></div>
+    </div>`;
+  }).join('');
+}
+
+// ─── TOOLS LIST ───
+function renderToolsList(filter) {
+  const wrap = document.getElementById('tools-list');
+  if (!wrap) return;
+  const q = (filter || '').toLowerCase();
+  const items = TOOLS_META.filter(t =>
+    !q || t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q)
+  );
+  if (!items.length) {
+    wrap.innerHTML = `<div style="padding:28px 20px;text-align:center;font-size:.82rem;color:rgba(255,255,255,.3);">Kein Tool gefunden</div>`;
+    return;
+  }
+  wrap.innerHTML = items.map(t => `
+    <div class="tool-row" onclick="openTool('${t.id}')">
+      <div class="tool-row-icon" style="background:${t.bg};">${t.svg}</div>
+      <div class="tool-row-body">
+        <div class="tool-row-name">${t.name}</div>
+        <div class="tool-row-desc">${t.desc}</div>
+      </div>
+      <span class="tool-row-arrow">›</span>
+    </div>`).join('');
+}
+function filterTools(val) { renderToolsList(val); }
+
+// ─── BOTTOM NAV ───
+function navGo(tab) {
+  document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById('nav-' + tab);
+  if (el) el.classList.add('active');
+}
 
 // ─── OPEN / CLOSE TOOLS ───
 const comingSoon = {};
 
 function openTool(id) {
+  trackToolUsed(id);
   if (id === 'koerper') {
     document.getElementById('modal-koerper').classList.add('open');
-    return;
-  }
-  if (id === 'strich') {
+  } else if (id === 'strich') {
     smOpen();
-    return;
-  }
-  if (id === 'blockaden') {
+  } else if (id === 'blockaden') {
     blReset();
     document.getElementById('modal-blockaden').classList.add('open');
   } else if (id === 'schutz') {
@@ -1322,6 +1401,10 @@ function openTool(id) {
     loqOpen();
   } else if (id === 'wunder') {
     wunderOpen();
+  } else if (id === 'meditationen') {
+    openSubSection('meditationen');
+  } else if (id === 'frequenzen') {
+    openSubSection('frequenzen');
   } else if (comingSoon[id]) {
     const d = comingSoon[id];
     document.getElementById('soon-title').textContent = d.name;
