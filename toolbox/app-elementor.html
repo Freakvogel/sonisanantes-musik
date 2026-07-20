@@ -1,5 +1,5 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -18,7 +18,7 @@
       --cream-muted: rgba(255,255,255,0.78);
       --display: 'Cinzel', Georgia, serif;
       --sans: 'Inter', -apple-system, sans-serif;
-      --serif: 'Cormorant Garamond', Georgia, serif;
+      --serif: 'Raleway', sans-serif;
     }
 
     html, body {
@@ -488,9 +488,9 @@
       color: var(--cream); text-align: center; margin-bottom: 8px; max-width: 400px;
     }
     .player-subtitle {
-      font-family: var(--serif); font-style: italic; font-size: .95rem;
+      font-family: var(--serif); font-size: .95rem;
       color: var(--cream-muted); text-align: center; margin-bottom: 24px;
-      font-weight: 300; max-width: 360px; line-height: 1.65;
+      font-weight: 400; max-width: 360px; line-height: 1.65;
     }
     .player-hz-badges { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
     .hz-badge {
@@ -556,7 +556,7 @@
       border-radius: 18px; padding: 26px 22px;
     }
     .bts-affirmation p {
-      font-family: var(--serif); font-style: italic; font-size: .98rem;
+      font-family: var(--serif); font-size: .98rem;
       color: rgba(255,255,255,.9); line-height: 1.9; margin-bottom: 16px;
     }
     .bts-affirmation p:last-child { margin-bottom: 0; }
@@ -597,13 +597,13 @@
     .wbw-question-card {
       background: rgba(212,168,32,.04); border: 1px solid rgba(212,168,32,.12);
       border-radius: 14px; padding: 16px 18px; margin-bottom: 10px;
-      font-family: var(--serif); font-style: italic;
+      font-family: var(--serif);
       font-size: .95rem; color: rgba(255,255,255,.82); line-height: 1.7;
     }
     .wbw-example-box {
       background: rgba(212,168,32,.06); border-left: 2px solid rgba(212,168,32,.5);
       border-radius: 0 12px 12px 0; padding: 18px 18px 18px 20px; margin: 20px 0;
-      font-family: var(--serif); font-style: italic;
+      font-family: var(--serif);
       font-size: .95rem; color: rgba(255,255,255,.88); line-height: 1.8;
     }
 
@@ -678,7 +678,7 @@
     }
     .efv-custom-wrap input::placeholder { color: rgba(255,255,255,.22); }
     .efv-custom-prefix {
-      font-family: var(--serif); font-style: italic;
+      font-family: var(--serif);
       font-size: .88rem; color: rgba(68,214,214,.65); white-space: nowrap; flex-shrink: 0;
     }
 
@@ -753,7 +753,7 @@
     }
     .loq-own-textarea {
       width: 100%; background: none; border: none; outline: none;
-      font-family: var(--serif); font-style: italic; font-size: 1rem;
+      font-family: var(--serif); font-size: 1rem;
       color: var(--cream); line-height: 1.75; resize: none;
       caret-color: var(--gold); min-height: 76px;
     }
@@ -786,7 +786,7 @@
     }
     .wunder-textarea {
       width: 100%; background: none; border: none; outline: none;
-      font-family: var(--serif); font-style: italic; font-size: .95rem;
+      font-family: var(--serif); font-size: .95rem;
       color: var(--cream); line-height: 1.75; resize: none;
       caret-color: rgba(185,130,255,.8);
     }
@@ -805,7 +805,7 @@
     .wunder-affirm {
       background: rgba(212,168,32,.04); border: 1px solid rgba(212,168,32,.12);
       border-radius: 12px; padding: 14px 16px;
-      font-family: var(--serif); font-style: italic;
+      font-family: var(--serif);
       font-size: .92rem; color: rgba(255,255,255,.78); line-height: 1.65;
     }
   </style>
@@ -915,7 +915,7 @@
       <p style="font-family:var(--sans);font-weight:300;font-size:.9rem;color:rgba(245,236,208,.7);line-height:1.7;">
         Dein Körper weiß mehr als dein Verstand. Er trägt das Wissen deiner Seele, deiner Ahnen und deiner energetischen Realität – und antwortet, wenn du lernst, ihm die richtigen Fragen zu stellen.
       </p>
-      <p style="font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--gold);margin-top:12px;line-height:1.6;">
+      <p style="font-family:var(--serif);font-size:1rem;color:var(--gold);margin-top:12px;line-height:1.6;">
         „Dein Körper lügt nie."
       </p>
     </div>
@@ -1528,7 +1528,7 @@ const blSteps = [
           <div class="guided-step"><div class="gs-num">2</div><div class="gs-text">Wenn JA: 10× sanft auf die Schlüsselbeine oder den Scheitel klopfen – bewusst und verbunden.</div></div>
           <div class="guided-step"><div class="gs-num">3</div><div class="gs-text">Nachtesten:</div></div>
         </div>
-        <p style="font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--cream-muted);text-align:center;margin:18px 0 14px;line-height:1.65;">Ist <strong style="color:var(--cream);font-style:normal;">${blockade}</strong><br>jetzt abgelöst?</p>
+        <p style="font-family:var(--serif);font-size:1.05rem;color:var(--cream-muted);text-align:center;margin:18px 0 14px;line-height:1.65;">Ist <strong style="color:var(--cream);font-style:normal;">${blockade}</strong><br>jetzt abgelöst?</p>
         <div style="display:flex;gap:10px;">
           <button onclick="blAbloesung('ja')" style="${btnStyle('rgba(63,184,155,.55)')}background:linear-gradient(135deg,rgba(63,184,155,.22),rgba(63,184,155,.08));color:var(--emerald);">JA</button>
           <button onclick="blAbloesung('nein')" style="${btnStyle('rgba(255,255,255,.2)')}background:rgba(255,255,255,.04);color:rgba(255,255,255,.6);">NEIN</button>
@@ -1540,7 +1540,7 @@ const blSteps = [
         <div class="step-icon-large">🔍</div>
         <h2 class="step-title">Noch nicht gelöst</h2>
         <div style="text-align:center;">${badge}</div>
-        <p style="font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--cream-muted);text-align:center;margin:4px 0 18px;line-height:1.65;">Frage deinen Körper:<br><strong style="color:var(--cream);font-style:normal;">„Muss ich mehr wissen?"</strong></p>
+        <p style="font-family:var(--serif);font-size:1.05rem;color:var(--cream-muted);text-align:center;margin:4px 0 18px;line-height:1.65;">Frage deinen Körper:<br><strong style="color:var(--cream);font-style:normal;">„Muss ich mehr wissen?"</strong></p>
         <div style="display:flex;gap:10px;">
           <button onclick="blMehrWissen('ja')" style="${btnStyle('rgba(212,168,32,.45)')}background:linear-gradient(135deg,rgba(212,168,32,.18),rgba(212,168,32,.06));color:var(--gold);">JA</button>
           <button onclick="blMehrWissen('nein')" style="${btnStyle('rgba(255,255,255,.2)')}background:rgba(255,255,255,.04);color:rgba(255,255,255,.6);">NEIN</button>
@@ -1551,7 +1551,7 @@ const blSteps = [
       <div class="step-content" style="text-align:center;">
         <div class="completion-glow">✓</div>
         <h2 class="step-title">Blockade ist vollständig gelöst</h2>
-        <p style="font-family:var(--serif);font-style:italic;font-size:1rem;color:rgba(255,255,255,.72);line-height:1.75;margin:12px 0 28px;">Dein Körper bestätigt:<br><em style="color:var(--cream);">${blockade}</em><br>ist vollständig abgelöst.</p>
+        <p style="font-family:var(--serif);font-size:1rem;color:rgba(255,255,255,.72);line-height:1.75;margin:12px 0 28px;">Dein Körper bestätigt:<br><em style="color:var(--cream);">${blockade}</em><br>ist vollständig abgelöst.</p>
         <button onclick="blNext()" style="padding:16px 32px;border-radius:14px;background:linear-gradient(135deg,rgba(123,45,158,.35),rgba(185,130,255,.15));border:1.5px solid rgba(185,130,255,.42);color:var(--cream);font-family:var(--display);font-size:.75rem;letter-spacing:2px;cursor:pointer;">Zum Abschluss ✦</button>
       </div>`;
 
@@ -1562,7 +1562,7 @@ const blSteps = [
         <h2 class="step-title">Lass uns gemeinsam tiefer gehen</h2>
         <div style="text-align:center;margin-bottom:20px;">${badge}</div>
         <div style="background:linear-gradient(135deg,rgba(123,45,158,.2),rgba(196,37,122,.1));border:1px solid rgba(185,130,255,.3);border-radius:20px;padding:24px 20px;margin-bottom:20px;">
-          <p style="font-family:var(--serif);font-style:italic;font-size:1rem;color:rgba(255,255,255,.82);line-height:1.75;margin-bottom:20px;">
+          <p style="font-family:var(--serif);font-size:1rem;color:rgba(255,255,255,.82);line-height:1.75;margin-bottom:20px;">
             Diese Blockade möchte noch tiefer begleitet werden. In einem persönlichen 1:1 arbeiten wir gemeinsam daran – Schritt für Schritt, bis sie vollständig gelöst ist.
           </p>
           <a href="https://sonisanantes.com/kontakt/" target="_blank" rel="noopener"
@@ -1579,11 +1579,11 @@ const blSteps = [
     <div class="step-content" style="text-align:center;">
       <div class="completion-glow">✓</div>
       <h2 class="step-title">Danke, dass du dir Zeit für dich genommen hast.</h2>
-      <p class="step-desc" style="text-align:center;font-family:var(--serif);font-style:italic;margin-bottom:28px;">Ich danke mir, dass ich mir diese Zeit für mich genommen habe.</p>
+      <p class="step-desc" style="text-align:center;font-family:var(--serif);margin-bottom:28px;">Ich danke mir, dass ich mir diese Zeit für mich genommen habe.</p>
       <div style="background:linear-gradient(135deg,rgba(123,45,158,.18),rgba(196,37,122,.1));border:1px solid rgba(185,130,255,.28);border-radius:20px;padding:24px 20px;">
         <div style="font-size:1.6rem;margin-bottom:12px;">✨</div>
         <div style="font-family:var(--display);font-size:.62rem;letter-spacing:2px;color:var(--turquoise);margin-bottom:10px;">PERSÖNLICHE BEGLEITUNG</div>
-        <p style="font-family:var(--serif);font-style:italic;font-size:1rem;color:rgba(255,255,255,.82);line-height:1.75;margin-bottom:20px;">
+        <p style="font-family:var(--serif);font-size:1rem;color:rgba(255,255,255,.82);line-height:1.75;margin-bottom:20px;">
           Du möchtest tiefer gehen, regelmäßig begleitet werden oder hast Fragen zu deinem Prozess? Ich bin für dich da.
         </p>
         <a href="https://wa.me/4915115603352" target="_blank" rel="noopener"
@@ -1610,7 +1610,7 @@ function blRenderPreCheck() {
       <div class="step-icon-large">🫀</div>
       <h2 class="step-title">Bevor wir starten</h2>
       <p class="step-desc" style="margin-bottom:10px;">Das Blockaden lösen basiert auf der <strong style="color:var(--cream);">Körperkommunikation</strong>. Du wirst sie bei jedem Testschritt brauchen.</p>
-      <p style="font-family:var(--serif);font-style:italic;font-size:1rem;color:rgba(255,255,255,.75);line-height:1.7;margin-bottom:28px;">Hast du bereits Erfahrung in der Körperkommunikation?</p>
+      <p style="font-family:var(--serif);font-size:1rem;color:rgba(255,255,255,.75);line-height:1.7;margin-bottom:28px;">Hast du bereits Erfahrung in der Körperkommunikation?</p>
       <div style="display:flex;flex-direction:column;gap:12px;max-width:280px;margin:0 auto;">
         <button onclick="blConfirmExperience(true)" style="padding:16px 24px;border-radius:14px;background:linear-gradient(135deg,rgba(123,45,158,.32),rgba(185,130,255,.16));border:1px solid rgba(185,130,255,.42);color:#fff;font-family:var(--display);font-size:.78rem;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;">JA – ich kenne sie ✦</button>
         <button onclick="blConfirmExperience(false)" style="padding:15px 24px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.7);font-family:var(--display);font-size:.78rem;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;">NEIN – noch nicht</button>
@@ -1781,7 +1781,7 @@ function smDrawFigName(fig, name) {
   if (!name) return;
   smCtx.save();
   smCtx.fillStyle='rgba(245,236,208,.6)';
-  smCtx.font=`400 ${Math.max(11,Math.round(fig.R*0.62))}px 'Cormorant Garamond',serif`;
+  smCtx.font=`400 ${Math.max(11,Math.round(fig.R*0.62))}px 'Raleway',sans-serif`;
   smCtx.textAlign='center'; smCtx.fillText(name,fig.cx,fig.nameY); smCtx.restore();
 }
 
@@ -2007,7 +2007,7 @@ function smRender() {
   const inputStyle='width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(212,168,32,.22);border-radius:12px;padding:13px 16px;color:var(--cream);font-family:var(--serif);font-size:17px;outline:none;-webkit-appearance:none;';
   const affStyle='background:linear-gradient(135deg,rgba(123,45,158,.1),rgba(196,37,122,.07));border:1px solid rgba(212,168,32,.2);border-radius:16px;padding:18px 20px;margin-bottom:14px;';
   const lblStyle='font-family:var(--display);font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--turquoise);margin-bottom:10px;';
-  const txtStyle='font-family:var(--serif);font-size:17px;line-height:1.72;color:var(--cream);font-style:italic;';
+  const txtStyle='font-family:var(--serif);font-size:17px;line-height:1.72;color:var(--cream);';
   const hintStyle='display:flex;align-items:flex-start;gap:9px;margin-top:13px;padding-top:13px;border-top:1px solid rgba(212,168,32,.12);font-size:12px;line-height:1.55;color:rgba(212,168,32,.6);letter-spacing:.04em;';
 
   if(smStep===1){
@@ -2243,7 +2243,7 @@ function efvRender() {
         </p>
         <p style="font-family:var(--sans);font-size:.9rem;color:var(--cream-muted);line-height:1.8;font-weight:300;max-width:300px;margin-bottom:12px;">Die Formel ist immer dieselbe:</p>
         <div style="background:rgba(68,214,214,.06);border:1px solid rgba(68,214,214,.18);border-radius:14px;padding:14px 20px;margin-bottom:40px;">
-          <span style="font-family:var(--serif);font-style:italic;font-size:1rem;color:rgba(68,214,214,.9);">„Welche Energiefelder kann ich anlegen…"</span>
+          <span style="font-family:var(--serif);font-size:1rem;color:rgba(68,214,214,.9);">„Welche Energiefelder kann ich anlegen…"</span>
         </div>
         <button class="efv-btn-primary" onclick="efvNext()">Starten</button>
       </div>`;
@@ -2267,7 +2267,7 @@ function efvRender() {
       <div style="padding:32px 20px 36px;">
         <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--turquoise);text-transform:uppercase;margin-bottom:16px;text-align:center;">Formulierung</div>
         <div style="background:rgba(68,214,214,.06);border:1px solid rgba(68,214,214,.18);border-radius:14px;padding:14px 18px;margin-bottom:20px;text-align:center;">
-          <span style="font-family:var(--serif);font-style:italic;font-size:1rem;color:rgba(68,214,214,.9);line-height:1.7;">Welche Energiefelder kann ich anlegen…</span>
+          <span style="font-family:var(--serif);font-size:1rem;color:rgba(68,214,214,.9);line-height:1.7;">Welche Energiefelder kann ich anlegen…</span>
         </div>
         <p style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);text-align:center;font-weight:300;margin-bottom:12px;">Wähle deinen Anschluss:</p>
         <div style="display:flex;gap:8px;justify-content:center;margin-bottom:18px;">
@@ -2282,7 +2282,7 @@ function efvRender() {
           <div style="flex:1;height:1px;background:rgba(255,255,255,.05);"></div>
         </div>
         <button class="efv-spontan-btn" onclick="efvSpontanImpuls()">✦ Spontan-Impuls</button>
-        <div id="efv-spontan-result" style="display:none;margin-top:14px;background:rgba(185,130,255,.07);border:1px solid rgba(185,130,255,.22);border-radius:12px;padding:14px 18px;font-family:var(--serif);font-style:italic;font-size:.95rem;color:rgba(255,255,255,.88);line-height:1.75;text-align:center;transition:opacity .4s;opacity:0;"></div>
+        <div id="efv-spontan-result" style="display:none;margin-top:14px;background:rgba(185,130,255,.07);border:1px solid rgba(185,130,255,.22);border-radius:12px;padding:14px 18px;font-family:var(--serif);font-size:.95rem;color:rgba(255,255,255,.88);line-height:1.75;text-align:center;transition:opacity .4s;opacity:0;"></div>
         <div style="display:flex;align-items:center;gap:12px;margin:22px 0 16px;">
           <div style="flex:1;height:1px;background:rgba(255,255,255,.05);"></div>
           <span style="font-family:var(--display);font-size:.58rem;letter-spacing:1.5px;color:rgba(255,255,255,.22);">EIGENER SATZ</span>
@@ -2308,7 +2308,7 @@ function efvRender() {
         </div>
         <div style="background:rgba(68,214,214,.05);border:1px solid rgba(68,214,214,.14);border-radius:14px;padding:16px 20px;max-width:310px;margin-bottom:12px;">
           <div style="font-family:var(--display);font-size:.58rem;letter-spacing:1.5px;color:var(--turquoise);opacity:.65;margin-bottom:8px;">DEIN FELD</div>
-          <p style="font-family:var(--serif);font-style:italic;font-size:.98rem;color:rgba(255,255,255,.9);line-height:1.8;margin:0;">Welche Energiefelder kann ich anlegen ${efvFormulation}</p>
+          <p style="font-family:var(--serif);font-size:.98rem;color:rgba(255,255,255,.9);line-height:1.8;margin:0;">Welche Energiefelder kann ich anlegen ${efvFormulation}</p>
         </div>
         <p style="font-family:var(--sans);font-size:.8rem;color:var(--cream-muted);font-weight:300;margin-bottom:28px;">Schließ kurz die Augen. Spüre dein Feld. Dann sende.</p>
         <button id="efv-send-btn" class="efv-send-btn" onclick="efvSend()">Feld jetzt aussenden</button>
@@ -2325,7 +2325,7 @@ function efvRender() {
         <h2 style="font-family:var(--display);font-size:1.3rem;font-weight:500;color:var(--cream);margin-bottom:12px;">Dein Feld ist unterwegs.</h2>
         <p style="font-family:var(--sans);font-size:.86rem;color:var(--cream-muted);font-weight:300;margin-bottom:32px;">Lass los. Vertraue. Das Feld wirkt.</p>
         <div style="background:rgba(68,214,214,.05);border:1px solid rgba(68,214,214,.14);border-radius:16px;padding:22px;max-width:300px;margin-bottom:44px;">
-          <p style="font-family:var(--serif);font-style:italic;font-size:.98rem;color:rgba(255,255,255,.88);line-height:1.85;margin:0;">„Ich sende mein Feld mit Vertrauen. Es erfüllt seinen Zweck — vollständig, liebevoll und perfekt."</p>
+          <p style="font-family:var(--serif);font-size:.98rem;color:rgba(255,255,255,.88);line-height:1.85;margin:0;">„Ich sende mein Feld mit Vertrauen. Es erfüllt seinen Zweck — vollständig, liebevoll und perfekt."</p>
         </div>
         <button class="efv-btn-primary" onclick="efvClose()">Zur Toolbox</button>
       </div>`;
@@ -2529,7 +2529,7 @@ function btsRender() {
         <div style="font-family:var(--display);font-size:.58rem;letter-spacing:2.5px;color:var(--turquoise);text-transform:uppercase;margin-bottom:18px;">Ankommen</div>
         <h2 style="font-family:var(--display);font-size:1.25rem;font-weight:500;color:var(--cream);margin-bottom:36px;">Komm zu dir.</h2>
         <div class="bts-breathe-ring">
-          <span style="font-family:var(--serif);font-style:italic;font-size:.82rem;color:rgba(68,214,214,.75);">atme</span>
+          <span style="font-family:var(--serif);font-size:.82rem;color:rgba(68,214,214,.75);">atme</span>
         </div>
         <p style="font-family:var(--sans);font-size:.88rem;color:var(--cream-muted);line-height:1.8;font-weight:300;max-width:270px;margin:36px 0 40px;">
           Schließe kurz die Augen. Spüre deinen Körper. Atme dreimal tief und bewusst in den Bauch.
@@ -2580,7 +2580,7 @@ function btsRender() {
           </svg>
         </div>
         <div id="bts-sent-label" style="font-family:var(--display);font-size:1.1rem;letter-spacing:4px;color:var(--turquoise);margin-bottom:12px;opacity:0;transition:opacity .8s;">ZURÜCKGEGEBEN</div>
-        <p id="bts-sent-desc" style="font-family:var(--serif);font-style:italic;font-size:.92rem;color:var(--cream-muted);line-height:1.8;max-width:270px;margin-bottom:32px;opacity:0;transition:opacity 1s .4s;">
+        <p id="bts-sent-desc" style="font-family:var(--serif);font-size:.92rem;color:var(--cream-muted);line-height:1.8;max-width:270px;margin-bottom:32px;opacity:0;transition:opacity 1s .4s;">
           Alles, was nicht dir gehört, kehrt jetzt vollständig zurück. Mit Liebe. Ohne Rest.
         </p>
         <button id="bts-send-btn" class="bts-btn-send" onclick="btsSend()">Jetzt zurückgeben</button>
@@ -2842,7 +2842,7 @@ function wbwRender() {
           In der Gegenwart. Mit dem Gefühl, das du dir wünschst. Und mit aufrichtigem Dank — als wäre es bereits geschehen.
         </p>
         <div style="background:rgba(212,168,32,.05);border:1px solid rgba(212,168,32,.15);border-radius:16px;padding:20px 22px;max-width:300px;margin-bottom:40px;">
-          <p style="font-family:var(--serif);font-style:italic;font-size:.98rem;color:rgba(255,255,255,.88);line-height:1.88;margin:0;">„Diese Worte tragen die Frequenz meines Herzens. Sie sind gesetzt."</p>
+          <p style="font-family:var(--serif);font-size:.98rem;color:rgba(255,255,255,.88);line-height:1.88;margin:0;">„Diese Worte tragen die Frequenz meines Herzens. Sie sind gesetzt."</p>
         </div>
         <button class="wbw-btn-primary" onclick="wbwClose()">Zur Toolbox</button>
       </div>`;
@@ -3041,7 +3041,7 @@ function loqRenderIntro() {
             <circle cx="11" cy="15" r=".7" fill="rgba(212,168,32,.9)"/>
           </svg>
         </div>
-        <p style="font-family:var(--serif);font-style:italic;font-size:.98rem;color:rgba(255,255,255,.72);line-height:1.85;max-width:290px;margin:0 auto;">
+        <p style="font-family:var(--serif);font-size:.98rem;color:rgba(255,255,255,.72);line-height:1.85;max-width:290px;margin:0 auto;">
           Kraftvolle Fragen öffnen Räume, die Antworten noch nicht gefunden haben.
         </p>
       </div>
@@ -3118,7 +3118,7 @@ function loqRenderCard() {
     <div style="padding:24px 16px 100px;display:flex;flex-direction:column;gap:18px;">
       <div class="loq-cat-label">${icon}&nbsp; ${name}</div>
       <div class="loq-card" style="opacity:0;transform:translateY(16px);">
-        <p style="font-family:var(--serif);font-style:italic;font-size:1.08rem;line-height:1.85;color:var(--cream);text-align:center;">
+        <p style="font-family:var(--serif);font-size:1.08rem;line-height:1.85;color:var(--cream);text-align:center;">
           „${q}"
         </p>
       </div>
@@ -3161,13 +3161,13 @@ function loqSendQuestion(q) {
   const body = document.getElementById('loq-body');
   body.innerHTML = `
     <div style="padding:36px 16px 100px;display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center;">
-      <p style="font-family:var(--serif);font-style:italic;font-size:1.05rem;color:rgba(255,255,255,.82);line-height:1.85;max-width:280px;">
+      <p style="font-family:var(--serif);font-size:1.05rem;color:rgba(255,255,255,.82);line-height:1.85;max-width:280px;">
         „${q}"
       </p>
       <canvas id="loq-send-canvas" width="200" height="200" style="width:200px;height:200px;transition:opacity .4s;"></canvas>
       <div id="loq-sent-msg" style="display:none;flex-direction:column;align-items:center;gap:14px;">
         <div style="font-family:var(--display);font-size:.7rem;letter-spacing:3px;color:rgba(212,168,32,.9);">ABGEGEBEN</div>
-        <p style="font-family:var(--serif);font-style:italic;font-size:.92rem;color:rgba(255,255,255,.55);line-height:1.8;max-width:250px;">
+        <p style="font-family:var(--serif);font-size:.92rem;color:rgba(255,255,255,.55);line-height:1.8;max-width:250px;">
           Deine Frage ist auf dem Weg. Das Universum hat gehört.
         </p>
         <button class="loq-next-btn" onclick="loqRenderIntro()">Neue Frage</button>
@@ -3246,7 +3246,7 @@ function loqRenderDone() {
   body.innerHTML = `
     <div style="padding:48px 20px 100px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:22px;">
       <div style="font-size:2.4rem;">${cat.icon}</div>
-      <p style="font-family:var(--serif);font-style:italic;font-size:1.05rem;color:rgba(255,255,255,.78);line-height:1.85;max-width:270px;">
+      <p style="font-family:var(--serif);font-size:1.05rem;color:rgba(255,255,255,.78);line-height:1.85;max-width:270px;">
         Du hast alle Fragen dieser Kategorie empfangen. Lass sie wirken.
       </p>
       <div style="background:rgba(212,168,32,.05);border:1px solid rgba(212,168,32,.14);border-radius:16px;padding:18px 22px;max-width:300px;">
@@ -3308,7 +3308,7 @@ function wunderRenderIntro() {
           </svg>
         </div>
         <h2 style="font-family:var(--display);font-size:1.1rem;letter-spacing:.5px;color:var(--cream);margin-bottom:14px;">Die 4 Schritte für Wunder</h2>
-        <p style="font-family:var(--serif);font-style:italic;font-size:.98rem;color:rgba(255,255,255,.65);line-height:1.85;max-width:290px;margin:0 auto;">
+        <p style="font-family:var(--serif);font-size:.98rem;color:rgba(255,255,255,.65);line-height:1.85;max-width:290px;margin:0 auto;">
           Wunder entstehen, wenn du lernst dem Universum zu vertrauen – und deinen Impulsen zu folgen.
         </p>
       </div>
@@ -3335,7 +3335,7 @@ function wunderRenderStep1() {
         <p style="font-family:var(--sans);font-size:.86rem;font-weight:300;color:rgba(255,255,255,.7);line-height:1.8;margin-bottom:12px;">
           Nimm dir einen Moment inne. Schließe die Augen, atme tief ein und verbinde dich mit deinem Herzen.
         </p>
-        <p style="font-family:var(--serif);font-style:italic;font-size:.95rem;color:rgba(185,130,255,.88);line-height:1.75;">
+        <p style="font-family:var(--serif);font-size:.95rem;color:rgba(185,130,255,.88);line-height:1.75;">
           Spüre in dich hinein: Was wünschst du dir wirklich? Lass es aufsteigen, ohne es zu analysieren.
         </p>
       </div>
@@ -3361,19 +3361,19 @@ function wunderRenderStep2() {
       ${wunderWish ? `
         <div style="background:rgba(185,130,255,.06);border-left:2px solid rgba(185,130,255,.4);border-radius:0 12px 12px 0;padding:14px 16px;">
           <div style="font-family:var(--display);font-size:.55rem;letter-spacing:2px;color:rgba(185,130,255,.5);margin-bottom:5px;">DEIN WUNSCH</div>
-          <p style="font-family:var(--serif);font-style:italic;font-size:.92rem;color:rgba(255,255,255,.8);line-height:1.7;">${wunderWish}</p>
+          <p style="font-family:var(--serif);font-size:.92rem;color:rgba(255,255,255,.8);line-height:1.7;">${wunderWish}</p>
         </div>` : ''}
       <div class="wunder-info-box">
         <p style="font-family:var(--sans);font-size:.86rem;font-weight:300;color:rgba(255,255,255,.7);line-height:1.8;margin-bottom:14px;">
           Atme tief durch. Halte deinen Wunsch im Herzen und stelle dir innerlich die Frage:
         </p>
-        <p style="font-family:var(--serif);font-style:italic;font-size:1.08rem;color:rgba(185,130,255,.92);line-height:1.7;text-align:center;margin-bottom:14px;">
+        <p style="font-family:var(--serif);font-size:1.08rem;color:rgba(185,130,255,.92);line-height:1.7;text-align:center;margin-bottom:14px;">
           „Was ist dafür heute zu tun?"
         </p>
         <p style="font-family:var(--sans);font-size:.84rem;font-weight:300;color:rgba(255,255,255,.58);line-height:1.8;">
           Warte auf den ersten Impuls. Er kann alles sein — eine Banane essen, tanzen, spazieren gehen. Egal was kommt: Es ist die Antwort.
         </p>
-        <p style="font-family:var(--serif);font-style:italic;font-size:.88rem;color:rgba(212,168,32,.75);margin-top:12px;">
+        <p style="font-family:var(--serif);font-size:.88rem;color:rgba(212,168,32,.75);margin-top:12px;">
           Vertraue dem ersten Gedanken. Hinterfrage ihn nicht.
         </p>
       </div>
@@ -3399,13 +3399,13 @@ function wunderRenderStep3() {
       ${wunderImpulse ? `
         <div style="background:rgba(212,168,32,.06);border:1px solid rgba(212,168,32,.2);border-radius:16px;padding:20px;text-align:center;">
           <div style="font-family:var(--display);font-size:.55rem;letter-spacing:2px;color:rgba(212,168,32,.6);margin-bottom:8px;">DEIN IMPULS</div>
-          <p style="font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--cream);line-height:1.75;">${wunderImpulse}</p>
+          <p style="font-family:var(--serif);font-size:1.05rem;color:var(--cream);line-height:1.75;">${wunderImpulse}</p>
         </div>` : ''}
       <div class="wunder-info-box">
         <p style="font-family:var(--sans);font-size:.86rem;font-weight:300;color:rgba(255,255,255,.7);line-height:1.8;margin-bottom:10px;">
           Dein Impuls ist die Botschaft des Universums für dich. Setze ihn jetzt um — egal wie klein oder unlogisch er erscheint.
         </p>
-        <p style="font-family:var(--serif);font-style:italic;font-size:.95rem;color:rgba(185,130,255,.85);line-height:1.75;">
+        <p style="font-family:var(--serif);font-size:.95rem;color:rgba(185,130,255,.85);line-height:1.75;">
           Die Umsetzung ist der eigentliche Schritt zum Wunder.
         </p>
       </div>
@@ -3422,10 +3422,10 @@ function wunderRenderStep4() {
         <h3 style="font-family:var(--display);font-size:.95rem;letter-spacing:.5px;color:var(--cream);">Wertschätze und feier dich</h3>
       </div>
       <div style="background:rgba(212,168,32,.05);border:1px solid rgba(212,168,32,.15);border-radius:16px;padding:20px;text-align:center;">
-        <p style="font-family:var(--serif);font-style:italic;font-size:1rem;color:rgba(255,255,255,.82);line-height:1.85;">
+        <p style="font-family:var(--serif);font-size:1rem;color:rgba(255,255,255,.82);line-height:1.85;">
           Du hast etwas Mutiges getan: Du hast dem Universum vertraut und deinen Impuls umgesetzt.
         </p>
-        <p style="font-family:var(--serif);font-style:italic;font-size:.92rem;color:rgba(212,168,32,.85);margin-top:12px;line-height:1.75;">
+        <p style="font-family:var(--serif);font-size:.92rem;color:rgba(212,168,32,.85);margin-top:12px;line-height:1.75;">
           Das verdient echte Anerkennung — von dir selbst.
         </p>
       </div>
@@ -3444,7 +3444,7 @@ function wunderRenderDone() {
     <div style="padding:52px 20px 100px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:24px;">
       <canvas id="wunder-done-canvas" width="180" height="180" style="width:180px;height:180px;"></canvas>
       <div style="font-family:var(--display);font-size:.72rem;letter-spacing:3px;color:rgba(212,168,32,.9);">WUNDER GESCHEHEN</div>
-      <p style="font-family:var(--serif);font-style:italic;font-size:1.05rem;color:rgba(255,255,255,.75);line-height:1.88;max-width:272px;">
+      <p style="font-family:var(--serif);font-size:1.05rem;color:rgba(255,255,255,.75);line-height:1.88;max-width:272px;">
         Du hast heute Raum für ein Wunder geschaffen. Das Universum hat deine Bereitschaft gesehen.
       </p>
       <button class="wunder-btn-primary" onclick="wunderOpen()">Nochmal durchführen</button>
