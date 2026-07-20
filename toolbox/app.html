@@ -40,6 +40,24 @@
       margin: 0 auto;
       position: relative;
     }
+    @media (min-width: 700px) {
+      header { padding: 24px 28px 0; }
+      .search-bar-wrap { padding: 18px 28px 0; }
+      .section-label { padding: 0 28px; }
+      .recent-scroll { padding: 0 24px 4px; }
+      .tools-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        padding: 0 28px 8px;
+        gap: 10px;
+      }
+      .app-footer { margin: 8px 28px 32px; }
+    }
+    @media (min-width: 900px) {
+      .tools-list {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
     @media (min-width: 500px) {
       .tool-modal {
         top: 80px !important;
