@@ -359,6 +359,16 @@
       flex-direction: column;
       background: var(--bg);
     }
+    .modal-copyright {
+      font-family: var(--display);
+      font-size: .56rem;
+      letter-spacing: .18em;
+      color: rgba(255,255,255,.2);
+      text-align: center;
+      padding: 10px 20px 18px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
     .tool-modal.open { display: flex; }
 
     .tool-modal-header {
@@ -3570,4 +3580,13 @@ function showToast(msg) {
   document.body.appendChild(t);
   setTimeout(() => t.remove(), 3000);
 }
+
+// Footer ©Sonisanantes • Yvonne Stark in alle Tool-Modals einfügen
+document.querySelectorAll('.tool-modal').forEach(modal => {
+  if (modal.id === 'modal-strich') return; // hat eigene Attribution
+  const cr = document.createElement('div');
+  cr.className = 'modal-copyright';
+  cr.textContent = '©Sonisanantes  •  Yvonne Stark';
+  modal.appendChild(cr);
+});
 </script>
