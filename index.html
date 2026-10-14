@@ -492,8 +492,31 @@
 </head>
 <body>
 
+<style>/* Einheitlicher Kopf und lesbare Texte */
+
+.logo-name{font-size:clamp(1.1rem,3.6vw,1.35rem)!important;letter-spacing:.34em!important;background:none!important;-webkit-text-fill-color:#44D6D6!important;color:#44D6D6!important;font-weight:500}
+.logo-sub{font-family:var(--display)!important;font-size:clamp(2rem,7vw,3rem)!important;font-weight:500!important;letter-spacing:.2em!important;text-transform:uppercase!important;margin-top:8px!important;background:linear-gradient(135deg,#D4A820,#F5ECD0,#D4A820)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;color:transparent!important}
+/* Montserrat-Text */
+@font-face{font-family:'Montserrat';font-style:normal;font-weight:300 700;font-display:swap;src:url(fonts/montserrat-normal-300-700-latin.woff2) format('woff2')}
+:root{--sans:'Montserrat','Inter',sans-serif}
+.track-title,#now-title,.playlist-title,.playlist-empty p{font-family:'Montserrat','Inter',sans-serif!important;font-weight:500!important}
+</style>
+<style>
+/* Navigation: zurück zu Deine Apps und zur Startseite */
+.soni-appnav{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:flex-start;gap:12px;max-width:1100px;margin:0 auto;padding:10px 16px;background:linear-gradient(180deg,rgba(5,6,8,.92),rgba(5,6,8,.0));-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+.soni-appnav a{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:6px 16px;border-radius:30px;font-family:'Cinzel',Georgia,serif;font-variant:small-caps;font-weight:500;font-size:14px;letter-spacing:.08em;text-decoration:none;color:#F3D56B;border:1px solid rgba(212,168,32,.55);background:rgba(212,168,32,.08);transition:box-shadow .2s,background .2s}
+.soni-appnav a:hover{background:rgba(212,168,32,.18);box-shadow:0 0 18px rgba(212,168,32,.35)}
+.soni-appnav a:focus-visible{outline:3px solid #44D6D6;outline-offset:3px}
+.soni-appnav .soni-site{color:#44D6D6;border-color:rgba(68,214,214,.5);background:rgba(68,214,214,.07)}
+.soni-appnav .soni-site:hover{background:rgba(68,214,214,.16);box-shadow:0 0 18px rgba(68,214,214,.3)}
+.soni-home,a.soni-home{color:#44D6D6!important;-webkit-text-fill-color:#44D6D6!important;text-decoration:none;text-shadow:0 0 18px rgba(68,214,214,.35);background:none!important}
+.soni-home:hover{text-shadow:0 0 22px rgba(68,214,214,.7)}
+</style>
+<nav class="soni-appnav" aria-label="Navigation">
+  <a href="https://sonisanantes.com/deine-apps/" target="_top">← Deine Apps</a>
+</nav>
 <header>
-  <div class="logo-name">Sonisanantes</div>
+  <div class="logo-name"><a class="soni-home" href="https://sonisanantes.com" target="_top">Sonisanantes</a></div>
   <div class="logo-sub">Musik</div>
   <div class="divider"></div>
 </header>
