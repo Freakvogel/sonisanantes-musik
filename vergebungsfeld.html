@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Das Vergebungsfeld – Sonisanantes</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#050608">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    button, a { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      --bg: #050608;
+      --gold: #D4A820;
+      --cream: #F5ECD0;
+      --violet: #7B2D9E;
+      --magenta: #C4257A;
+      --turquoise: #44D6D6;
+      --text: rgba(255,255,255,.92);
+      --text-dim: rgba(255,255,255,.55);
+      --display: 'Cinzel', Georgia, serif;
+      --sans: 'Inter', -apple-system, sans-serif;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.65;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse at 15% 15%, rgba(123,45,158,.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 30%, rgba(68,214,214,.07) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 100%, rgba(196,37,122,.13) 0%, transparent 50%);
+    }
+
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(5,6,8,.95);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(212,168,32,.15);
+      padding: calc(env(safe-area-inset-top, 10px) + 12px) 20px 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .back-btn {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      margin-top: calc(env(safe-area-inset-top, 10px) / 2);
+      background: none; border: none; color: var(--gold);
+      font-family: var(--sans); font-size: 13px; letter-spacing: .08em;
+      cursor: pointer; min-height: 44px; padding: 12px 10px;
+    }
+    .header-center { text-align: center; }
+    .logo-name {
+      font-family: var(--display); font-size: clamp(1rem, 3.5vw, 1.4rem);
+      font-weight: 500; letter-spacing: .2em; text-transform: uppercase;
+      background: linear-gradient(135deg, #D4A820, #F5ECD0, #D4A820);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .logo-sub {
+      font-size: .58rem; letter-spacing: .38em; text-transform: uppercase;
+      color: var(--turquoise); margin-top: 2px;
+    }
+
+    #app { position: relative; z-index: 1; max-width: 560px; margin: 0 auto;
+      padding: 22px 16px calc(env(safe-area-inset-bottom, 0px) + 48px); }
+
+    .fade { animation: fadeIn .6s ease both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+    .label {
+      font-family: var(--display); font-size: 10px; letter-spacing: .3em;
+      text-transform: uppercase; color: var(--turquoise); margin-bottom: 10px;
+    }
+    h1, h2, h3 { font-family: var(--display); font-weight: 500; color: var(--gold); line-height: 1.3; }
+    h1 { font-size: clamp(1.5rem, 6vw, 2rem); letter-spacing: .06em; }
+    h2 { font-size: 1.15rem; letter-spacing: .08em; }
+    h3 { font-size: 1rem; letter-spacing: .06em; }
+    p { margin-bottom: 12px; }
+    .dim { color: var(--text-dim); }
+    .quote { font-family: var(--serif); font-style: italic; font-size: 1.2rem; font-weight: 400; color: var(--cream); line-height: 1.55; }
+
+    .hero { text-align: center; padding: 14px 4px 6px; }
+    .hero .sub { font-family: var(--serif); font-style: italic; font-size: 1.15rem; color: var(--cream); margin: 10px 0 18px; }
+    .gold-line { height: 1px; background: linear-gradient(90deg, transparent, rgba(212,168,32,.5), transparent); margin: 26px 0; }
+
+    .card {
+      background: linear-gradient(135deg, rgba(123,45,158,.1), rgba(196,37,122,.06));
+      border: 1px solid rgba(212,168,32,.2); border-radius: 16px;
+      padding: 18px 20px; margin-bottom: 14px;
+    }
+    .note { border-left: 2px solid var(--turquoise); padding: 2px 0 2px 14px; font-size: .88rem; color: var(--text-dim); margin: 14px 0; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 6px; margin: 22px 0 18px; }
+    .tab {
+      flex: 1; min-height: 44px; background: rgba(255,255,255,.04);
+      border: 1px solid rgba(212,168,32,.18); border-radius: 12px;
+      color: var(--text-dim); font-family: var(--display); font-size: 10.5px;
+      letter-spacing: .14em; text-transform: uppercase; cursor: pointer; padding: 8px 4px;
+    }
+    .tab.on { color: var(--gold); border-color: rgba(212,168,32,.6); background: rgba(212,168,32,.08); box-shadow: 0 0 14px rgba(212,168,32,.15); }
+
+    /* Options */
+    .opt {
+      display: block; width: 100%; text-align: left; min-height: 48px;
+      background: rgba(255,255,255,.04); border: 1px solid rgba(212,168,32,.2);
+      border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;
+      color: var(--cream); font-family: var(--sans); font-size: .95rem; font-weight: 300;
+      cursor: pointer; transition: border-color .2s, background .2s;
+    }
+    .opt.on { border-color: var(--gold); background: rgba(212,168,32,.1); }
+    .btn {
+      display: block; width: 100%; min-height: 50px; margin-top: 16px;
+      background: linear-gradient(135deg, var(--violet), var(--magenta));
+      border: none; border-radius: 14px; color: #fff;
+      font-family: var(--display); font-size: 12px; letter-spacing: .22em; text-transform: uppercase;
+      cursor: pointer; box-shadow: 0 0 22px rgba(196,37,122,.3);
+    }
+    .btn:disabled { opacity: .35; box-shadow: none; cursor: default; }
+    .btn.ghost { background: none; border: 1px solid rgba(212,168,32,.35); color: var(--gold); box-shadow: none; }
+
+    /* Tool list */
+    .tool {
+      border: 1px solid rgba(212,168,32,.18); border-radius: 16px; margin-bottom: 10px;
+      background: rgba(255,255,255,.025); overflow: hidden;
+    }
+    .tool-head {
+      width: 100%; display: flex; gap: 14px; align-items: center; text-align: left;
+      background: none; border: none; color: inherit; cursor: pointer; padding: 14px 16px; min-height: 64px;
+    }
+    .tool-num { font-family: var(--display); font-size: 1.5rem; color: var(--gold); min-width: 30px; text-align: center; }
+    .tool-title { font-family: var(--display); font-size: .92rem; letter-spacing: .05em; color: var(--cream); }
+    .tool-meta { font-size: .76rem; color: var(--turquoise); letter-spacing: .06em; margin-top: 2px; }
+    .tool-body { display: none; padding: 2px 18px 18px; }
+    .tool.open .tool-body { display: block; animation: fadeIn .4s ease both; }
+    .sec { font-family: var(--display); font-size: 9.5px; letter-spacing: .28em; text-transform: uppercase; color: var(--turquoise); margin: 16px 0 6px; }
+    .say { font-family: var(--serif); font-style: italic; font-size: 1.12rem; color: var(--cream); background: rgba(123,45,158,.12); border-radius: 12px; padding: 12px 16px; margin: 10px 0; line-height: 1.55; }
+    .impulse { font-size: .95rem; color: var(--magenta); font-weight: 400; margin-top: 14px; }
+    ul.list { list-style: none; margin-bottom: 10px; }
+    ul.list li { padding-left: 18px; position: relative; margin-bottom: 4px; }
+    ul.list li::before { content: '✦'; position: absolute; left: 0; color: var(--gold); font-size: .7rem; top: .35em; }
+
+    /* Ritual */
+    .steps { counter-reset: s; }
+    .step { display: flex; gap: 14px; margin-bottom: 14px; }
+    .step-n { flex: none; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--gold); color: var(--gold); font-family: var(--display); display: flex; align-items: center; justify-content: center; }
+
+    /* Breath */
+    .breath-wrap { display: flex; flex-direction: column; align-items: center; margin: 18px 0 6px; }
+    .orb { width: 90px; height: 90px; border-radius: 50%; background: radial-gradient(circle, rgba(212,168,32,.5), rgba(123,45,158,.25) 70%, transparent); box-shadow: 0 0 30px rgba(196,37,122,.3); transform: scale(.7); transition: transform 4s ease-in-out; }
+    .orb.in { transform: scale(1.25); }
+    .breath-txt { font-family: var(--display); font-size: 11px; letter-spacing: .3em; color: var(--turquoise); margin-top: 18px; text-transform: uppercase; min-height: 1.2em; }
+
+    .affirm { text-align: center; padding: 26px 20px; }
+    .affirm p { font-family: var(--serif); font-style: italic; font-size: 1.2rem; color: var(--cream); margin-bottom: 10px; }
+    .affirm p.last { color: var(--gold); margin-top: 16px; }
+    .foot { text-align: center; font-size: .8rem; color: var(--text-dim); margin-top: 28px; }
+
+    @media (prefers-reduced-motion: reduce) { .fade, .tool.open .tool-body { animation: none; } .orb { transition: none; } }
+
+    @font-face{font-family:'Cinzel';font-style:normal;font-weight:400 700;font-display:swap;src:url(fonts/cinzel-normal-latin.woff2) format('woff2')}
+    @font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:300 600;font-display:swap;src:url(fonts/cormorant-garamond-normal-latin.woff2) format('woff2')}
+    @font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:300 500;font-display:swap;src:url(fonts/cormorant-garamond-italic-latin.woff2) format('woff2')}
+    @font-face{font-family:'Inter';font-style:normal;font-weight:300 600;font-display:swap;src:url(fonts/inter-normal-latin.woff2) format('woff2')}
+  </style>
+</head>
+<body>
+  <header>
+    <button class="back-btn" onclick="goBack()">← Zurück</button>
+    <div class="header-center">
+      <div class="logo-name">Sonisanantes</div>
+      <div class="logo-sub">Das Vergebungsfeld</div>
+    </div>
+  </header>
+
+  <main id="app">
+    <section class="hero fade">
+      <div class="label">Zurück in deine innere Freiheit</div>
+      <h1>Das Vergebungsfeld</h1>
+      <p class="sub">Du erkennst an, was war. Du würdigst, was du gefühlt hast.<br>Du lässt los, was dich heute nicht länger bestimmen soll.</p>
+      <div class="note" style="text-align:left">Vergebung ist kein Muss. Du musst niemandem verzeihen, um heilen zu dürfen. Du darfst Grenzen setzen, Abstand halten und Gerechtigkeit einfordern. Und du darfst dir Zeit lassen.</div>
+    </section>
+
+    <nav class="tabs" role="tablist">
+      <button class="tab on" data-tab="kompass">Kompass</button>
+      <button class="tab" data-tab="tools">10 Wege</button>
+      <button class="tab" data-tab="ritual">Ritual</button>
+      <button class="tab" data-tab="mehr">Vertiefen</button>
+    </nav>
+
+    <div id="view"></div>
+
+    <div class="gold-line"></div>
+    <section class="card affirm" id="affirm"></section>
+    <p class="foot">In Liebe und Dankbarkeit · Verbunden mit deinem Herzen<br>Dieses Tool ersetzt keine Therapie oder medizinische Hilfe. Bei starker Belastung hol dir bitte professionelle Unterstützung.</p>
+  </main>
+
+<script>
+(function () {
+  'use strict';
+
+  var TOOLS = [
+    { n: 1, t: 'Ho’oponopono', sub: 'Herzöffnung und innere Versöhnung', min: '5–10 Min.',
+      fuer: 'Schuldgefühle, Selbstkritik, Konflikte und den Wunsch nach innerem Frieden.',
+      how: ['Lege die Hände auf dein Herz.', 'Denke an eine konkrete Situation und sprich die vier Sätze langsam aus. Richte sie zunächst an dich selbst.', 'Spüre nach, welcher Satz Widerstand oder Wärme auslöst.'],
+      list: ['Es tut mir leid.', 'Bitte verzeih mir.', 'Danke.', 'Ich liebe dich.'],
+      impuls: 'Ich öffne mich für Versöhnung, ohne meine Wahrheit zu verleugnen.',
+      journal: ['Welcher Satz hat Wärme ausgelöst, welcher Widerstand?', 'Was möchte dieser Widerstand mir sagen?'] },
+    { n: 2, t: 'Die Begegnung mit dem inneren Kind', sub: 'Geborgenheit und Selbstmitgefühl', min: '10–15 Min.',
+      fuer: 'Alte Scham, das Gefühl, nicht gut genug zu sein, und wiederkehrende Selbstvorwürfe.',
+      how: ['Stelle dir dein jüngeres Ich vor. Du musst keine Erinnerung erzwingen.', 'Frage es, was es damals gebraucht hätte.', 'Sage zu diesem Mädchen:'],
+      say: '„Du musstest damals nicht alles wissen. Du durftest lernen. Ich sehe dich heute mit liebevollen Augen. Ich bin bereit, dir zuzuhören und dich nicht länger zu verurteilen.“',
+      impuls: 'Ich schenke mir heute die Fürsorge, nach der ich mich sehne.',
+      journal: ['Was hätte sie damals gebraucht?', 'Was kann ich ihr heute davon geben?'] },
+    { n: 3, t: 'Die Spiegelvergebung', sub: 'Selbstannahme und Identität', min: '3–5 Min.',
+      fuer: 'Selbstablehnung, Scham über Entscheidungen und harte innere Dialoge.',
+      how: ['Schau dir in einem Spiegel in die Augen. Wenn das unangenehm ist, lege eine Hand auf dein Herz und senke den Blick.', 'Sprich:'],
+      say: '„Ich sehe die Frau, die ich bin. Ich sehe auch die Frau, die ich einmal war. Ich muss nicht perfekt sein, um liebenswert zu sein. Ich darf Verantwortung übernehmen und mir trotzdem mit Liebe begegnen.“',
+      impuls: 'Ich höre auf, meinen Wert von meiner Fehlerlosigkeit abhängig zu machen.',
+      journal: ['Was habe ich im Spiegel gesehen und gefühlt?', 'Welcher Satz fiel mir leicht, welcher schwer?'] },
+    { n: 4, t: 'Der Brief der Vergebung', sub: 'Gefühle ausdrücken und Klarheit gewinnen', min: '15–20 Min.',
+      fuer: 'Ungesagte Worte, Reue, Enttäuschung und lang getragene Verletzungen.',
+      how: ['Schreibe einen Brief an dich selbst oder an einen Menschen. Nutze vier Abschnitte:'],
+      list: ['Das ist geschehen.', 'Das habe ich dabei gefühlt.', 'Das bedaure ich beziehungsweise das brauche ich anzuerkennen.', 'Das möchte ich heute für mich wählen.'],
+      after: 'Der Brief muss weder abgeschickt noch verbrannt werden.',
+      impuls: 'Ich gebe meinen Gefühlen Raum, ohne von ihnen bestimmt zu bleiben.',
+      journal: ['Schreibe den Brief in deinem Journal in vier Abschnitten.', 'Wie fühle ich mich nach dem letzten Satz?'] },
+    { n: 5, t: 'Die Körpervergebung', sub: 'Körperwahrnehmung und Regulation', min: '5–10 Min.',
+      fuer: 'Wenn Schuld oder Groll als Enge, Anspannung oder Unruhe erlebt werden.',
+      how: ['Spüre deine Füße am Boden.', 'Nimm wahr, wo du Anspannung bemerkst. Lege dort, wenn angenehm, eine Hand auf.', 'Atme ruhig und ohne Druck.', 'Frage dich: „Was brauche ich gerade, um mich sicherer und freundlicher mit mir zu fühlen?“'],
+      impuls: 'Ich muss nichts erzwingen. Ich darf meinem Körper Zeit geben.',
+      hinweis: 'Körperempfindungen können Gefühle begleiten; sie sind kein Beweis für gespeicherte Schuld oder bestimmte emotionale Ursachen.',
+      journal: ['Wo im Körper habe ich etwas bemerkt?', 'Was hat sich mit Wärme und Atem verändert?'] },
+    { n: 6, t: 'Die Lebenslinien-Vergebung', sub: 'Biografiearbeit und neue Perspektiven', min: '15–20 Min.',
+      fuer: 'Entscheidungen, die du Jahre später noch bereust.',
+      how: ['Zeichne eine Zeitlinie deines Lebens.', 'Markiere einen Moment, in dem du dich selbst verurteilst. Notiere daneben:'],
+      list: ['Was wusste ich damals?', 'Welche Möglichkeiten hatte ich?', 'Was habe ich gebraucht?', 'Was weiß ich heute, das ich damals noch nicht wusste?'],
+      impuls: 'Ich beurteile mein früheres Ich nicht ausschließlich mit dem Wissen von heute.',
+      journal: ['Welcher Moment steht auf meiner Linie?', 'Wie schaue ich jetzt auf die Frau von damals?'] },
+    { n: 7, t: 'Das Ritual des Loslassens', sub: 'Symbolischer Abschluss', min: '10 Min.',
+      fuer: 'Wiederkehrende Vorwürfe und das Bedürfnis, einen inneren Abschluss zu markieren.',
+      how: ['Schreibe auf einen Zettel, welchen Vorwurf du nicht länger ständig gegen dich richten möchtest.', 'Ergänze, welche Erkenntnis du daraus mitnimmst.', 'Lies den Zettel bewusst durch. Falte ihn, bewahre ihn auf oder zerreiße ihn als Symbol für deine neue Haltung.'],
+      impuls: 'Ich darf die Erkenntnis behalten, ohne die Selbstbestrafung fortzusetzen.',
+      journal: ['Welchen Vorwurf lasse ich los?', 'Welche Erkenntnis nehme ich mit?'] },
+    { n: 8, t: 'Die Visualisierung des Verbindungsbandes', sub: 'Innere Abgrenzung und emotionale Freiheit', min: '5–10 Min.',
+      fuer: 'Groll, belastende Beziehungserinnerungen und gedankliche Fixierung auf einen Menschen.',
+      how: ['Stelle dir die Beziehung als Band zwischen dir und der anderen Person vor. Du musst nichts gewaltsam durchtrennen.', 'Visualisiere, wie du deine Aufmerksamkeit zu dir zurückholst und deine eigenen Grenzen stärkst.', 'Sprich:'],
+      say: '„Ich lasse los, was ich nicht kontrollieren kann. Ich behalte meine Würde, meine Erfahrungen und meine Grenzen. Deine Verantwortung bleibt bei dir. Meine Kraft gehört mir.“',
+      impuls: 'Ich löse mich innerlich aus der Verstrickung, ohne meine Grenzen aufzugeben.',
+      hinweis: 'Das Band ist ein Bild für die eigene innere Erfahrung, kein Nachweis einer tatsächlichen energetischen Verbindung.',
+      journal: ['Wie sah das Band aus?', 'Welche Grenze möchte ich klarer halten?'] },
+    { n: 9, t: 'Verantwortung statt Selbstbestrafung', sub: 'Reue integrieren und Wiedergutmachung', min: '10–15 Min.',
+      fuer: 'Situationen, in denen du selbst jemanden verletzt, enttäuscht oder eine Grenze überschritten hast.',
+      how: ['Unterscheide zwischen Schuldgefühl und konkreter Verantwortung:'],
+      list: ['Was war mein tatsächlicher Anteil?', 'Was kann ich ehrlich anerkennen?', 'Ist eine Entschuldigung oder Wiedergutmachung sinnvoll?', 'Was werde ich künftig anders machen?'],
+      say: '„Ich muss mein Verhalten nicht schönreden. Ich darf daraus lernen, Verantwortung übernehmen und mich verändern. Ein Fehler muss nicht meine gesamte Identität bestimmen.“',
+      impuls: 'Ich verwandle Reue in bewusstes Handeln.',
+      journal: ['Was war mein tatsächlicher Anteil?', 'Welcher konkrete Schritt folgt daraus?'] },
+    { n: 10, t: 'Die Vergebung aus der Zukunft', sub: 'Integration und Neuausrichtung', min: '10 Min.',
+      fuer: 'Frauen, die sich für frühere Entscheidungen verurteilen oder Angst vor neuen Fehlern haben.',
+      how: ['Stelle dir dein zukünftiges Ich vor – eine Frau, die mit mehr Erfahrung, Klarheit und Selbstmitgefühl auf ihr Leben schaut.', 'Frage sie: „Was möchtest du, dass ich heute über meinen bisherigen Weg verstehe?“', 'Schreibe anschließend einen Satz auf, der dich in deinem gegenwärtigen Leben unterstützt.'],
+      impuls: 'Ich erschaffe meine Zukunft nicht aus Selbstverurteilung, sondern aus Bewusstsein und Wahlfreiheit.',
+      journal: ['Was hat meine zukünftige Stimme mir gesagt?', 'Mein Satz für heute:'] }
+  ];
+
+  var TOPICS = [
+    { id: 'selbst', t: 'Ich mache mir selbst Vorwürfe.', sanft: 3, tief: 6, konkret: 7, auch: [1, 10] },
+    { id: 'kind', t: 'Alte Verletzungen und das innere Kind.', sanft: 2, tief: 4, konkret: 7, auch: [3] },
+    { id: 'groll', t: 'Ich trage Groll gegen einen anderen Menschen.', sanft: 8, tief: 4, konkret: 7, auch: [1] },
+    { id: 'verletzt', t: 'Ich habe selbst jemanden verletzt.', sanft: 1, tief: 4, konkret: 9, auch: [3] },
+    { id: 'anspannung', t: 'Ich spüre Anspannung und emotionale Überforderung.', sanft: 5, tief: 2, konkret: 1, auch: [3] },
+    { id: 'abschnitt', t: 'Ich möchte mit einem vergangenen Lebensabschnitt Frieden schließen.', sanft: 10, tief: 6, konkret: 7, auch: [2] }
+  ];
+  var MODES = [
+    { id: 'sanft', t: 'Sanft und stabilisierend' },
+    { id: 'tief', t: 'Tiefer reflektierend' },
+    { id: 'konkret', t: 'Mit konkretem nächsten Schritt' }
+  ];
+
+  var STEPS = [
+    ['Ankommen', 'Spüre deine Füße, atme ruhig und nimm wahr, was gerade in dir lebendig ist.'],
+    ['Anerkennen', '„Das ist geschehen. Es hat mich berührt. Ich darf meine Gefühle ernst nehmen.“'],
+    ['Unterscheiden', 'Was liegt in meiner Verantwortung? Was liegt außerhalb meiner Verantwortung? Was brauche ich heute?'],
+    ['Eine neue Wahl treffen', 'Wähle eine Vergebungsmethode, einen stärkenden Satz oder eine konkrete Handlung, die dir entspricht.'],
+    ['Integrieren', 'Lege eine Hand auf dein Herz und frage: „Was ist mein nächster liebevoller und zugleich wahrhaftiger Schritt?“']
+  ];
+
+  var AFFIRM = [
+    'Ich ehre die Frau, die ich war.',
+    'Ich begegne der Frau, die ich heute bin, mit Mitgefühl.',
+    'Ich übernehme Verantwortung, wo sie zu mir gehört.',
+    'Ich gebe zurück, was nicht meine Verantwortung ist.',
+    'Ich darf Grenzen setzen, ohne mein Herz zu verschließen.',
+    'Ich darf lernen, ohne mich zu bestrafen.',
+    'Ich muss meine Vergangenheit nicht auslöschen, um meine Zukunft neu zu gestalten.'
+  ];
+  var AFFIRM_LAST = 'Schritt für Schritt kehre ich zu mir zurück – in meine Würde, meine innere Freiheit und meine Schöpferkraft.';
+
+  var view = document.getElementById('view');
+  var state = { tab: 'kompass', topic: null, mode: null, result: false, open: null };
+  var breathTimer = null;
+
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function toolById(n) { return TOOLS[n - 1]; }
+
+  function toolBody(t) {
+    var b = el('div', 'tool-body');
+    b.appendChild(el('div', 'sec', 'Für'));
+    b.appendChild(el('p', '', t.fuer));
+    b.appendChild(el('div', 'sec', 'Anwendung'));
+    t.how.forEach(function (h) { b.appendChild(el('p', '', h)); });
+    if (t.list) {
+      var ul = el('ul', 'list');
+      t.list.forEach(function (l) { ul.appendChild(el('li', '', l)); });
+      b.appendChild(ul);
+    }
+    if (t.say) b.appendChild(el('div', 'say', t.say));
+    if (t.after) b.appendChild(el('p', 'dim', t.after));
+    b.appendChild(el('div', 'impulse', 'Energetischer Impuls: ' + t.impuls));
+    if (t.hinweis) b.appendChild(el('div', 'note', t.hinweis));
+    b.appendChild(el('div', 'sec', 'Leitfragen für dein Journal'));
+    var ul2 = el('ul', 'list');
+    t.journal.forEach(function (l) { ul2.appendChild(el('li', '', l)); });
+    b.appendChild(ul2);
+    b.appendChild(el('p', 'dim', 'Schließe mit einem Atemzug und der Frage: „Was ist mein nächster liebevoller und zugleich wahrhaftiger Schritt?“'));
+    return b;
+  }
+
+  function toolCard(t, open, onToggle) {
+    var c = el('div', 'tool' + (open ? ' open' : ''));
+    var h = el('button', 'tool-head');
+    h.setAttribute('aria-expanded', open ? 'true' : 'false');
+    h.appendChild(el('div', 'tool-num', String(t.n)));
+    var w = el('div');
+    w.appendChild(el('div', 'tool-title', t.t));
+    w.appendChild(el('div', 'tool-meta', t.sub + ' · ' + t.min));
+    h.appendChild(w);
+    h.addEventListener('click', onToggle);
+    c.appendChild(h);
+    c.appendChild(toolBody(t));
+    return c;
+  }
+
+  function renderKompass() {
+    var root = el('div', 'fade');
+    if (state.result) {
+      var topic = TOPICS.filter(function (x) { return x.id === state.topic; })[0];
+      var mode = MODES.filter(function (x) { return x.id === state.mode; })[0];
+      root.appendChild(el('div', 'label', 'Dein Einstieg'));
+      root.appendChild(el('p', 'dim', topic.t + ' · ' + mode.t));
+      var main = toolById(topic[state.mode]);
+      root.appendChild(toolCard(main, true, function () {}));
+      root.appendChild(el('p', 'dim', 'Du musst nicht alle Methoden anwenden. Wenn es sich heute nicht stimmig anfühlt, wähle einfach etwas anderes.'));
+      root.appendChild(el('div', 'label', 'Weitere passende Wege'));
+      topic.auch.concat([topic.sanft, topic.tief, topic.konkret]).filter(function (n, i, a) {
+        return n !== main.n && a.indexOf(n) === i;
+      }).slice(0, 3).forEach(function (n) {
+        var t = toolById(n);
+        root.appendChild(toolCard(t, state.open === n, function () { state.open = state.open === n ? null : n; render(); }));
+      });
+      var b1 = el('button', 'btn ghost', 'Neu wählen');
+      b1.addEventListener('click', function () { state.result = false; state.open = null; render(); });
+      root.appendChild(b1);
+      var b2 = el('button', 'btn ghost', 'Mit dem 5-Schritte-Ritual rahmen');
+      b2.addEventListener('click', function () { state.tab = 'ritual'; render(); window.scrollTo(0, 0); });
+      root.appendChild(b2);
+      return root;
+    }
+
+    root.appendChild(el('div', 'label', 'Dein Vergebungs-Kompass'));
+    root.appendChild(el('p', 'dim', 'Wähle, was gerade im Vordergrund steht. Du erhältst einen passenden Einstieg – du musst nicht alle Methoden anwenden.'));
+    root.appendChild(el('h3', '', 'Was möchtest du bearbeiten?'));
+    var g1 = el('div'); g1.style.marginTop = '12px';
+    TOPICS.forEach(function (tp) {
+      var o = el('button', 'opt' + (state.topic === tp.id ? ' on' : ''), tp.t);
+      o.addEventListener('click', function () { state.topic = tp.id; render(); });
+      g1.appendChild(o);
+    });
+    root.appendChild(g1);
+    var h2 = el('h3', '', 'Was fühlt sich heute machbar an?'); h2.style.margin = '20px 0 12px';
+    root.appendChild(h2);
+    MODES.forEach(function (m) {
+      var o = el('button', 'opt' + (state.mode === m.id ? ' on' : ''), m.t);
+      o.addEventListener('click', function () { state.mode = m.id; render(); });
+      root.appendChild(o);
+    });
+    var go = el('button', 'btn', 'Passende Übung erstellen');
+    go.disabled = !(state.topic && state.mode);
+    go.addEventListener('click', function () { state.result = true; render(); window.scrollTo(0, 0); });
+    root.appendChild(go);
+    return root;
+  }
+
+  function renderTools() {
+    var root = el('div', 'fade');
+    root.appendChild(el('div', 'label', 'Die zehn Vergebungs-Tools'));
+    root.appendChild(el('p', 'dim', 'Wähle das Tool nach dem, was du gerade brauchst: Verständnis, Ausdruck, Loslassen, Versöhnung oder einen konkreten Neuanfang.'));
+    TOOLS.forEach(function (t) {
+      root.appendChild(toolCard(t, state.open === t.n, function () { state.open = state.open === t.n ? null : t.n; render(); }));
+    });
+    return root;
+  }
+
+  function renderRitual() {
+    var root = el('div', 'fade');
+    root.appendChild(el('div', 'label', 'Das universelle Vergebungsritual'));
+    root.appendChild(el('h2', '', 'Die fünf Schritte zurück zu dir'));
+    root.appendChild(el('p', 'dim', 'Der rote Faden für alle Methoden. Fünf Minuten genügen, oder du erweiterst es zu einer längeren Meditation.'));
+    var card = el('div', 'card'); card.style.marginTop = '16px';
+    var steps = el('div', 'steps');
+    STEPS.forEach(function (s, i) {
+      var r = el('div', 'step');
+      r.appendChild(el('div', 'step-n', String(i + 1)));
+      var w = el('div');
+      w.appendChild(el('h3', '', s[0]));
+      w.appendChild(el('p', '', s[1]));
+      r.appendChild(w);
+      steps.appendChild(r);
+    });
+    card.appendChild(steps);
+    root.appendChild(card);
+
+    root.appendChild(el('div', 'label', 'Atem-Begleiter'));
+    var wrap = el('div', 'breath-wrap');
+    var orb = el('div', 'orb');
+    var txt = el('div', 'breath-txt', 'Bereit');
+    wrap.appendChild(orb); wrap.appendChild(txt);
+    root.appendChild(wrap);
+    var bb = el('button', 'btn ghost', 'Atmung starten');
+    bb.addEventListener('click', function () {
+      if (breathTimer) { stopBreath(); orb.classList.remove('in'); txt.textContent = 'Bereit'; bb.textContent = 'Atmung starten'; return; }
+      var inhale = true;
+      function tick() { orb.classList.toggle('in', inhale); txt.textContent = inhale ? 'Einatmen' : 'Ausatmen'; inhale = !inhale; }
+      tick(); breathTimer = setInterval(tick, 4000); bb.textContent = 'Atmung beenden';
+    });
+    root.appendChild(bb);
+    return root;
+  }
+
+  function renderMehr() {
+    var root = el('div', 'fade');
+    root.appendChild(el('div', 'label', 'Drei Vertiefungen'));
+    root.appendChild(el('p', 'dim', 'Lassen sich mit den zehn Tools kombinieren.'));
+    function card(title, paras, quote) {
+      var c = el('div', 'card');
+      c.appendChild(el('h3', '', title)); c.lastChild.style.marginBottom = '10px';
+      paras.forEach(function (p) { c.appendChild(el('p', '', p)); });
+      if (quote) c.insertBefore(el('div', 'say', quote), c.children[2] || null);
+      return c;
+    }
+    root.appendChild(card('Die Metta-Praxis – liebevolle Güte',
+      ['Richte freundliche Wünsche an dich selbst, zunächst ganz unabhängig davon, ob du schon vergeben kannst.', 'Diese aus buddhistischen Traditionen bekannte Praxis fördert eine Haltung des Mitgefühls, statt Vergebung zu erzwingen.'],
+      '„Möge ich sicher sein. Möge ich Frieden finden. Möge ich mir mit Freundlichkeit begegnen.“'));
+    root.appendChild(card('Die Generationen-Reflexion',
+      ['Frage dich, welche Familienregeln du übernommen hast: „Ich muss es allen recht machen“, „Eine gute Mutter stellt sich hinten an“ oder „Ich darf keine Fehler machen“.', 'Unterscheide zwischen dem, was du gelernt hast, und dem, was du heute bewusst weitergeben möchtest.', 'Das ist eine Reflexionsübung, keine Annahme, dass jede Belastung von den Vorfahren stammt.']));
+    root.appendChild(card('Klang, Atem und Integration',
+      ['Nutze sanfte Musik, Summen oder einen ruhigen Atemrhythmus, um die Übung einzurahmen. Lasse anschließend Stille zu und frage: „Was brauche ich jetzt?“', 'Klang kann das Erleben begleiten und die Aufmerksamkeit lenken. Er muss keine bestimmte Frequenz erzeugen, damit die Erfahrung wertvoll ist.']));
+    return root;
+  }
+
+  function stopBreath() { if (breathTimer) { clearInterval(breathTimer); breathTimer = null; } }
+
+  function render() {
+    stopBreath();
+    view.textContent = '';
+    var fn = { kompass: renderKompass, tools: renderTools, ritual: renderRitual, mehr: renderMehr }[state.tab];
+    view.appendChild(fn());
+    Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (b) {
+      var on = b.getAttribute('data-tab') === state.tab;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (b) {
+    b.addEventListener('click', function () { state.tab = b.getAttribute('data-tab'); state.open = null; render(); });
+  });
+
+  var aff = document.getElementById('affirm');
+  aff.appendChild(el('div', 'label', 'Abschluss-Affirmation'));
+  AFFIRM.forEach(function (a) { aff.appendChild(el('p', '', a)); });
+  aff.appendChild(el('p', 'last', AFFIRM_LAST));
+
+  window.goBack = function () {
+    if (document.referrer && document.referrer.indexOf(location.host) !== -1 && history.length > 1) history.back();
+    else window.location.href = 'index.html';
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>
